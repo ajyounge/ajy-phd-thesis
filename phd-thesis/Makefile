@@ -2,6 +2,7 @@ FILE=phd-thesis
 preview=open -a /Applications/Preview.app
 
 all:
+	make clean
 	pdflatex ${FILE}
 	bibtex ${FILE}
 	pdflatex ${FILE}

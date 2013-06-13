@@ -1,67 +1,193 @@
-\documentclass[times,10pt]{article} 
+\documentclass[oneside,phd,etd]{IUCS}
 
-\usepackage{fullpage}
-\usepackage{setspace}
-\usepackage{times}
-\usepackage{comment}
-\usepackage{graphicx}
-\usepackage{fancyvrb}
-\usepackage{listings}
-\usepackage{rotating}
-\usepackage[usenames]{color}
-\usepackage{setspace}
-\usepackage{tabularx,colortbl}
-\usepackage{subfigure}
-\usepackage{url}
-\usepackage{cite}
+% Specify the following optional arguments in the square brackets to
+% specify the thesis type:
+%
+%   senior  : Produces the senior thesis preliminary pages (default)
+%   honors  : Produces the honors thesis preliminary pages
+%   masters : Produces the masters thesis preliminary pages
+%   phd     : Produces the PhD dissertation preliminary pages
+%
+% The default format is appropriate for printing, with blank pages
+% inserted after the preliminary pages in twoside mode so you can
+% send it directly to a two-sided printer. However, for ETD
+% submission the blank pages need to be removed from the final output.
+% The following option does this for you:
+%
+%   etd     : Produces a copy with no blank pages in the preliminary section.
+%             Remove this option to produce a version with blank pages inserted
+%             for easy double sided printing.
+%
+% The rest of the class options are the same as the regular book class.
+% A few to remember:
+%
+%   oneside : Produces single sided print layout (recommended for theses less than 50 pages)
+%   twoside : Produces single sided print layout (the default if you remove oneside)
+%
+% The BYUPhys class provides the following macros:
+%
+%   \makepreliminarypages : Makes the preliminary pages
+%   \clearemptydoublepage : same as \cleardoublepage but doesn't put page numbers
+%                           on blank intervening pages
+%   \singlespace          : switch to single spaced lines
+%   \doublespace          : switch to double spaced lines
+%
+% --------------------------- Load Packages ---------------------------------
+% The graphicx package allows the inclusion of figures.  Plain LaTeX and
+% pdfLaTeX handle graphics differently. The following code checks which one
+% you are compiling with, and switches the graphicx package options accordingly.
+\usepackage{ifpdf} \ifpdf 
+\usepackage[pdftex]{graphicx} \else 
+\usepackage[dvips]{graphicx} \fi
+
+% The fancyhdr package allows you to easily customize the page header.
+% The settings below produce a nice, well separated header.
 \usepackage{fancyhdr}
+  \fancyhead{}
+  \fancyhead[LO]{\slshape \rightmark}
+  \fancyhead[RO,LE]{\textbf{\thepage}}
+  \fancyhead[RE]{\slshape \leftmark}
+  \fancyfoot{}
+  \pagestyle{fancy}
+  \renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter \ \ #1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection \ \ #1}}
+% The caption package allows us to change the formatting of figure captions.
+% The commands here change to the suggested caption format: single spaced and a bold tag
+\usepackage[margin=0.3in,labelfont=bf,labelsep=none]{caption} \DeclareCaptionFormat{suggested}{\singlespace#1#2 #3\par\doublespace} \captionsetup{format=suggested}
 
+% The cite package cleans up the way citations are handled.  For example, it
+% changes the citation [1,2,3,6,7,8,9,10,11] into [1-3,6-11].  If your advisor
+% wants superscript citations, use the overcite package instead of the cite package.
+\usepackage{cite}
 
-\usepackage[%
-        pdfcreator={http://cyberaide.org},
-        pdftex,
-        colorlinks=true,
-        linkcolor={black},
-        citecolor={black},
-        urlcolor={black}]{hyperref}
+% The makeidx package makes your index for you.  To make an index entry,
+% go to the place in the book that should be referenced and type
+%  \index{key}
+% An index entry labeled "key" (or whatever you type) will then
+% be included and point to the correct page.
+\usepackage{makeidx} 
+\makeindex
 
+% The url package allows for the nice typesetting of URLs.  Since URLs are often
+% long with no spaces, they mess up line wrapping.  The command \url{http://www.physics.byu.edu}
+% allows LaTeX to break the url across lines at appropriate places: e.g. http://www.
+% physics.byu.edu.  This is helpful if you reference web pages.
+\usepackage{url} \urlstyle{rm}
 
-% correct bad hyphenation here
-\hyphenation{op-tical net-works semi-conduc-tor}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% If you have a lot of equations, you might be interested in the amstex package.
+% It defines a number of environments and macros that are helpful for mathematics.
+% We don't do much math in this example, so we haven't used amstex here.
+% The hyperref package provides automatic linking and bookmarking for the table
+% of contents, index, equation references, and figure references.  It must be
+% included for the BYU Physics class to make a properly functioning electronic
+% thesis.  It should be the last package loaded if possible.
 %
-% Program Float
+% To include a link in your pdf use \href{URL}{Text to be displayed}.  If your
+% display text is the URL, you probably should use the \url{} command discussed
+% above.
 %
+% To add a bookmark in the pdf you can use \pdfbookmark.  You can look up its usage
+% in the hyperref package documentation
+\usepackage[bookmarksnumbered,pdfpagelabels=true,plainpages=false,colorlinks=true, linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+
+% AJY specific packages
 \usepackage{float}
 
-\floatstyle{ruled}
-\newfloat{program}{thp}{lop}
-\floatname{program}{Program}
+% ------------------------- Fill in these fields for the preliminary pages ----------------------------
+%
+% For Senior and honors this is the year and month that you submit the thesis
+% For Masters and PhD, this is your graduation date
+\Year{2014} \Month{May} \Author{Andrew J. Younge}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% If you have a long title, split it between two lines. The \TitleBottom field defines the second line
+% A two line title should be an "inverted pyramid" with the top line longer than the bottom.
+\TitleTop{Insert really cool PhD thesis title here}
+
+% \TitleBottom{}
+% Your research advisor
+\Advisor{Geoffrey C. Fox, PhD}
+
+% The department undergraduate research coordinator
+\MemberA{TBD}
+
+% The representative of the department who will approve your thesis (usually the chair)
+\MemberB{TBD}
+
+% The title of the department representative
+%  \DepRepTitle{Graduate Coordinator}
+% The text of your abstract
+\Abstract{
+TBD
+}
+
+% Acknowledge those who helped and supported.
+\Acknowledgments{
+
+TBD
+}
+
+\fussy
+
 \begin{document}
 
-\input{tex/macros}
+% Start page counting in roman numerals
+\frontmatter
 
-\input{paper}
+% This command makes the formal preliminary pages.
+% You can comment it out during the drafting process if you want to save paper.
 
-\section*{Acknowledgment}
+\makepreliminarypages
 
+\singlespace
 
-\bibliographystyle{tex/IEEEtran}
+% Make the table of contents.
 
-%\bibliography{../bib/WF}
+\tableofcontents \clearemptydoublepage
+
+% Make the list of figures
+\listoffigures \clearemptydoublepage
+
+\doublespace
+
+% Start regular page counting at page 1
+\mainmatter
+
+% Personal Comments to make while working on the manuscript
+\newcommand{\AJY}[1]{{\color{red}\em AJY: #1}}
+
+% \newcommand{\AJY}[1]{}
+
+\include{macros}
+
+\newfloat{algorithm}{htbp}{loa} \floatname{algorithm}{Algorithm}
+
+\include{introduction} 
+\include{chapter2} 
+%\include{chapter3} 
+%\include{chapter4} 
+%\include{chapter5} 
+\include{conclusion}
+
+\appendix
+
+%\bibliographystyle{csRIT}
+
+\bibliographystyle{IEEEtran} 
 \bibliography{%
-../bib/ajyounge,%
-../bib/www,%
-../bib/grid,%
-../bib/all}
+bib/cyberaide-cloud}
+%../bib/vonLaszewski,%
+%../bib/cyberaide-cloud,%
+%../bib/cyberaide-greenit,%
+%../bib/cyberaide-www,%
+%../bib/cyberaide-grid,%
+% ../bib/gridhell,%
+%../bib/lizhe,%
+%../bib/all}
 
-%\clearpage
-%\appendix
-%\input{todo}
+\include{appendix}
 
-\end{document}
+\phantomsection \addcontentsline{toc}{chapter}{Index} 
+\renewcommand{\baselinestretch}{1} \small \normalsize \printindex
 
+\end{document} 
 
