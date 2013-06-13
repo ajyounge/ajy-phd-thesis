@@ -1,0 +1,67 @@
+\documentclass[times,10pt]{article} 
+
+\usepackage{fullpage}
+\usepackage{setspace}
+\usepackage{times}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{rotating}
+\usepackage[usenames]{color}
+\usepackage{setspace}
+\usepackage{tabularx,colortbl}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{fancyhdr}
+
+
+\usepackage[%
+        pdfcreator={http://cyberaide.org},
+        pdftex,
+        colorlinks=true,
+        linkcolor={black},
+        citecolor={black},
+        urlcolor={black}]{hyperref}
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Program Float
+%
+\usepackage{float}
+
+\floatstyle{ruled}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Program}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\input{tex/macros}
+
+\input{paper}
+
+\section*{Acknowledgment}
+
+
+\bibliographystyle{tex/IEEEtran}
+
+%\bibliography{../bib/WF}
+\bibliography{%
+../bib/ajyounge,%
+../bib/www,%
+../bib/grid,%
+../bib/all}
+
+%\clearpage
+%\appendix
+%\input{todo}
+
+\end{document}
+
+
