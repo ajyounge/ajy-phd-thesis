@@ -1,5 +1,6 @@
-% Revision: 12-21-2009
+% Revision: 06-13-2013
 % Revision History
+%   06-13-2013 : AJY: Removed RIT information and Added in Indiana University. GO HOOSIERS
 %   12-21-2009 : AJY: Removed BYU Phsyics Dept links and added in RIT CS information
 %   07-10-2008 : Corrected Alignment of signature boxes on Masters/PhD Approval page
 %   07-25-2007 : Corrected some spelling errors
@@ -502,10 +503,10 @@
     \datebox\hfill\signaturebox{\@Advisor\\Chair, Graduate Committee}
     \vskip 0pt plus 2fill
     \noindent Accepted for the Department\par\hfill%
-    \signaturebox{\@DepRep, \@DepRepTitle\\Department of Computer Science}
+    \signaturebox{\@DepRep, \@DepRepTitle\\Computer Science Program}
 	{} \vfill \noindent Accepted for the College\par\hfill
     \signaturebox{\@Dean, \@DeanTitle \\
-    Golisano College of Computing and Information Sciences
+    School of Informatics and Computing  
 	}
     \clearemptydoublepage
   }
