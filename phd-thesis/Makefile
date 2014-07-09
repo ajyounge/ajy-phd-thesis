@@ -7,6 +7,7 @@ all:
 	bibtex ${FILE}
 	pdflatex ${FILE}
 	pdflatex ${FILE}
+	pdflatex ${FILE}
 
 clean:
 	rm -f *~ *.dvi *.aux *.log *.bbl *.blg *.out *.toc
