@@ -103,7 +103,7 @@
 %
 % For Senior and honors this is the year and month that you submit the thesis
 % For Masters and PhD, this is your graduation date
-\Year{2013} \Month{June} \Author{Andrew J. Younge}
+\Year{2015} \Month{Jan} \Author{Andrew J. Younge}
 
 % If you have a long title, split it between two lines. The \TitleBottom field defines the second line
 % A two line title should be an "inverted pyramid" with the top line longer than the bottom.
@@ -128,12 +128,22 @@
 %  \DepRepTitle{Graduate Coordinator}
 % The text of your abstract
 \Abstract{
-Compress ~250 pages and N years of your life down to a few short paragraphs here.
+TODO: Compress ~250 pages and N years of your life down to a few short paragraphs here.
+\\
+Scientific computing endeavors have created clusters, grids, and supercomputers as HPC platforms and paradigms. These resources focus on peak performance and computing efficiency, thereby enabling scientific community to tackle non-trivial problems on massively parallel architectures. Meanwhile, efforts to leverage the economies of scale from data center operations and advances in virtualization technologies have created large scale Cloud Infrastrictire. Such Infrastructure-as-a-Service (IaaS) deployments provide mechanisms for handling millions of user interactions concurrently or organizing, cataloging, and retrieving data by allowing users to specify a custom computing environment tailored to their needs. Combining concepts from both supercomputing and clouds will enable users to leverage the performance of HPC applications with the ease and availably in clouds. 
+
+
+This work proposes to bridge the gap between supercomputing and clouds using a few key aspects. First, we evaluate current hypervisors and their viability to run HPC workloads within current infrastructure. Next, we illustrate a mechanism to enable advanced accelerators such as GPUs in a Virtual Machine that can significantly enhance scientific computing problems. Furthermore, we are also able to support high speed, low latency inter-node communication through the use of InfiniBand within virtual machines.  Upon evaluating these newfound features and leveraging the system within the OpenStack environment, we illustrate that virtualzied cloud cyberinfrastructure perform at near-native speeds and support a broad range of scientific computing problems as never before. 
+
+
+
 }
+
 
 % Acknowledge those who helped and supported.
 \Acknowledgments{
-
+TODO: Write acknowledgements section
+\\
 Thanks, Mom!
 
 }
@@ -178,6 +188,8 @@ Thanks, Mom!
 \include{chapter3} 
 \include{chapter4} 
 \include{chapter5} 
+\include{chapter6}
+\include{chapter7}
 \include{conclusion}
 
 \appendix
