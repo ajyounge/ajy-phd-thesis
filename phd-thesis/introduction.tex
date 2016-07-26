@@ -11,9 +11,11 @@
 \label{sec:overview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Give quick very high level view. 
+\TODO{Give quick very high level view. 
 
 Provide insightful quote regarding scientific computation 
+
+Breifly describe current state of Distributed Systems.
 
 Introduce the importance and impact of HPC.
 
@@ -24,8 +26,54 @@ Describe major differences between HPC and cloud
 
 Define how a merger between HPC and Cloud computing is desired.
 
-Introduce how Virtual Clusters, can do this!!
+Introduce how Virtual Clusters, can do this.
 - what is a virtual cluster? What is it not?
+- Missing performance considerations.
+
+}
+
+For years visionaries in computer science have predicted the advent of utility-based computing.  This concept dates back to John McCarthy's vision stated at the MIT centennial celebrations in 1961.
+
+\begin{quote}
+``If computers of the kind I have advocated become the computers of the future, then computing may someday be organized as a public utility just as the telephone system is a public utility... The computer utility could become  the basis of a new and important industry.``
+\end{quote}
+ Only recently has the hardware and software become available to support the concept of utility computing on a large scale.
+
+The concepts inspired by the notion of utility computing have combined with the requirements and standards of Web 2. 0 \cite{alexander2006wnw} to create Cloud computing \cite{buyya2008moc, foster2008cca, aboveTheClouds}.  Cloud computing is defined as, ``A large-scale distributed computing paradigm that is driven by economies of scale, in which a pool of abstracted, virtualized, dynamically-scalable, managed computing power, storage, platforms, and services are delivered on demand to external customers over the Internet." This concept of Cloud computing is important to Distributed Systems because it represents a true paradigm shift \cite{kuhn1970structure} within the entire IT infrastructure.  Instead of adopting the in-house services, client-server model, and mainframes, Clouds push resources out into abstracted services hosted \textit{en masse} by larger organizations.  This concept of distributing resources is similar to many of the visions of the Internet itself, which is where the ``Clouds'' nomenclature originated, as many people depicted the internet as a big fluffy cloud one connects to.
+
+%Should this go into related research?
+%\TODO{Blend between HPC and Cloud here in this paragraph a lot better}
+While Cloud computing is changing IT infrastructure, it also has had a drastic impact on Distributed Systems itself, which has a different evolution. Gone are the IBM Mainframes of the 1980's which dominated the enterprise landscape.  While some mainframes still exist, they are used only for batch related processing tasks and are relatively unused for scientific applications as they are inefficient at Floating Point Operations.  As such, they were replaced with Beowulf Clusters \cite{sterling2001beowulf} of the 90's and 00's. Anovelty of Supercomputing is that instead of just one large machine, many machines are connected together and used to achieve a common goal, thereby maximizing the overall speed of computation.  Clusters represent a more commodity-based supercomputer, where off the shelf CPUs are used instead of the highly customized and expensive processors in Supercomputers.  Supercomputers and Clusters are best suited for large scale applications such as particle physics, weather forecasting, climate research, molecular  modeling, bioinformatics, and physical simulations, to name a few.  These applications are often termed ``Grand Challenge" applications and represent the majority of scientific calculations done on large-scale Supercomputing resources today. However, there exists a notable gap between high end high perofrmance computing and supercomputers, and what is available on the common desktop. This mid-tier scientific computation is a fast growing field that struggles to efficiently harness distributed systems while hoping to minimize extensive devleopment efforts. As such, the notion of Cloud computing Infrasturcture and platform services has been seen as appealing to many researchers.  
+
+%this is a big segway here, need more background information to frame
+
+As more domain science turns to the aid of computational resources for conducting novel scientific endeavours, there is a continuing and growing need for national cyberinfrastructure initiatives to support an increasingly diverse set of scientific workloads. This growth can be seen not only in the number of computational resource requests (cite XSEDE findings) but also in the recent increase in accelerators and hybrid computing models capable of quickly providing additional resources \cite{vetter2011keeneland}.  
+
+Historically, this diversity was separated into High Performance Computing (HPC) and High Throughput Computing (HTC).  With HTC, computational problems can be separated into independent tasks that can execute in a pleasingly parallel fashion, happily gaining any available resources and rarely require significant communication or synchronization between tasks. HPC often represents computational problems that require significant communication and coordination to effectively produce results, usually with the use of a communication protocol such as MPI \cite{mpi}.  Recently however, many big-data paradigms \cite{bigdata} have been introduced in distributed systems that represent new computational models for distributed computing, such as MapReduce \cite{MapReduce} and the corresponding Apache Big Data stack \cite{Jha2014apache}. Supporting these different distributed computational paradigms requires a flexible infrastructure capable of providing computational resources for all possible models in a fast and efficient manner. 
+
+\TODO{Introduce virtual clusters here, related to beowulf clusters, hpc systems}
+
+One such proposed solution is the use of virtual clusters \cite{foster2006virtual} to provide distinct, separated environments on similar resources using virtual machines. However, past concerns with virtualization have limited the adoption of virtual clusters in many large scale cyberinfrastructure deployments. This has largely been due to the overhead of virtualization, whereby many scientific computations have experienced a signficiant and notable degredation in performance.  In an ecosystem framiliarized with HPC systems where pformance is paramount, this has been an obstructive hurdle for many even mid-level scientific endeavors.
+
+The notion that virtualization and Cloud infrastructure has been in the past characterized many times. One of the most prominient examples of this is the Department of Energy's Magellan Project \cite{www-magellan}, where by the Magellan Final Report \cite{MagellanFinal} states the following finding as a Key Finding:
+  
+\begin{quote}
+``\textbf{Finding 2. Scientific applications with minimal communication and I/O are best suited for
+clouds.}
+
+We have used a range of application benchmarks and micro-benchmarks to understand the performance of scientific applications. Performance of tightly coupled applications running on virtualized clouds using commodity networks can be significantly lower than on clusters optimized for these workloads. This can be true at even mid-range computing scales. For example, we observed slowdowns of about 50x for PARATEC on the Amazon EC2 instances compared to Magellan bare-metal (non-virtualized) at 64 cores and about 7x slower at 1024 cores on Amazon Cluster Compute instances, the specialized high performance computing offering. As a result, current cloud systems are best suited for high-throughput, loosely coupled applications with modest data requirements.``
+\end{quote}
+
+
+
+These findings underscore how classical usage of virtualization in cloud infrastructure has serious performance issues when running tightly coupled distributed memory applications. Many of these performance limitations are sound, given the limitation of a number of virtualization overheads commonplace in 2011, including shadow page tables, slow emulated Ethernet drivers, experimental hypervisors, and a complete lack of sophisticated hardware concurrently was commonplace in supercomputers and clusters. 
+
+However, efforts can be done to overcome these limitations in virtualization, and virtualization itself is not fundamentally limiting to high performance computing. Recent improvements in performance as well the recent usability of accelerators and high speed, low latency interconnects, as demonstrated in this manuscript, have made virtual clusters a more viable solution.  Furthemore, virtualization could even bring enhansed usability and enable specialized runtime components to HPC resources, adding significant value to traditional HPC resources.  
+
+%\TODO{ Also bring in the Magellan project's EC2 paper here, show what they were doing}
+
+
+ 
 
 
 
@@ -35,7 +83,7 @@ Introduce how Virtual Clusters, can do this!!
 \label{sec:stmt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-TBD
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Challenges}

@@ -2,10 +2,59 @@
 %% PhD Thesis/Project
 
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
-\chapter{VirtualCalifornia Earthquate Simulation in SR-IOV InfiniBand enabled Virtual Cloud Infrastructure}
-\label{chap:earthquate}
+\chapter{Future Endeavours with Virtualization}
+\label{chap:future-work}
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
 
-\section{Introduction}
+%%%%%%---------------------------------------------------------------
+\subsection{Live Migration Mechanisms}
+%%%%%%---------------------------------------------------------------
 
-TODO Finish!
+TODO: Definition of Migration, live migration, differences. (assumed known here).
+
+Live migration of VMs represents one of the fundamental advantages to virtualization, and also one of the greatest challenges to efficiency.  In Live migration, the complete VM state is copied from a source to a unallocated destination host, where disk, memory, and network connections are kept intact. For disk continuity, a distributed and/or shared filesystem is utilized, most commonly NFS, where both the source and destination hosts have access to the Vm disk.  Network continuity is preserved so long as the destination guest is within the same LAN and generates an unsolicited ARP reply to maintain the original IP after migration.  VM vCPU states and machine states are recorded from the source and quickly sent to the destination host when the VM is paused. This pause and tranfer time represents the entirety of a VM downtime during live migration, and is often < 100 milliseconds across  commodity Ethernet networks. 
+
+However, VM memory migration often requires the most care and is often the leading cause for migration overhead during live migration. This is due to not only the potentially large amount of memory to be sent across the network.  This is defined directly by the amount of main memory allocated (or in use) by the source VM. However, as a VM's memory is sent, the VM is still runing and therefor memory pages can be dirtied, creating the need for any written page to be retransmitted. Given a small network and a memory bound processes running within a VM, this can be an infinitely long process of page dirtying. 
+
+A few general memory live migration concepts have been utilized, and are summarized in Figure X. 
+
+\begin{itemize}
+\item Pre-copy Migration:  All memory pages are transmitted to the destination before the VM is paused. The hypervisor will note and track all dirtied memory pages, and retransmit those pages in iterative rounds. The rounds end when either no dirtied pages exist or a max iteration count has been reached. The VM state is then transmitted and resumed on the destination. 
+\item Post-copy Migration: The Vm state is immediately paused and sent to the destination hypervisor, and immediately resumed. If the new destination VM generates a page fault, the VM is paused, and faulted pages are transmitted across the network on demand from the source and the VM resumed.  
+\item Hybrid-copy Migration: Provides a compromise solution to memory paging. First, single copy of the VM memory pages, or a subset of known-necessary memory pages are sent to the destination.  Then the source VM is paused, its VM state sent to the destination, and resumed on the destination.  Known dirtied source pages, or missing pages are then copied to the destination upon a triggered page fault utilizing the same mechanism as post-copy migration. 
+\end{itemize}
+
+
+%%%%%%---------------------------------------------------------------
+\subsection{RDMA \& VMs}
+%%%%%%---------------------------------------------------------------
+
+TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
+
+
+%%%%%%---------------------------------------------------------------
+\subsection{Fast VM Cloning}
+%%%%%%---------------------------------------------------------------
+
+In many distributed system environments, concurrency is achieved through the use of homogeneous compute nodes that handle the bulk of the computational load in parallel. In virtual clusters, there is a need to efficiently deploy and manage near identical virtual machines for distributed computation. 
+
+In Snowflock \cite{lagar2009snowflock, lagar2011snowflock}, the notion of VM cloning is given. Specifically, Lagar et al. define the notion of VM Fork, where VMs are treated similar to a fork\(\) system call for processes.   This process is conceptually similar to VM migration, with the exception that the source VM is not destroyed after the migration. Starting with a master VM, an impromptu cluster can be created across a network using the Xen hypervisor.  Snowflock specifically uses Multicast to linearly scale out VM creation to many hosts, only coping a minimal state and then remotely coping memory pages when requested.  This fetched memory on-demand is similar in principal to the post-copy live migration technique describe in Section 3.1.  This is further augmented with blocktap-based virtual disks with Copy-on-Write (CoW) functionally, delivering CoW slices for each child VM. 
+
+While Snowflock provides an excellent framework for VM cloning, it is not suitable for the current implementation. First, it uses Xen, which previous research has found to have limited performance for HPC workloads \cite{Younge2011cloud}.  Second, SnowFlock is designed for Ethernet and IP based networks, which have significantly higher latency and lower bandwidth when compared to InfiniBand solutions. As such, we proposed to develop analogous mechanisms on KVM to use RDMA for VM memory and disk paging. 
+
+Potential VM Cloning RDMA mechanism:
+\begin{itemize}
+\item Prepare parent VM state, including registers and info
+\item Create large buffers for all VM memory on child hosts (as per usual)
+\item Send vmstate via RDMAwrite or IB Send to N child nodes, where N is the clone size
+\item Resume/start child VMs in tandem. 
+\item Have parent VM use RDMA multicast (unreliable connection) to send memory pages to all childs efficiently
+\item If child page faults, does direct RDMAread operation for specific page. 
+\item Priority given (somehow?) to RDMA requests first. 
+\item Eventually, all children will have memory pages via multicast. As multicast is unreliable, delivery failure will just trigger a page fault and subsequent page sending via RDMA (yet unlikely)
+\end{itemize}
+
+This method allows for efficient multicasting of master VM memory.  It allows for direct page fault handling, while allowing child VMs to start and run immediately. Hybrid solution could also work with such a situation.  As RDMA multicast is relatively questionable, not sure how practical this method would/could be.
+
+
+

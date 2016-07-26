@@ -68,6 +68,15 @@ When all of these layers are combined, a dynamic software stack is created to fo
 
 \subsection{Virtualization}
 
+Virtualization, in its most pure form, refers to the process of creating virtual abstraction to hardware platforms, operating systems, or software resources. Viurtualization enables the creation of 1 or more virtual machines (VMs) that are run concurrently on the same operating environment, be it hardware or some higher software. As virtualization is, in general, just another form of abstraction, there are in fact many levels to virtualization that exist. 
+
+Virtualization can start from the instruction set architecture (ISA) level, where by an entire processor instruction set is emulated and provided.  This may be useful for running sotware or services developed for one instruction set (say MIPS) but is needed to run on Intel x86 hardware. ISA level virtualization is usually emulated through an interpreter which translates source instructions to target instructions, however this can often be extremely inefficient.  Dynamic binary translation can help aid in efficiency by translating bocks of source instructions to target instructions, however this still can be limiting.   
+
+The next, and potentially most relevant level of virtualization is hardware abstraction. Here,  the virtualization generates a virtual hardware environment for a VM, including providing virtual processors, memory, and I/O devices, allowing for a multiplexing of VMs to exist. 
+
+\AJY{TODO: Bring in virtualization comparison chart from old text}
+
+
 There are a number of underlying technologies, services, and infrastructure-level configurations that make Cloud computing possible.  One of the most important technologies is the use of virtualization \cite{Barham2003, ESX}. Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:1}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data center.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS.
 
  \FIGURE{htb}
@@ -82,6 +91,9 @@ Virtualization is not specific to Cloud computing. IBM originally pioneered the 
 \subsection{Hypervisors and Containers}
 
 TODO: write up a description about the various hypervisor types, and containers too. 
+
+
+ While there are many forms of virtualization, the focus here is primarily on hardware and OS level virtualization, instead of higher level and API based virtualization techniques.  
 
 \subsection{Workload Scheduling}
 

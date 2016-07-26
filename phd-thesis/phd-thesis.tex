@@ -108,8 +108,9 @@
 
 % If you have a long title, split it between two lines. The \TitleBottom field defines the second line
 % A two line title should be an "inverted pyramid" with the top line longer than the bottom.
-\TitleTop{Architectural Principals of Distributed }
-\TitleBottom{High Performance Virtualization}
+\TitleTop{Architectural Principles and Experimentation of}
+\TitleBottom{Distributed High Performance Virtual Clusters}
+%\TitleBottom{High Performance Virtualization}
 
 % \TitleBottom{}
 % Your research advisor
@@ -129,12 +130,16 @@
 %  \DepRepTitle{Graduate Coordinator}
 % The text of your abstract
 \Abstract{
-TODO: Compress ~250 pages and N years of your life down to a few short paragraphs here.
-\\
-Scientific computing endeavors have created clusters, grids, and supercomputers as HPC platforms and paradigms. These resources focus on peak performance and computing efficiency, thereby enabling scientific community to tackle non-trivial problems on massively parallel architectures. Meanwhile, efforts to leverage the economies of scale from data center operations and advances in virtualization technologies have created large scale Cloud Infrastrictire. Such Infrastructure-as-a-Service (IaaS) deployments provide mechanisms for handling millions of user interactions concurrently or organizing, cataloging, and retrieving data by allowing users to specify a custom computing environment tailored to their needs. Combining concepts from both supercomputing and clouds will enable users to leverage the performance of HPC applications with the ease and availably in clouds. 
+With the advent of virtualization and Infrastructure-as-a-Service (IaaS), the broader scientific computing community is considering the use of clouds for their scientific computing needs. This is due to the relative scalability, ease of use, advanced user environment customization abilities, and the many novel computing paradigms available for data-intensive applications. However, a notable performance gap exists between IaaS and typical high performance computing (HPC) resources. This has limited the applicability of IaaS for many potential users, not only for those who look to leverage the benefits of virtualization with traditional scientific computing applications, but also for the growing number of big data scientists whose platforms are unable to build on HPC's advanced hardware resources.
 
+Concurrently, we are at the forefront of a convergence in infrastructure between Big Data and HPC, in which a unified distributed computing architecture could provide computing and storage capabilities for both differing distributed systems use cases. There is the potential to leverage performance and advanced hardware from the HPC community, and provide it in a virtualized infrastructure using High Performance Virtual Clusters. This will not only enable a more diverse user environment within supercomputing applications, but also bring increased performance and capabilities to big data platform services. 
 
-This work proposes to bridge the gap between supercomputing and clouds using a few key aspects. First, we evaluate current hypervisors and their viability to run HPC workloads within current infrastructure. Next, we illustrate a mechanism to enable advanced accelerators such as GPUs in a Virtual Machine that can significantly enhance scientific computing problems. Furthermore, we are also able to support high speed, low latency inter-node communication through the use of InfiniBand within virtual machines.  Upon evaluating these newfound features and leveraging the system within the OpenStack environment, we illustrate that virtualzied cloud cyberinfrastructure perform at near-native speeds and support a broad range of scientific computing problems as never before. 
+This work proposes to bridge the gap between HPC and cloud infrastructure and enable infrasturcture convergence through a framework for virtual clusters. It begins with an evaluation of current hypervisors and their viability to run HPC workloads within current infrastructure, which helps define existing performance gaps. Next, we uncover mechanisms to enable the use of specialized hardware common in many HPC resources, such as advanced accelerators like the Nvidia GPUs and high-speed, low-latency InfiniBand interconnects. The virtualized infrastructure that developed, which leverages traditional HPC hardware and utilizes best-practices virtualization using KVM, supports advanced Molecular Dynamics simulations at near-native performance. These advances are incorporated into a novel framework for constructing distributed virtual clusters using the OpenStack cloud infrastructure. With high performance virtual clusters, we look to support a broad range of scientific computing challenges, from HPC simulations to big data analytics with a single, unified infrastructure.
+
+%Scientific computing endeavors have created clusters, grids, and supercomputers as HPC platforms and paradigms. These resources focus on peak performance and computing efficiency, thereby enabling scientific community to tackle non-trivial problems on massively parallel architectures. Meanwhile, efforts to leverage the economies of scale from data center operations and advances in virtualization technologies have created large scale Cloud Infrastrictire. Such Infrastructure-as-a-Service (IaaS) deployments provide mechanisms for handling millions of user interactions concurrently or organizing, cataloging, and retrieving data by allowing users to specify a custom computing environment tailored to their needs. Combining concepts from both supercomputing and clouds will enable users to leverage the performance of HPC applications with the ease and availably in clouds. 
+%
+%
+%This work proposes to bridge the gap between supercomputing and clouds using a few key aspects. First, we evaluate current hypervisors and their viability to run HPC workloads within current infrastructure. Next, we illustrate a mechanism to enable advanced accelerators such as GPUs in a Virtual Machine that can significantly enhance scientific computing problems. Furthermore, we are also able to support high speed, low latency inter-node communication through the use of InfiniBand within virtual machines.  Upon evaluating these newfound features and leveraging the system within the OpenStack environment, we illustrate that virtualzied cloud cyberinfrastructure perform at near-native speeds and support a broad range of scientific computing problems as never before. 
 
 
 
@@ -177,12 +182,16 @@ Thanks, Mom!
 
 % Personal Comments to make while working on the manuscript
 \newcommand{\AJY}[1]{{\color{red}\em AJY: #1}}
+\newcommand{\TODO}[1]{{\color{black}\em  TODO: #1}}
 
 % \newcommand{\AJY}[1]{}
 
 \include{macros}
 
 \newfloat{algorithm}{htbp}{loa} \floatname{algorithm}{Algorithm}
+
+
+
 
 \include{introduction} 
 \include{chapter2} 
