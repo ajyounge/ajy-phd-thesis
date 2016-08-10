@@ -2,28 +2,70 @@
 %% PhD Thesis/Project
 
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
-\chapter{Future Endeavours with Virtualization}
+\chapter{Virtualization advancements to support HPC applications}
 \label{chap:future-work}
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
 
+Many of the previous chapters have focused on closing the performance gap that exists with running HPC workloads in virtualized infrastructure, as compared to native. While this is a significant techincal challenge to overcome, the use of virtualization itself has the potential to offer additional benefits that are otherwise not possible. It is the author's hope that through careful research, design, and future implementation, it may be possible to use virtuaization to enable a new class of HPC infrastructure with added performance and features that has yet to be realized.    
+
 %%%%%%---------------------------------------------------------------
-\subsection{Live Migration Mechanisms}
+\section{Memory Page Table Optimizations}
+%%%%%%---------------------------------------------------------------
+
+As we've seen both in Chapter \ref{chap:cloud2011} as well as in other supported literature \cite{vm-memory}, virtualization of memory structures becomes a point of contention and potential overhead. This is often due to the extensive effort a hypervisor has to perform in order to translate memory addresses from guest-virtual addresses to host-virtual addresses, and then again to machine-physical addresses.  Historically, this was handled using Shadow Page tables \cite{shadow-pagetables}, which eliminate the need for emulation of physical memory inside the VM by creating a page table mapping from guest virtual to machine memory. However, these page tables are not walkable by hardware such as a transition lookaside buffer (TLB), and as such guest OS page tables require updating of the shadow page table. This can be costly not only in the additional management, but also notably by the cost of VMexit and VMentry calls.
+
+Recently, Intel and AMD have implemented Extended Page Tables (EPT) and nested paging, respectively.  Looking at EPT, we see how supported is added to allow the TLB hardware to keep track of both guest pages and hypervisor pages concurrently, effectively removing the need for shadow page table. The downside of EPT and nested paging occurs when there is a TLB miss (the page isn't in the TLB), and as such each miss requires a walk through each VMM nested paging, effectively creating TLB miss cost of 16 table walks (instead of just 3-4) for 4k pages. While many applications find this TLB miss additional cost less much less than that of managing shadow page tables, it still can lead to a significant gap in performance between non-virtualized applications, especially as VM count or an application's memory footprint increase. 
+
+One potential way to decrease the chance of a TLB miss (and therefore the cost of a miss) is by using a larger page size. By default, x86 hardware uses 4k pages sizes, but newer hardware can support 2M and 1G page sizes as well, effectively named \emph{transparent huge pages} or THP.  Using the KVM hypervisor with transparent hugepages enabled, we can create guest VMs backed entirely 2M hugepages \cite{redhat2010thp}. We can also enable transparant hugepage support within the guest as well, to have the entire guest OS (including kernel and modules) using 2M pages. 
+
+The result of THP-enabled guest VMs can be significant. With huge pages on Intel x86 CPUs with EPT, there exists an entirely separate TLB for hugepages as well. This will naturally alleviate TLB pressure and therefore reduce TLB contention between guest and host operating systems. Because 2M pages provide larger addressable memory, the size of the page tables themselves are also decreased.  Effectively, this reduces the TLB miss cost from 4 to 3 page table walks, which when handling a VM TLB miss, then requires only 15 walks to the default 24. This in effect can have a significant improvement in VM performance, as hypothesized in \cite{redhat2010thp}.
+
+To evaluate the effect of 2M transparent huge pages on guest performance, we leverage the same KVM setup in Chapter \ref{chap:cloud2014} on the Bespin hardware. Specifically, THP is switched both in the host as well as the guest OS kernels, and the same LibSVM application using GPUs is re-run. The libSVM GPU application can have significant memory requirements, as large chunks of the support vector machine datasets are stored in CPU memory, and then transfered to GPU memory, making it an ideal application to use for evaluating THP.
+
+
+
+ \FIGURE{htb}
+  {images/libSVM-KVM-THP.pdf}
+  {1.0}
+  {Transparent Huge Pages with KVM}
+  {F:thp}
+
+
+The results of running libSVM in a THP-enabled VM,a VM with no THP, and natively are displayed in Figure \cite{F:thp}.  Comparing first just the KVM results without THP to the native solution, we can see the impact of TLB misses on the overal application runtime, especially at large problem sizes (6000 training sets). However, when TLB is enabled in the guest and host, we actually see the KVM VM solution \emph{outperform} the native solution. This is because guest privileged OS memory used to buffer to/from GPU memory is backed by 2M pages, instead of the normal 4k pages as in the native solution. This causes significantly less TLB misses during application runtime, resulting in improved performance.  While this is likely a special case for THP usage with the libSVM application, the fact that a VM can even occationally outperform a native runtime is a noteworthy accomplishment. This also underscores the need for careful tuning and best-practices for hypervisors when supporting advanced scientific workloads. 
+
+%%%%%%---------------------------------------------------------------
+\section{Live Migration Mechanisms}
 %%%%%%---------------------------------------------------------------
 
 TODO: Definition of Migration, live migration, differences. (assumed known here).
 
-Live migration of VMs represents one of the fundamental advantages to virtualization, and also one of the greatest challenges to efficiency.  In Live migration, the complete VM state is copied from a source to a unallocated destination host, where disk, memory, and network connections are kept intact. For disk continuity, a distributed and/or shared filesystem is utilized, most commonly NFS, where both the source and destination hosts have access to the Vm disk.  Network continuity is preserved so long as the destination guest is within the same LAN and generates an unsolicited ARP reply to maintain the original IP after migration.  VM vCPU states and machine states are recorded from the source and quickly sent to the destination host when the VM is paused. This pause and tranfer time represents the entirety of a VM downtime during live migration, and is often < 100 milliseconds across  commodity Ethernet networks. 
+Live migration of VMs represents one of the fundamental advantages to virtualization, and also one of the greatest challenges to efficiency.  In live migration, the complete VM state is copied from a source to a unallocated destination host, where disk, memory, and network connections are kept intact. For disk continuity, a distributed and/or shared filesystem is utilized, most commonly but not exclusively NFS, where both the source and destination hosts have access to the VM disk.  Network continuity is preserved so long as the destination guest is within the same LAN and generates an unsolicited ARP reply to maintain the original IP after migration.  VM vCPU states and machine states are recorded from the source and quickly sent to the destination host when the VM is paused. This pause and tranfer time represents the entirety of a VM downtime during live migration, and is often at or under 100 milliseconds across  commodity Ethernet networks. 
 
-However, VM memory migration often requires the most care and is often the leading cause for migration overhead during live migration. This is due to not only the potentially large amount of memory to be sent across the network.  This is defined directly by the amount of main memory allocated (or in use) by the source VM. However, as a VM's memory is sent, the VM is still runing and therefor memory pages can be dirtied, creating the need for any written page to be retransmitted. Given a small network and a memory bound processes running within a VM, this can be an infinitely long process of page dirtying. 
+VM memory transfers are often the main performance consideration for overhead during live migration. This is not only due to the potentially large amount of memory to be sent across the network, but the veracity at which the memory is changed.  This is defined directly by the amount of main memory allocated (or in use) by the source VM. However, as a VM's memory is sent, the VM is still running and therefor memory pages can be dirtied, creating the need for any written page to be retransmitted. Given a small network and a memory bound processes running within a VM, this can be an infinitely long process of page dirtying. Many live migration strategies provide an iterative timeout mechanism to avoid this infinite state, but this will lead to increased downtime during migration.  
 
-A few general memory live migration concepts have been utilized, and are summarized in Figure X. 
+A few general memory live migration concepts have been utilized, and are summarized below. 
 
 \begin{itemize}
-\item Pre-copy Migration:  All memory pages are transmitted to the destination before the VM is paused. The hypervisor will note and track all dirtied memory pages, and retransmit those pages in iterative rounds. The rounds end when either no dirtied pages exist or a max iteration count has been reached. The VM state is then transmitted and resumed on the destination. 
-\item Post-copy Migration: The Vm state is immediately paused and sent to the destination hypervisor, and immediately resumed. If the new destination VM generates a page fault, the VM is paused, and faulted pages are transmitted across the network on demand from the source and the VM resumed.  
-\item Hybrid-copy Migration: Provides a compromise solution to memory paging. First, single copy of the VM memory pages, or a subset of known-necessary memory pages are sent to the destination.  Then the source VM is paused, its VM state sent to the destination, and resumed on the destination.  Known dirtied source pages, or missing pages are then copied to the destination upon a triggered page fault utilizing the same mechanism as post-copy migration. 
+\item Pre-copy Migration:  All memory pages are transmitted to the destination before the VM is paused. The hypervisor will note and track all dirtied memory pages, and retransmit those pages in iterative rounds. The rounds end when either no dirtied pages exist or a max iteration count has been reached. The VM state is then transmitted and resumed on the destination. This method was the first live migration technique used in \cite{clark2005live}. 
+\item Post-copy Migration: The Vm state is immediately paused and sent to the destination hypervisor, and immediately resumed. If the new destination VM generates a page fault, the VM is paused, and faulted pages are transmitted across the network on demand from the source and the VM resumed.  This methodology is proposed for use in the Xen hypervisor by Hines et al \cite{hines2009post}. 
+\item Hybrid-copy Migration: Provides a compromise solution to memory paging. First, single copy of the VM memory pages, or a subset of known-necessary memory pages are sent to the destination.  Then the source VM is paused, its VM state sent to the destination, and resumed on the destination.  Known dirtied source pages, or missing pages are then copied to the destination upon a triggered page fault utilizing the same mechanism as post-copy migration. An example of hybrid migration can be found via Lu et al \cite{Lu2013}. 
 \end{itemize}
 
+While pre-copy migration is the traditional and most used live migration technique, there are opportunities about to implement other migration techniques to advance the mobility of distributed computing in high performance virtual clusters with virtualization. 
+
+%%%%%%---------------------------------------------------------------
+\subsection{Moving the Compute to the Data}
+%%%%%%---------------------------------------------------------------
+
+
+While pre-copy migration is dominant in the live migration techniques of nearly every mainstream hypervisor today, it is proposed that for HPC applications, post-copy migration could provide some key new advances. One particular use case would be to send a lightweight VM to directly act on a large or set of large datasets, and return a slimmed down result set. This would reduce the requirement of transmitting the data across a network entirely, and potentially speed up data access latency drastically, as on result information in the form of memory pages and VM state are transmitted. 
+
+With post-copy migration, one could easily move the computation at hand close to a data source. This data source, and lightweight VM sink, could potentially be something similar to a Burst Buffer system \cite{Lofstead2014,wright2015trinity} or a classic HPC I/O node with a distribute filesystem such as Lustre or GPFS \cite{schmuck2002gpfs}. This data source could even potentially be a remote scientific instrument completely separate from the HPC infrastructure itself.  A VM would initiate post-copy live migration, transmitting  only the necessary cpu state, registers, and non-paged memory rather than the full VM memory state. Once migrated, the VM could access and perform the necessary calculations on the data, and return the result (rather than a full dataset) to the original source VM. During this time, only the necessary memory pages required would generate a fault and trigger their transmission from the source.  
+
+This post-copy live migration technique for remote data computation avoids the cost of spawning a whole new job and/or process with associated running parameters, as well as the extremely high cost of a full VM live migration using the pre-copy method. However, one potential downside of post-copy live migration would be the non-deterministic runtime, as it would be unknown how much remote memory paging would be required. This could lead to more time spent with the destination VM in a paused state awaiting remote memory pages, rather than if the entire VM memory contents were transmitted completely. Careful analysis of memory usage, or a hybrid copy method based on predetermined memory sections could help overcome this issue, but require a more advanced migration architecture. 
+
+
+\TODO{Should I draw this out in a process diagram?}
 
 %%%%%%---------------------------------------------------------------
 \subsection{RDMA \& VMs}
@@ -33,7 +75,7 @@ TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
 
 
 %%%%%%---------------------------------------------------------------
-\subsection{Fast VM Cloning}
+\section{Fast VM Cloning}
 %%%%%%---------------------------------------------------------------
 
 In many distributed system environments, concurrency is achieved through the use of homogeneous compute nodes that handle the bulk of the computational load in parallel. In virtual clusters, there is a need to efficiently deploy and manage near identical virtual machines for distributed computation. 
