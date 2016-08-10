@@ -95,13 +95,15 @@ In order to provide comprehensive high performance virtual clusters, we need to 
 
 However, providing an enhanced virtualized infrastructure does not solve all aspects of high performance virtual clusters. Specifically, proposed infrasturctures need to be properly evaluated in a systematic way through the use of a wide array of benchmarks, mini-applications, and full scale scientific applications. This effort can further be broken separated into three major problem sets; base level benchmarking tools, HPC applications, and big data applications. Evaluting the stringent performance requirements of all three sets, when compared with bare metal (no virtualization) common solutions, will illuminate not only successful designs but also the necessary focus areas that require more attention.
 
-One of the higher level aspects of providing high performance virtual clusters is the high level orchestration of the virtual clusters themselves. While this largely remains tangential to this research, it is none the less a key aspect for a successful soltuion. Some effort has been put forth for virtual cluster experiment management \cite{futureGrid-experiment-management}, and many ongoing open sources solutions also offer compelling options, such as OpenStack Heat \cite{openstack-heat}.  
+One of the higher level aspects of providing high performance virtual clusters is the high level orchestration of the virtual clusters themselves. While this largely remains tangential to this research, it is none the less a key aspect for a successful soltuion. Some effort has been put forth for virtual cluster experiment management \cite{futureGrid-experiment-management}, and many ongoing open sources solutions also offer compelling options, such as OpenStack Heat \cite{www-openstack-heat}.  
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Challenges}
 \label{sec:chall}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Historically, 
 
 The utility of Cloud computing
 
@@ -122,9 +124,35 @@ The utility of Cloud computing
 \subsection{Contributions}
 
 
+ \FIGURE{htb}
+  {images/VirtualCluster-architecture.pdf}
+  {1.0}
+  {Architectural diagram for High Performance Virtual Clusters}
+  {F:hpvcarch}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Outline}
 \label{sec:outline}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sweet
+
+
+The rest of this dissertation is organized into chapters, each signifying the steps to move forward the notion of a high performance virtual cluster solution.
+
+Chapter \ref{chap:related} investigates the related research surrounding both cloud computing and high performance computing. Within cloud computing, an introduction to cloud infrastructure, virtualization, and containers will all be discussed. This also includes details regarding virtual clusters as well as an overview of some national scale cloud infrastructure efforts that exist. Furtermore, we investigate the state of high performance computing and supercomputing, as well touch upon some of the current exascale efforts.
+
+Chapter \ref{chap:cloud2011} takes a look at the potential for virtualization, in its current state, for high performance computing. This includes a feature comparison for hardware availability of a few common hypervisors, specifically Xen, KVM, VirtualBox, and VMWare. Then, a few common HPC benchmarks are evaluated to determine what overhead exists and where in a single node configuration. This identifies how in some senarioes, virtualization adds only a minor overhead, whereas with other scenarios, overheads can be up to 50\% compared to native configurations. 
+
+Chapter \ref{chap:hpgc2014} starts to overcome one of the main limitations of virtualization for use in advaced scientific computing, specifically the lack of hardware avaiability. In this chaper, The Xen hypervisor is used to demonstrate the first publicized affect of GPU Passthrough, allowing for GPUs to be used in a guest VM. The efficiency of this method is breifly evaluated using two different hardware setups, and finds hardware can play a notable role in single node performance. 
+
+Chapter \ref{chap;cloud2014} continues where chapter \ref{chap:hpgc2014} leaves off, by demonstrating that GPU passthrough is possible on many other hypervisors, specifically also KVM and VMWare, and compares with one of the main containerization solutions, LXC. Here, the GPUs are evaluated using not only the HPC SHOC GPU benchmark suite developed at Oak Ridge National Laboratory, but also a diverse mix of real-world applications to examine how and where overhead exists with GPUs in VMs for each virtualization setup.  Specifically, we find that with properly tuned hardware and NUMA-balanced configurations, that the KVM solution can perform at roughly near-native performance, with on average ~1.5\% overhead compared to no virtualization. This illustrates that with the combination correct hypervisor selection, careful tuning, and advanced hardware, scientific computations can be supported using virtualized hardware. 
+
+Chapter \ref{chap:mdsimulations} takes the findings from the previous chapter to the next level. Specifically, the lessons learned from successful KVM virtualization with GPUs is expanded and combined with a missing key component of supporting advanced parallel computations: a high speed, low latency interconnect, specifically InfiniBand. Using SR-IOV and PCI Passthrough of QDR InfiniBand interconnect across a small cluster, it is demonstrated that two Molcular Dynamics simulations, both very commonly used in the HPC community, can be run at near-native performance in the designed virtual cluster.
+
+Chapter \ref{chap:future-work} takes a look at the given situation, and puts forth an argument for a high performance virtual cluster solutions. Specifically, we look at the given state of the art, how virtual clusters can be used to provide an infrastructure to support the convergence between HPC and big data. Furthermore, this chapter outlines and investigates potential next steps for virtualization, including the potential for advanced live migration techniques and VM cloning, which can be made available with the inclusion of a high-performance RDMA-capable interconnect. 
+
+
+Finally, this work concludes with an overal view of the current state of high performance virtualization, as well as it's potential to impact and support a wide array of disciplines. 
+
+
+
