@@ -68,8 +68,35 @@ This post-copy live migration technique for remote data computation avoids the c
 \TODO{Should I draw this out in a process diagram?}
 
 %%%%%%---------------------------------------------------------------
-\subsection{RDMA \& VMs}
+\subsection{RDMA-enabled VM Migration}
 %%%%%%---------------------------------------------------------------
+
+Currently, most live migrations occur over TCP/IP connections, even if RDMa-capable device is available
+Other porposed implementations in Xen show the advantage of RDMA pre-copy live migration
+  - find 80\% total migration time decrase, and 77\% for applications
+  - RDMA does not require, CPU or force context switches, application performance is not impacted. This is critical for HPC
+  - Utilize zero-copy
+  - Study only looks at pre-copy methcanisms with small pages
+
+Want to provide post-copy fault based live migration for THP-backed VMs in high performant hypervisor (KVM). 
+
+Discuss the tradeoffs between target-based RDMAread operations and source based RDMAwrite operations.
+
+RDMA read protocol requires more effort at the destiation host while RDMA write protocoal puts burden on the source host.  One way to determine which mechtod is best is by evaluating both host loads to find the least CPU-starved node, and use the aoopropriate RDMa communication mechanism. Furthermore, it may be possible to assume a large source load for HPC applications, and as such default to RDMAread operations to alleviate source host contention. 
+
+Overal process algorithm for pre-copy live migration:
+\begin{itemize}
+\item Transfer initial CPU state, registers
+\item Start the page table pages translation process: MFN to PFN and use copy-base approach
+\item Concurrently, allocate remote memory on destination VM.
+\item Set up other machine state settings in destination
+\item Start destination VM, pause source VM.
+\item Initiate RDMAwrite of entire memory contents from source to destination
+\item As page faults occur in destination VM, catch faults and perform RDMAread requesting pages. 
+\item 
+
+\end{itemize}
+
 
 TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
 
@@ -78,25 +105,34 @@ TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
 \section{Fast VM Cloning}
 %%%%%%---------------------------------------------------------------
 
-In many distributed system environments, concurrency is achieved through the use of homogeneous compute nodes that handle the bulk of the computational load in parallel. In virtual clusters, there is a need to efficiently deploy and manage near identical virtual machines for distributed computation. 
+In many distributed system environments, concurrency is achieved through the use of homogeneous compute nodes that handle the bulk of the computational load in parallel. This can take many forms, including master/slave configurations, or even a traditional HPC cluster with identical compute nodes, often used to support Single Process Multiple Data (SPMD) computational models \cite{spmd1988}. With high performance virtual clusters, there is a need to efficiently deploy and manage near identical virtual machines for distributed computation. 
 
-In Snowflock \cite{lagar2009snowflock, lagar2011snowflock}, the notion of VM cloning is given. Specifically, Lagar et al. define the notion of VM Fork, where VMs are treated similar to a fork\(\) system call for processes.   This process is conceptually similar to VM migration, with the exception that the source VM is not destroyed after the migration. Starting with a master VM, an impromptu cluster can be created across a network using the Xen hypervisor.  Snowflock specifically uses Multicast to linearly scale out VM creation to many hosts, only coping a minimal state and then remotely coping memory pages when requested.  This fetched memory on-demand is similar in principal to the post-copy live migration technique describe in Section 3.1.  This is further augmented with blocktap-based virtual disks with Copy-on-Write (CoW) functionally, delivering CoW slices for each child VM. 
+In Snowflock \cite{lagar2009snowflock, lagar2011snowflock}, the notion of VM cloning is given. Specifically, Lagar et al. define the notion of VM Fork, where VMs are treated similar to a fork\(\) system call for processes.   This process is conceptually similar to VM migration, with the exception that the source VM is not destroyed after the migration. Starting with a master VM, an impromptu cluster can be created across a network using the Xen hypervisor.  Snowflock specifically uses Multicast to linearly scale out VM creation to many hosts, only coping a minimal state and then remotely coping memory pages when requested.  This fetched memory on-demand is similar in principal to the post-copy live migration technique described in the previous section.  This is further augmented with blocktap-based virtual disks with Copy-on-Write (CoW) functionally, delivering CoW slices for each child VM. 
 
-While Snowflock provides an excellent framework for VM cloning, it is not suitable for the current implementation. First, it uses Xen, which previous research has found to have limited performance for HPC workloads \cite{Younge2011cloud}.  Second, SnowFlock is designed for Ethernet and IP based networks, which have significantly higher latency and lower bandwidth when compared to InfiniBand solutions. As such, we proposed to develop analogous mechanisms on KVM to use RDMA for VM memory and disk paging. 
+While Snowflock provides an excellent framework for VM cloning, it is not suitable for the current implementation. First, it uses Xen, which in previous research described in Chapter \ref{chap:cloud2011} has found to have limited performance for HPC workloads \cite{Younge2011cloud}.  Second, SnowFlock is designed for Ethernet and IP based networks, which have significantly higher latency and lower bandwidth when compared to InfiniBand solutions.  Developing analogous mechanisms with a high performance hypvervisor such as KVM or Palacios \cite{lange2010palacios} to use RDMA for VM memory paging. RDMA could even be utilized in conjunction with CoW disc blocks.
 
 Potential VM Cloning RDMA mechanism:
 \begin{itemize}
-\item Prepare parent VM state, including registers and info
-\item Create large buffers for all VM memory on child hosts (as per usual)
-\item Send vmstate via RDMAwrite or IB Send to N child nodes, where N is the clone size
+\item Prepare parent VM state, including registers and info.
+\item Prepare CoW disk images.
+\item Create large buffers for all VM memory on child hosts. 
+\item Send vmstate via RDMAwrite or IB Send to N child nodes, where N is the clone size.
 \item Resume/start child VMs in tandem. 
-\item Have parent VM use RDMA multicast (unreliable connection) to send memory pages to all childs efficiently
-\item If child page faults, does direct RDMAread operation for specific page. 
-\item Priority given (somehow?) to RDMA requests first. 
-\item Eventually, all children will have memory pages via multicast. As multicast is unreliable, delivery failure will just trigger a page fault and subsequent page sending via RDMA (yet unlikely)
+\item Parent VM set up RDMA multicast (unreliable connection) to send memory pages to all childs efficiently
+\item Child clone VM joins RDMA mlticast.
+\item If child page faults, perform RDMAread operation for specific page. 
 \end{itemize}
 
-This method allows for efficient multicasting of master VM memory.  It allows for direct page fault handling, while allowing child VMs to start and run immediately. Hybrid solution could also work with such a situation.  As RDMA multicast is relatively questionable, not sure how practical this method would/could be.
+This method allows for efficient cloning of VMs based on a running parent VM. First, the VM state and images are copied to all child nodes to recieve the VM, and blank memory is allocated. Then each child VM is started, and page faults are andled via RDMA read. This will result in an initial slowdown, but as pages are received the child VMs will start to run. The rest of th emmory is eventually sent via multicast to all VMs simultaniously.   As multicast is unreliable, delivery failure will just trigger a page fault and subsequent page sending via RDMA.  It allows for direct page fault handling, while allowing child VMs to start and run immediately. As RDMA multicast mechanisms are relatively questionable,  more investigation is needed to evaluate the feasibility of this situation. A higher level API such as IBverbs or MPI may be needed for this method to effectively work.  
+
+It is expected for post-copy VM cloning to also work most efficiencly if used in conjunction with guest VMs backed with hugepages. Transfering memory in 2M chunks will more effectively utilize network bandwdith by eliminating send/receive overhead. This also will hide the latency found in SR-IOV enabled interconnects for small messages. Furthermore, it will reduce the overhead of page fault handling mechanisms, as less overall pages will fault and be transfered.  While hugepages are expected to improve VM cloning efficency, emperical testing will still be necessary to properly evaluate their viability.   
+
+While a VM fork mechanism leveraging post-copy live migration in KVM will quickly spool up cloned VMs, the eventual memory transfer will eventually fail to scale past the network's capacity. This could happen if hundreds or thousands of child clone VMs are being started simultaniously, as is likely in large scale deployments. As such, a higherarchical distribution may be necessary. One possible method for this would be a two-stage cloning mechanism, where child VMs are cloned one to each cabinet, and the entire memory contents copied using the pre-copy migration mechanism. From there, further cloning occurs to deploy many cloned VMs to individual nodes within the cabinet. Organization of mid-tier cloned VMs would likely be determined based on RDMA fabric configurations within cabinets, as this is a network-bound process. 
+
+\TODO{Describe idea for two-stage filesystem with parent disk mounted as read-only, with all write going to scratch space.  This is similar to how Cray handles node OS deployments on XC30 and XC40 systems today.}
+
+In summary, we expect the combination of transparant huge pages, an RDMA-capable interconnect multiplexed in hardware for use by both guest and hosts, a high performant hypervisor, and post-copy migration and cloning mechanisms to enable a novel architecture for high perofrmance virtual clusters. These mechanisms, if implemented and combined with an efficient OS, such as Kitten \cite{pedretti2011kitten}, could help enable a new runtime system to support extreme scale distirbuted memory computations with in-situ analysis \cite{ahrens2010visualization, vishwanath2011toward} for large scale scientific systems. 
+
 
 
 
