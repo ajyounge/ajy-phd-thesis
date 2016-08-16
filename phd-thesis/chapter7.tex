@@ -71,20 +71,13 @@ This post-copy live migration technique for remote data computation avoids the c
 \subsection{RDMA-enabled VM Migration}
 %%%%%%---------------------------------------------------------------
 
-Currently, most live migrations occur over TCP/IP connections, even if RDMa-capable device is available
-Other porposed implementations in Xen show the advantage of RDMA pre-copy live migration
-  - find 80\% total migration time decrase, and 77\% for applications
-  - RDMA does not require, CPU or force context switches, application performance is not impacted. This is critical for HPC
-  - Utilize zero-copy
-  - Study only looks at pre-copy methcanisms with small pages
+Currently, most live migration in production environments occur over TCP/IP connections. This is the case largly due to the prevelence of commodity Etherent connections within cloud infrasturcture. However even if RDMA-capable interconnects are available in such infrastructure as described as a reality in Chapter \ref{chap:mdsimulations}, live migration still occurs over TCP/IP. For the case of InfiniBand, this is via IP over InfiniBand (IPoIB) \cite{chu2006ipoib}, which can be an inefficient use of the interconnect bandwidth and add extra latency \cite{yu2008performance}. 
 
-Want to provide post-copy fault based live migration for THP-backed VMs in high performant hypervisor (KVM). 
+As such, live migration can be sped up significantly by using an RDMA based mechanisms. Huang et al first provided a proposed pre-copy method for RDMA-based migration using the Xen hypervisor \cite{huang2007high}. Specifically, they found a 80\% decrease in migration time with RDMAwrite operations. This speedup is largely due to the added overhead necessary for TCP/IP communications, largly in CPU utilization for copying buffers, packet processing, and the included context switch overhead when competing for resources in a CPU-bound application (which are common in HPC environments). 
 
-Discuss the tradeoffs between target-based RDMAread operations and source based RDMAwrite operations.
+ However, the live migration algorithm proposed in \cite{huang2007high} uses the standard pre-copy mechanism that sends the entire memory contents across the network as RDMA operations, then iteratively copies dirtied pages before switching the running states.  As discussed in the previous section, a post-copy migration strategy may have benefits for quick VM migration in high performance virtual clusters, or even for VM cloning as described in Section \ref{vmcloning}. Furthermore, efforts in Chapter \cite{chap:cloud2011} have found that the Xen hypervisor is not best suited for HPC workloads.  As such, there is a need to redefine the use of RDMA for VM migration using a hybrid post-copy mechanism in a high performance hypervisor.   
 
-RDMA read protocol requires more effort at the destiation host while RDMA write protocoal puts burden on the source host.  One way to determine which mechtod is best is by evaluating both host loads to find the least CPU-starved node, and use the aoopropriate RDMa communication mechanism. Furthermore, it may be possible to assume a large source load for HPC applications, and as such default to RDMAread operations to alleviate source host contention. 
-
-Overal process algorithm for pre-copy live migration:
+\TODO{Update this item list with an algorithm definition}
 \begin{itemize}
 \item Transfer initial CPU state, registers
 \item Start the page table pages translation process: MFN to PFN and use copy-base approach
@@ -93,16 +86,34 @@ Overal process algorithm for pre-copy live migration:
 \item Start destination VM, pause source VM.
 \item Initiate RDMAwrite of entire memory contents from source to destination
 \item As page faults occur in destination VM, catch faults and perform RDMAread requesting pages. 
-\item 
-
 \end{itemize}
 
+Currently efforts are underway to provide post-copy live migration in KVM/QEMU, using the "migrate\_set\_capability x-postcopy-ram on" mode within KVM \cite{www-kvm-postcopy}. This method uses the Linux \emph{userfaultfd} kernel mechanisms from a kernel 4.3 or newer. At the start, all memory blocks are registered as \emph{userfaultfd} so all faults cause the running thread to pause. In kernel space, the missing page is requested from the sender, which prioritized over other pages being sent and is returned and mapped to the destination guest memory space and the thead or process is unpaused. This mechanism operates asynchronously, so that multiple outstanding page faults will not stop other executables within the VM. As such, the xpostcopy-ram KVM extention has been identified as an ideal place to implement an RDMA based implementation. 
 
-TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
+\TODO{Discuss how RMDA would fit in KVM post copy}
+
+%Other porposed implementations in Xen show the advantage of RDMA pre-copy live migration 
+%  - find 80\% total migration time decrase, and 77\% for applications
+%  - RDMA does notransmission from the source.  
+%
+% require, CPU or force context switches, application performance is not impacted. This is critical for HPC
+%  - Utilize zero-copy
+%  - Study only looks at pre-copy methcanisms with small pages
+%
+
+%Want to provide post-copy fault based live migration for THP-backed VMs in high performant hypervisor (KVM). 
+
+RDMA read protocol requires more effort at the destiation host while RDMA write protocoal puts burden on the source host.  One way to determine which mechtod is best is by evaluating both host loads to find the least CPU-starved node, and use the aoopropriate RDMa communication mechanism. Furthermore, it may be possible to assume a large source load for HPC applications, and as such default to RDMAread operations to alleviate source host contention. 
+
+
+
+
+%TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
 
 
 %%%%%%---------------------------------------------------------------
 \section{Fast VM Cloning}
+\label{vmcloning}
 %%%%%%---------------------------------------------------------------
 
 In many distributed system environments, concurrency is achieved through the use of homogeneous compute nodes that handle the bulk of the computational load in parallel. This can take many forms, including master/slave configurations, or even a traditional HPC cluster with identical compute nodes, often used to support Single Process Multiple Data (SPMD) computational models \cite{spmd1988}. With high performance virtual clusters, there is a need to efficiently deploy and manage near identical virtual machines for distributed computation. 
