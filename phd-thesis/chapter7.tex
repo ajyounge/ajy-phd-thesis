@@ -53,19 +53,7 @@ A few general memory live migration concepts have been utilized, and are summari
 
 While pre-copy migration is the traditional and most used live migration technique, there are opportunities about to implement other migration techniques to advance the mobility of distributed computing in high performance virtual clusters with virtualization. 
 
-%%%%%%---------------------------------------------------------------
-\subsection{Moving the Compute to the Data}
-%%%%%%---------------------------------------------------------------
 
-
-While pre-copy migration is dominant in the live migration techniques of nearly every mainstream hypervisor today, it is proposed that for HPC applications, post-copy migration could provide some key new advances. One particular use case would be to send a lightweight VM to directly act on a large or set of large datasets, and return a slimmed down result set. This would reduce the requirement of transmitting the data across a network entirely, and potentially speed up data access latency drastically, as on result information in the form of memory pages and VM state are transmitted. 
-
-With post-copy migration, one could easily move the computation at hand close to a data source. This data source, and lightweight VM sink, could potentially be something similar to a Burst Buffer system \cite{Lofstead2014,wright2015trinity} or a classic HPC I/O node with a distribute filesystem such as Lustre or GPFS \cite{schmuck2002gpfs}. This data source could even potentially be a remote scientific instrument completely separate from the HPC infrastructure itself.  A VM would initiate post-copy live migration, transmitting  only the necessary cpu state, registers, and non-paged memory rather than the full VM memory state. Once migrated, the VM could access and perform the necessary calculations on the data, and return the result (rather than a full dataset) to the original source VM. During this time, only the necessary memory pages required would generate a fault and trigger their transmission from the source.  
-
-This post-copy live migration technique for remote data computation avoids the cost of spawning a whole new job and/or process with associated running parameters, as well as the extremely high cost of a full VM live migration using the pre-copy method. However, one potential downside of post-copy live migration would be the non-deterministic runtime, as it would be unknown how much remote memory paging would be required. This could lead to more time spent with the destination VM in a paused state awaiting remote memory pages, rather than if the entire VM memory contents were transmitted completely. Careful analysis of memory usage, or a hybrid copy method based on predetermined memory sections could help overcome this issue, but require a more advanced migration architecture. 
-
-
-\TODO{Should I draw this out in a process diagram?}
 
 %%%%%%---------------------------------------------------------------
 \subsection{RDMA-enabled VM Migration}
@@ -75,7 +63,7 @@ Currently, most live migration in production environments occur over TCP/IP conn
 
 As such, live migration can be sped up significantly by using an RDMA based mechanisms. Huang et al first provided a proposed pre-copy method for RDMA-based migration using the Xen hypervisor \cite{huang2007high}. Specifically, they found a 80\% decrease in migration time with RDMAwrite operations. This speedup is largely due to the added overhead necessary for TCP/IP communications, largly in CPU utilization for copying buffers, packet processing, and the included context switch overhead when competing for resources in a CPU-bound application (which are common in HPC environments). 
 
- However, the live migration algorithm proposed in \cite{huang2007high} uses the standard pre-copy mechanism that sends the entire memory contents across the network as RDMA operations, then iteratively copies dirtied pages before switching the running states.  As discussed in the previous section, a post-copy migration strategy may have benefits for quick VM migration in high performance virtual clusters, or even for VM cloning as described in Section \ref{vmcloning}. Furthermore, efforts in Chapter \cite{chap:cloud2011} have found that the Xen hypervisor is not best suited for HPC workloads.  As such, there is a need to redefine the use of RDMA for VM migration using a hybrid post-copy mechanism in a high performance hypervisor.   
+However, the live migration algorithm proposed in \cite{huang2007high} uses the standard pre-copy mechanism that sends the entire memory contents across the network as RDMA operations, then iteratively copies dirtied pages before switching the running states.  As discussed in the previous section, a post-copy migration strategy may have benefits for quick VM migration in high performance virtual clusters, or even for VM cloning as described in Section \ref{vmcloning}. Furthermore, efforts in Chapter \cite{chap:cloud2011} have found that the Xen hypervisor is not best suited for HPC workloads.  As such, there is a need to redefine the use of RDMA for VM migration using a hybrid post-copy mechanism in a high performance hypervisor.   
 
 \TODO{Update this item list with an algorithm definition}
 \begin{itemize}
@@ -90,7 +78,23 @@ As such, live migration can be sped up significantly by using an RDMA based mech
 
 Currently efforts are underway to provide post-copy live migration in KVM/QEMU, using the "migrate\_set\_capability x-postcopy-ram on" mode within KVM \cite{www-kvm-postcopy}. This method uses the Linux \emph{userfaultfd} kernel mechanisms from a kernel 4.3 or newer. At the start, all memory blocks are registered as \emph{userfaultfd} so all faults cause the running thread to pause. In kernel space, the missing page is requested from the sender, which prioritized over other pages being sent and is returned and mapped to the destination guest memory space and the thead or process is unpaused. This mechanism operates asynchronously, so that multiple outstanding page faults will not stop other executables within the VM. As such, the xpostcopy-ram KVM extention has been identified as an ideal place to implement an RDMA based implementation. 
 
-\TODO{Discuss how RMDA would fit in KVM post copy}
+Leveraging the \emph{xpost-copy-ram} effort with KVM, a post copy mechanism could be used, but instead of transfering memory pages via TCP/IP, RDMA mechanisms could be inserted. To provide RDMA functionalty, the InfiniBand interconnect could first be used as a proof-of-concept. This choice is due to InfiniBand's rise in popularity, increased prevelance in virtualized systems  with SR-IOV as noted in Chapter \ref{chap:mdsimulations}, and RMDA functionality. However, other interconnect opitons exist that may be better suited for enhanced functionality and performance.
+
+RDMA semantics can be used to either read or write contents of remote memory, in this case VM guest memory pages. However before such opeations can take place, the target side of hte operation must register the remote memory buffers and send the remote key to the initiator, effectively providing the DMA addressing to be used. Beyond the increased bandwidth and decreased latency benefits provided by an advanced interconnect with InfiniBand, RDMA also allows VM memory to be sent without involving the OS. This is due to InfiniBand's xero-copy, kernel bypass mechanisms, and utilizing asynchronous operations. This keeps the CPU load down, and focused on the computation at hand rather than the I/O transfer, as it often has to when utilizing a TCP/IP stack. 
+ 
+Selecting the proper RMDA based communication operations to use can make a notable difference in the overal performance of the migration.  In \cite{something}, the authors note an X\% difference between Send/Receive and Read/Write operations.   Some RDMA operations are largely a one-sided invovement, which can have performance impact and should be carefully considered in using for post-copy live migration. The RDMAread operation requires more effort at the destiation host, while RDMA write operation puts burden on the desitnation host.  One way to determine which method is best is by evaluating both source and sink CPU loads.  However this method likely will not be as obvious when we consider VMs will be not be running in an over-subscripbed virtualized environment, but rather a highly optimized one. 
+
+When the destination VM page faults, it is necessary to retreive the page with as little latency as possible, as the running thread is paused. Using the method developed in \cite{www-kvm-postcopy}, the \emph{userfaultfd} will trigger an RDMAread to retreive the missing page. RDMAread requires no interaction from the source VM, as RDMAread is one sided and the memory buffers have been passed in the setup phase. To further enable quick return time for the missing page, enabling polling on the source host may further reduce latency, however verification of this will be necessary. When the RDMAread operation is finished, the running thread will resume and execution will continue.
+
+
+
+
+
+%\TODO{Refrace to really empesize RDMA benfits provided by zero-copy, kernel bypass, and asynchronous operation( threads not blocking)}
+
+%Considering the target of supporting HPC workloads which often have considerable resource requirements, it may be possible to assume a large destination load, as the running application is quickly resumed at the destination with a post-copy method.
+% As such, RDMAread operations should be used from the destination to the source to alleviate destination host load. As it is the case in post-copy migration that the destination will trigger a page fault and needs to be handled, the RDMAread operation further makes sense to use.  This is further an important consideration when we consider performing multiple concurrent migrations, as detailed in with VM cloning later in Section \ref{vmcloning}. 
+
 
 %Other porposed implementations in Xen show the advantage of RDMA pre-copy live migration 
 %  - find 80\% total migration time decrase, and 77\% for applications
@@ -103,9 +107,24 @@ Currently efforts are underway to provide post-copy live migration in KVM/QEMU, 
 
 %Want to provide post-copy fault based live migration for THP-backed VMs in high performant hypervisor (KVM). 
 
-RDMA read protocol requires more effort at the destiation host while RDMA write protocoal puts burden on the source host.  One way to determine which mechtod is best is by evaluating both host loads to find the least CPU-starved node, and use the aoopropriate RDMa communication mechanism. Furthermore, it may be possible to assume a large source load for HPC applications, and as such default to RDMAread operations to alleviate source host contention. 
 
 
+
+
+
+%%%%%%---------------------------------------------------------------
+\subsection{Moving the Compute to the Data}
+%%%%%%---------------------------------------------------------------
+
+
+While pre-copy migration is dominant in the live migration techniques of nearly every mainstream hypervisor today, it is proposed that for HPC applications, post-copy migration could provide some key new advances. One particular use case would be to send a lightweight VM to directly act on a large or set of large datasets, and return a slimmed down result set. This would reduce the requirement of transmitting the data across a network entirely, and potentially speed up data access latency drastically, as on result information in the form of memory pages and VM state are transmitted. 
+
+With post-copy migration, one could move the computation at hand close to a data source in significantly less time than full pre-copy live migration. This data source, and lightweight VM sink, could potentially be something similar to a Burst Buffer system \cite{Lofstead2014,wright2015trinity} or a classic HPC I/O node with a distribute filesystem such as Lustre or GPFS \cite{schmuck2002gpfs}. This data source could even potentially be a remote scientific instrument completely separate from the HPC infrastructure itself, especially if the network at hand is capable of RoCE \cite{roce} or iWARP\cite{iwarp}.  A VM would initiate post-copy live migration, transmitting  only the necessary cpu state, registers, and non-paged memory rather than the full VM memory state. Once migrated, the VM could connect to a (now local) I/O or storage device, accessing data fast and perofrming the necessary calculations. The VM could potentially even forgo the copy of the majority of its memory. During this time, only the necessary memory pages required to complete the immediate calculation would generate a fault and trigger their transmission from the source.  The VM could even return the result (rather than a very large dataset) to the original source VM. 
+
+This post-copy live migration technique for remote data computation avoids the cost of spawning a whole new job and/or process with associated running parameters, as well as the extremely high cost of a full VM live migration using the pre-copy method. However, one potential downside of post-copy live migration would be the non-deterministic runtime, as it would be unknown how much remote memory paging would be required. This could lead to more time spent with the destination VM in a paused state awaiting remote memory pages, rather than if the entire VM memory contents were transmitted completely. Careful analysis of memory usage, or a hybrid copy method based on predetermined memory sections could help overcome this issue, but require a more advanced migration architecture. 
+
+
+\TODO{Should I draw this out in a process diagram?}
 
 
 %TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
