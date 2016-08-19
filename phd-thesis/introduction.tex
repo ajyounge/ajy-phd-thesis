@@ -11,6 +11,7 @@
 \label{sec:overview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{comment}
 \TODO{Give quick very high level view. 
 
 Provide insightful quote regarding scientific computation 
@@ -31,6 +32,8 @@ Introduce how Virtual Clusters, can do this.
 - Missing performance considerations.
 
 }
+\end{comment}
+
 
 For years visionaries in computer science have predicted the advent of utility-based computing.  This concept dates back to John McCarthy's vision stated at the MIT centennial celebrations in 1961.
 
@@ -52,24 +55,11 @@ As more domain science turns to the aid of computational resources for conductin
 
 Historically, application diversity was separated into High Performance Computing (HPC) and High Throughput Computing (HTC).  With HTC, computational problems can be separated into independent tasks that can execute in a pleasingly parallel fashion, happily gaining any available resources and rarely require significant communication or synchronization between tasks. HPC often represents computational problems that require significant communication and coordination to effectively produce results, usually with the use of a communication protocol such as MPI \cite{mpi}.  Recently however, many big-data paradigms \cite{agrawal2011big} have been introduced in distributed systems that represent new computational models for distributed computing, such as MapReduce \cite{dean2008mapreduce} and the corresponding Apache Big Data stack \cite{Jha2014apache}. Supporting these different distributed computational paradigms requires a flexible infrastructure capable of providing computational resources for all possible models in a fast and efficient manner. 
 
+\TODO{We need something meta here.  A bit historical, bring in cloud computing}
+
 \TODO{Introduce virtual clusters here, related to beowulf clusters, hpc systems}
 
 One such proposed solution is the use of virtual clusters \cite{Foster2006} to provide distinct, separated environments on similar resources using virtual machines. These virtual clusters, similar in design to the Beowulf clusters and commodity HPC systems, provide a distributed memory environment, usually with a local resource management system \cite{czajkowski1998resource}, however they do so in Virtual Machines (VMs).  However, past concerns with virtualization have limited the adoption of virtual clusters in many large scale cyberinfrastructure deployments. This has largely been due to the overhead of virtualization, whereby many scientific computations have experienced a significant and notable degradation in performance.  In an ecosystem familiarized with HPC systems where performance is paramount, this has been an obstructive hurdle for many even mid-level scientific endeavors.
-
-The notion that virtualization and Cloud infrastructure do not fit well with HPC applications has been characterized many times. One of the most prominent examples of this is the Department of Energy's Magellan Project \cite{www-magellan}, where by the Magellan Final Report \cite{MagellanFinal} states the following finding as a Key Finding:
-  
-\begin{quote}
-``\textbf{Finding 2. Scientific applications with minimal communication and I/O are best suited for
-clouds.}
-
-We have used a range of application benchmarks and micro-benchmarks to understand the performance of scientific applications. Performance of tightly coupled applications running on virtualized clouds using commodity networks can be significantly lower than on clusters optimized for these workloads. This can be true at even mid-range computing scales. For example, we observed slowdowns of about 50x for PARATEC on the Amazon EC2 instances compared to Magellan bare-metal (non-virtualized) at 64 cores and about 7x slower at 1024 cores on Amazon Cluster Compute instances, the specialized high performance computing offering. As a result, current cloud systems are best suited for high-throughput, loosely coupled applications with modest data requirements.``
-\end{quote}
-
-These findings underscore how classical usage of virtualization in cloud infrastructure has serious performance issues when running tightly coupled distributed memory applications. Many of these performance concerns are sound, given the limitation of a number of virtualization overheads commonplace at the time, including shadow page tables, slow emulated Ethernet drivers, experimental hypervisors, and a complete lack of sophisticated hardware concurrently was commonplace in supercomputers and clusters.  As a result, the advantages of virtualization, including on-demand resource allocation, live migration and advanced hybrid migration, and user-defined environments, have not been able to effectively show their value in the context of the HPC community. 
-
-However, virtualization itself may not be fundamentally limited by the overhead that causes issues in running high performance computing applications. Recent improvements in performance, along with increased usability of accelerators and high speed, low latency interconnects in virtualized environments as demonstrated in this dissertation, have made virtual clusters a more viable solution for mid-tier scientific applications.  Furthermore, it is possible for  virtualization technologies to bring enhanced usability and enable specialized runtime components to future HPC resources, adding significant value over today's supercomputing resources.   
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Statement}
@@ -78,7 +68,7 @@ However, virtualization itself may not be fundamentally limited by the overhead 
 
 \TODO{The open question is if Cloud infrastructure, using virtualizaton, can support mid-tier scientific computation.  This argument is that yes, it potentially can.}
 
-With the rise of cloud computing within the greater realm of distributed systems, we've seen a number of scientific computing endeavors map well to cloud infrastructure. First, this includes the simple and most common practice of on demand computing where by userscan rent-a-workstation \cite{kondo2009cost}. Perhaps these resources are more powerful than a given researcher's laptop and used to run their scientific applications or support greater laboratory collaborative efforts, such as a shared database or web service. 
+With the rise of cloud computing within the greater realm of distributed systems, we've seen a number of scientific computing endeavors map well to cloud infrastructure. First, this includes the simple and most common practice of on demand computing where by users can rent-a-workstation \cite{kondo2009cost}. Perhaps these resources are more powerful than a given researcher's laptop and used to run their scientific applications or support greater laboratory collaborative efforts, such as a shared database or web service. 
 
 Second, we've seen virtualized cloud infrastructure support high throughput computing very well. Often times pleasingly parallel applications, be it from high energy physics such as the LHC effort \cite{buncic2010cernvm, bell2015scaling} or bioinformatics with BLAST alignment jobs \cite{menon2012cloud}, have proven to run with high efficiency in public and private cloud environments. The rise of public cloud infrastructure has also coincided with increase in big data computation and analytics.
 \TODO{give more info on Big data here}.
@@ -120,25 +110,40 @@ One of the higher-level aspects of providing high performance virtual clusters i
 \label{sec:chall}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Historically,  
+\TODO{Quick paragraph that leads into this}
 
-The utility of Cloud computing
+The notion that virtualization and Cloud infrastructure are not able to support parallel distributed memory applications has been characterized many times. One of the most prominent examples of this is the Department of Energy's Magellan Project \cite{www-magellan}, where by the Magellan Final Report \cite{MagellanFinal} states the following finding as a Key Finding:
+  
+\begin{quote}
+``\textbf{Finding 2. Scientific applications with minimal communication and I/O are best suited for
+clouds.}
 
-\TODO{ Also bring in the Magellan project's EC2 paper here, show what they were doing, how performance is a limiting factor}
+We have used a range of application benchmarks and micro-benchmarks to understand the performance of scientific applications. Performance of tightly coupled applications running on virtualized clouds using commodity networks can be significantly lower than on clusters optimized for these workloads. This can be true at even mid-range computing scales. For example, we observed slowdowns of about 50x for PARATEC on the Amazon EC2 instances compared to Magellan bare-metal (non-virtualized) at 64 cores and about 7x slower at 1024 cores on Amazon Cluster Compute instances, the specialized high performance computing offering. As a result, current cloud systems are best suited for high-throughput, loosely coupled applications with modest data requirements.``
+\end{quote}
 
-- Quickly state our desires: support HPC and big data
-- State our solution is ot use virtualization
+These findings underscore how classical usage of virtualization in cloud infrastructure has serious performance issues when running tightly coupled distributed memory applications. Many of these performance concerns are sound, given the limitation of a number of virtualization overheads commonplace at the time, including shadow page tables, slow emulated Ethernet drivers, experimental hypervisors, and a complete lack of sophisticated hardware concurrently was commonplace in supercomputers and clusters.  As a result, the advantages of virtualization, including on-demand resource allocation, live migration and advanced hybrid migration, and user-defined environments, have not been able to effectively show their value in the context of the HPC community. 
+
+
+\TODO{Need to organize effort with a framework}
+
+\TODO{HPC/Big data convergence. Need to provide functionality for both}
+
+
+
 - However, historically virtualization has performance issues
-
-
-
 - Performance must be a first class function
 - Need for a framework.  to organize efforts
 - Need to address not only HPC but also big data
 - HPC and Big data convergence 
 
 
-\subsection{Contributions}
+
+However, virtualization itself may not be fundamentally limited by the overhead that causes issues in running high performance computing applications. Recent improvements in performance, along with increased usability of accelerators and high speed, low latency interconnects in virtualized environments as demonstrated in this dissertation, have made virtual clusters a more viable solution for mid-tier scientific applications.  Furthermore, it is possible for  virtualization technologies to bring enhanced usability and enable specialized runtime components to future HPC resources, adding significant value over today's supercomputing resources.  This could potentially include infrastructure advances for higher level cloud platform services for supporting big data applications \cite{qiu2014towards}. 
+
+
+
+
+%\subsection{Contributions}
 
 
 
