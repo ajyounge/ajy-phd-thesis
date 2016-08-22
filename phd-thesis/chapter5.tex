@@ -424,6 +424,59 @@ Energy)  co-design effort for exascale applications~\cite{LULESH}.
 \begin{table*}
 %\rowcolors{2}{gray!25}{white}
 \footnotesize
+\caption{SHOC overheads for Bespin (K20) expressed as geometric means of scaled values within a
+level, while maximum overheads are expressed as a percentage.  }
+\label{K20MEANS}
+\centering
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+%\rowcolor{gray!50}
+    \hline 
+    ~  & \multicolumn{8}{c|}{Bespin (K20)} \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare} \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
+    L0 & 0.999   & 1.57   & 0.997 & 3.34   & 1.00   & 1.77  & 1.00  & 1.90     \\ \hline 
+    L1 & 0.998   & 1.23   & 0.998 & 1.39   & 1.00   & 1.47  & 1.00  & 0.975   \\ \hline 
+    L2 & 0.998   & 0.48   & 0.995 & 0.846  & 0.999  & 1.90  & 0.999 & 1.20   \\ \hline
+    ~  & \multicolumn{8}{c|}{Bespin PCIe-only}  \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare}  \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
+    L0 & 0.997   & 0.317   & 0.999  & 0.143 & 0.995  & 0.981  & 0.995 & 1.01      \\ \hline 
+    L1 & 0.998   & 0.683   & 0.997  & 1.39  & 1.00   & 0.928  & 1.01  & 0.975   \\ \hline 
+    L2 & 0.998   & 0.478   & 0.996  & 0.846 & 1.00   & 0.247  & 1.01  & 0.133    \\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{table*}
+%\rowcolors{2}{gray!25}{white}
+\footnotesize
+\caption{SHOC overheads  for Delta (c2075) expressed as geometric means of scaled values within a
+level, while maximum overheads are expressed as a percentage.  }
+\label{C2075MEANS}
+\centering
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+%\rowcolor{gray!50}
+    \hline 
+    ~  &  \multicolumn{8}{c|}{Delta (C2075)} \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare}  \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
+    L0 & 1.01     & 0.031   & 0.969    & 12.7  & 1.00  & 0.073   & 1.00  & 4.95    \\ \hline 
+    L1 & 1.00     & 1.45    & 0.959    & 24.0  & 1.00  & 0.663   & 0.933 & 36.6    \\ \hline 
+    L2 & 1.00     & 0.101   & 0.982    & 4.60  & 1.00  & 0.016   & 0.962 & 7.01    \\ \hline
+    ~  &  \multicolumn{8}{c|}{Delta PCIe-only} \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare} \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
+    L0 & 1.04     & 0.029   & 0.889    & 12.7  & 1.00  & 0.01  & 0.995  & 4.37    \\ \hline 
+    L1 & 1.00     & 1.45    & 0.914    & 20.5  & 0.999 & 0.380 & 0.864  & 36.6    \\ \hline 
+    L2 & 1.00     & 0.075   & 0.918    & 4.60  & 1.00  & N/A   & 0.869  & 7.01    \\ \hline
+    \end{tabular}
+\end{table*}
+
+
+
+\begin{comment}
+\begin{table*}
+%\rowcolors{2}{gray!25}{white}
+\footnotesize
 \caption{SHOC overheads expressed as geometric means of scaled values within a
 level, while maximum overheads are expressed as a percentage.  }
 \label{MEANS}
@@ -445,6 +498,10 @@ level, while maximum overheads are expressed as a percentage.  }
     L2 & 0.998   & 0.478   & 0.996  & 0.846 & 1.00   & 0.247  & 1.01  & 0.133 & 1.00     & 0.075   & 0.918    & 4.60  & 1.00  & N/A   & 0.869  & 7.01    \\ \hline
     \end{tabular}
 \end{table*}
+\end{comment}
+
+
+
 We characterize GPGPU performance within virtual machines across two hardware
 systems, 4 hypervisors, and 3 application sets.  We begin with the SHOC
 benchmark suite before describing the GPU-LIBSVM, LAMMPS, and LULESH results.
@@ -495,7 +552,7 @@ typically higher.
 %\end{figure}
 
 
-In Table~\ref{MEANS}, we provide geometric means for each SHOC level across each
+In Tables~\ref{K20MEANS} and \ref{C2075MEANS}, we provide geometric means for each SHOC level across each
 hypervisor and system.  We also include the maximum
 overhead for each hypervisor at each level to facilitate comparison across
 hypervisors and systems.  Finally, we provide a comparable breakdown of only the
