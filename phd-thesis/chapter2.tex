@@ -254,21 +254,28 @@ Other cloud specific projects exist such as In-VIGO \cite{DBLP:journals/fgcs/Ada
 \subsection{Workload Scheduling}
 %%%%%%---------------------------------------------------------------
 
-While virtualization provides many key advancements, this technology alone is not sufficient.  Rather, a collective scheduling and management for virtual machines is required to piece together a working Cloud.  Let us consider a typical usage for a Cloud data center that is used in part to provide computational power for the Large Hadron Collider at CERN \cite{CERN2003}, a global collaboration from more than 2000 scientists of 182 institutes in 38 nations.  Such a system would have a small number of experiments to run. Each experiment would require a very large number of jobs to complete the computation needed for the analysis.  Examples of such experiments are the ATLAS \cite{luo2005gsp} and CMS \cite{cms} projects, which (combined) require Petaflops of computing power on a daily basis.  Each job of an experiment is unique, but the application runs are often the same.  
-
-Therefore, virtual machines are deployed to execute incoming jobs. There is a file server which provides virtual machine templates. All typical jobs are preconfigured in virtual machine templates. When a job arrives at the head node of the  cluster, a correspondent virtual machine is dynamically started on acertain compute node within the cluster to execute the job (see Figure BLAH).
-
-While this is an abstract solution, it is important to keep in mind that these virtual machines create an overhead when compared to running on ``bare metal."  Current research estimates this the overhead for CPU bound operations at 1 to 15\% depending on the hypervisor, however more detailed studies are needed to better understand this overhead.   While the hypervisor introduces overhead, so does the actual VM image being used.  Therefore, it is clear that slimming down the images could yield an increase in overall system efficiency.  This provides the motivation for the minimal Virtual Machine image design discussed in Section \ref{sec:minvm}.
+%While this is an abstract solution, it is important to keep in mind that these virtual machines create an overhead when compared to running on ``bare metal."  Current research estimates this the overhead for CPU bound operations at 1 to 15\% depending on the hypervisor, however more detailed studies are needed to better understand this overhead.   While the hypervisor introduces overhead, so does the actual VM image being used.  Therefore, it is clear that slimming down the images could yield an increase in overall system efficiency.  This provides the motivation for the minimal Virtual Machine image design discussed in Section \ref{sec:minvm}.
 
 %%%%%%---------------------------------------------------------------
 \subsection{Virtual Clusters}
 %%%%%%---------------------------------------------------------------
 
-TODO: write all about virtual clusters. This includes much from the Cloud Computing book that looks at virtua clusters back in 2009 and such, as well as the latest efforts with SDSC's comet cloud and various other new age efforts. Also probably good to tlak a lot aobut dynamic provisioning here? Definetely FutureGrid and Chamelian. 
+While virtualization and cloud IaaS provide many key advancements, this technology alone is not sufficient.  Rather, a collective scheduling and management for virtual machines is required to piece together a working virtual cluster.  
 
-Cluster computing has defined one of the core tools in distributed systems for use in parallel computation \cite{amdahl1967validity}. Cluster computing revolves around the desire to get more computing power and better reliability by utilizing many computers together across a network for 1 or many computational tasks. Clusters have manifested themselves in many different ways, ranging from Beowulf clusters \cite{becker1995beowulf} which run using commodity PCs to some of the TOP500 \cite{www-top500} supercomputing systems today.  Virtual clusters represents the growing need of users to effectively organize computational resources in an environment specific to their tasks at hand, instead of sharing a common architecture across many users. With the advent of virtualization \cite{barham2003xen}, virtual clusters have often been deployed across a set of Virtual Machines (VMs) in order to gain relative isolation and flexibility between disjoint virtual clusters. Virtual clusters, or a set of multiple cluster computing deployments on a single, larger physical cluster infrastructure, often have the following properties and attributes \cite{hwang2013distributed}:
+Let us consider a typical usage for a Cloud data center that is used in part to provide computational power for the Large Hadron Collider at CERN \cite{CERN2003}, a global collaboration from more than 2000 scientists of 182 institutes in 38 nations.  Such a system would have a small number of experiments to run. Each experiment would require a very large number of jobs to complete the computation needed for the analysis.  Examples of such experiments are the ATLAS \cite{luo2005gsp} and CMS \cite{cms} projects, which (combined) require Petaflops of computing power on a daily basis.  Each job of an experiment is unique, but the application runs are often the same.  Therefore, virtual machines are deployed to execute incoming jobs. There is a file server which provides virtual machine templates. All typical jobs are preconfigured in virtual machine templates. When a job arrives at the head node of the  cluster, a correspondent virtual machine is dynamically started on a certain compute node within the cluster to execute the job.  While the LHC project and CERN's cloud effort is a formidable one, it only covers pleasingly parallel HTC workloads, and often times HPC and big data workloads can equally complex in differing ways.
 
-\cite{wu2014synchronization}
+
+\FIGURE{!htb}
+  {images/distributed_and_cloud_computing_fig318.JPG}
+  {1.0}
+  {Image borrowed from Cloud book - serves as temporary placeholder only}
+  {F:virtualcluster}
+
+%\TODO{write all about virtual clusters. This includes much from the Cloud Computing book that looks at virtual clusters back in 2009 and such, as well as the latest efforts with SDSC's comet cloud and various other new age efforts. Also probably good to tlak a lot aobut dynamic provisioning here? }
+
+Cluster computing has defined one of the core tools in distributed systems for use in parallel computation \cite{amdahl1967validity}. Cluster computing revolves around the desire to get more computing power and better reliability by utilizing many computers together across a network for 1 or many computational tasks. Clusters have manifested themselves in many different ways, ranging from Beowulf clusters \cite{becker1995beowulf} which run using commodity PCs to some of the TOP500 \cite{www-top500} supercomputing systems today.  Virtual clusters represents the growing need of users to effectively organize computational resources in an environment specific to their tasks at hand, instead of sharing a common architecture across many users. With the advent of virtualization \cite{barham2003xen}, virtual clusters are deployed across a set of VMs in order to gain relative isolation and flexibility between disjoint virtual clusters. Virtual clusters, or a set of multiple cluster computing deployments on a single, larger physical cluster infrastructure, often have the following properties and attributes \cite{hwang2013distributed}:
+
+%\cite{wu2014synchronization}
 
 \begin{itemize}
 \item Resources allocation based on a VM unit
@@ -285,17 +292,11 @@ Cluster computing has defined one of the core tools in distributed systems for u
 \item Connection to back-end storage solution to provide virtual persistent storage
 \end{itemize}
 
-TODO: Give more info on original virtual cluster designs and implementations, such as Cluster-on-Demand, VCs in Grid computing, Nimbus, Amazon EC2, etc.
+\TODO{Give more info on original virtual cluster designs and implementations. Give information on cloudmesh, and HEAT, and cubernetes}
 
-
-\FIGURE{!htb}
-  {images/distributed_and_cloud_computing_fig318.JPG}
-  {1.0}
-  {Image borrowed from Cloud book - serves as temporary placeholder only}
-  {F:virtualcluster}
 
 %%%%%%---------------------------------------------------------------
-\subsubsection{Performance: A first class function}
+\subsubsection{Virtual Cluster Performance}
 %%%%%%---------------------------------------------------------------
 
 
