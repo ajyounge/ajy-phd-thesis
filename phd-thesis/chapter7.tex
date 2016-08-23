@@ -165,7 +165,7 @@ It is expected for post-copy VM cloning to also work most efficiencly if used in
 
 While a VM fork mechanism leveraging post-copy live migration in KVM will quickly spool up cloned VMs, the eventual memory transfer will eventually fail to scale past the network's capacity. This could happen if hundreds or thousands of child clone VMs are being started simultaniously, as is likely in large scale deployments. As such, a higherarchical distribution may be necessary. One possible method for this would be a two-stage cloning mechanism, where child VMs are cloned one to each cabinet, and the entire memory contents copied using the pre-copy migration mechanism. From there, further cloning occurs to deploy many cloned VMs to individual nodes within the cabinet. Organization of mid-tier cloned VMs would likely be determined based on RDMA fabric configurations within cabinets, as this is a network-bound process. 
 
-\TODO{Describe idea for two-stage filesystem with parent disk mounted as read-only, with all write going to scratch space.  This is similar to how Cray handles node OS deployments on XC30 and XC40 systems today.}
+%\TODO{Describe idea for two-stage filesystem with parent disk mounted as read-only, with all write going to scratch space.  This is similar to how Cray handles node OS deployments on XC30 and XC40 systems today.}
 
 
 
