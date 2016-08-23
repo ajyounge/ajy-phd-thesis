@@ -14,7 +14,7 @@ In order to accurately depict the research presented in this article, the topics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:1}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data center.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS. It should be noted that virtualization is not specific to Cloud computing. IBM originally pioneered the concept in the 1960's with the M44/44X systems.  It has only recently been reintroduced for general use on x86 platforms. 
+Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:1}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data sideways.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS. It should be noted that virtualization is not specific to Cloud computing. IBM originally pioneered the concept in the 1960's with the M44/44X systems.  It has only recently been reintroduced for general use on x86 platforms. 
 
 
  \FIGURE{htb}
@@ -91,7 +91,7 @@ Cloud computing \cite{Armbrust2010} is one of the most explosively expanding tec
 
 \item{\em Scalable} - Clouds are designed to deliver as much computing power as any user needs.  While in practice the underlying infrastructure is not infinite, the cloud resources are projected to ease the developer's dependence on any specific hardware.
 
-\item{\em Quality of Service (QoS)} - Unlike standard data centers and advanced computing resources, a well-designed Cloud can project a much higher QoS than traditionally possible.  This is due to the lack of dependence on specific hardware, so any physical machine failures can be mitigated without the prerequisite user awareness.
+\item{\em Quality of Service (QoS)} - Unlike standard data sidewayss and advanced computing resources, a well-designed Cloud can project a much higher QoS than traditionally possible.  This is due to the lack of dependence on specific hardware, so any physical machine failures can be mitigated without the prerequisite user awareness.
 
 \item{\em Specialized Environment} - Within a Cloud, the user can utilize customized tools and services to meet their needs. This can be to utilize the latest library, toolkit, or to support legacy code within new infrastructure.  
 
@@ -139,7 +139,7 @@ When all of these layers are combined, a dynamic software stack is created to fo
 Today there are a number of Clouds that offer solutions for Infrastructure-as-a-Service (IaaS). At a high level, IaaS can be split into 3 tiers, based on their availability.  
 
 \begin{itemize}
-\item \textbf{Public} - Public IaaS is where the services and virtualizaton of hardware resources are provided over the internet. Usually this is in a centeralized data center (or centers) whereby many users concurrently access these resources from across the globe, often at a pre-negotiated price point and service level agreement (SLA) \cite{baset2012cloud}.  Public clouds are the best utilization of economies of scale, by selling hosting services en-masse and thereby offering competitive costs. The Amazon Elastic Compute Cloud (EC2) is a primary example of a public cloud.    
+\item \textbf{Public} - Public IaaS is where the services and virtualizaton of hardware resources are provided over the internet. Usually this is in a sidewaysalized data sideways (or sidewayss) whereby many users concurrently access these resources from across the globe, often at a pre-negotiated price point and service level agreement (SLA) \cite{baset2012cloud}.  Public clouds are the best utilization of economies of scale, by selling hosting services en-masse and thereby offering competitive costs. The Amazon Elastic Compute Cloud (EC2) is a primary example of a public cloud.    
 
 \item \textbf{Private} - Private IaaS is where the cloud infrastructure is limited to within a distinct group, set of users, business, or virtual organization. Usually such private cloud infrastructure is also on a private, dedicated network that can either be separate or connected to other services. Data within private clouds are often more secure than those on a public cloud, and as such can be the choice for many users who have sensitive data, or who large-scale users who find better cost, performance, or QoS than what's provided  within public clouds.
 
@@ -152,7 +152,7 @@ Today there are a number of Clouds that offer solutions for Infrastructure-as-a-
 \subsubsection{Amazon EC2}
 
 
- The Amazon Elastic Compute Cloud (EC2) \cite{www-amazon-ec2}, is probably the most popular of cloud infrastructure to date, and is used extensively in the IT industry. EC2 is the central component of Amazon Web Services platform \cite{www-aws}. EC2 allows users to effectively rent virtual machines (called instances), hosted within Amazon's data centers, at a certain price point. Through their advanced UI or a RESTful API, users can start, stop, pause, migrate, and destroy instances exactly as needed, and to match the required computational tasks at hand.   
+ The Amazon Elastic Compute Cloud (EC2) \cite{www-amazon-ec2}, is probably the most popular of cloud infrastructure to date, and is used extensively in the IT industry. EC2 is the central component of Amazon Web Services platform \cite{www-aws}. EC2 allows users to effectively rent virtual machines (called instances), hosted within Amazon's data sidewayss, at a certain price point. Through their advanced UI or a RESTful API, users can start, stop, pause, migrate, and destroy instances exactly as needed, and to match the required computational tasks at hand.   
 
 Amazon EC2 predominantly relies on the Xen hypervisor to provide VMs on demand to users, with an equivalent compute unit equal to a 1.7Ghz Intel Xeon processor.  However, recent advancements, instance types, and upgrades to EC2 have increased this compute unit's power. Instance reservations have 3 types: On-demand, Reserved, and Spot. With On-demand instances, users pay by the hour for however long the desired instance is running. Users can instead rent reserved instances, where they pay a one-time (discounted) cost based on a pre-determined allocation time. There is also Spot pricing, where VMs are provisioned only when a given spot price is met, which is determined simply based on supply and demand within the EC2 system itself. 
 
@@ -163,7 +163,7 @@ These advanced features, coupled with the first-to-market viability and continua
 \subsubsection{Nimbus}
 
 Nimbus \cite{www/nimbus,virtualwork} is a set of open source tools that provide a private IaaS cloud computing solution. Nimbus is based on the concept of virtual workspaces previously introduced for Globus \cite{virtualwork}. A virtual workspace is an abstraction of an execution environment that can be made dynamically available to authorized clients by using well-defined protocols.  In this way, it can create customized environments by deploying virtual machines (VMs) among remote resources. To such an end, Nimbus provides a web interface called Nimbus Web. Its aim is to provide administrative and user functions in a friendly interface. 
-%Nimbus Web is centered around a Python Django \cite{www/django} web application that is intended to be deployable completely separate from the Nimbus service.
+%Nimbus Web is sidewaysed around a Python Django \cite{www/django} web application that is intended to be deployable completely separate from the Nimbus service.
 
 \begin{comment}
 \FIGURE{!htb}
@@ -232,7 +232,7 @@ Currently, OpenStack exists as one of the largest ongoing private IaaS efforts, 
 
 
 
-%The role of the Proxy Server is to enable of look ups to the location of the accounts, containers, or objects in OpenStack storage rings and route the request. Thus any object is streamed to or from an object server directly through the proxy server to or from the user. A ring represents a mapping between the names of entities stored on disk and their physical location. Separate rings for accounts, containers, and objects exist. A ring includes the concepts of using zones, devices, partitions, and replicas. Hence it allows dealing with failures, and isolation of zones representing a drive, a server, a cabinet, a switch, or even a datacenter. Weights can be used to balance the distribution of partitions on drives across the cluster allowing to support heterogeneous storage resources. According to the documentation, ``the Object Server is a very simple blob storage server that can store, retrieve and delete objects stored on local devices.''  Objects are stored as binary files with metadata stored in the file's extended attributes. This requires that the underlying filesystem choice for object servers support which is often not the case for standard Linux installations. To list objects, a Container Server can be utilized. Listing of containers is handled by the Account Server.
+%The role of the Proxy Server is to enable of look ups to the location of the accounts, containers, or objects in OpenStack storage rings and route the request. Thus any object is streamed to or from an object server directly through the proxy server to or from the user. A ring represents a mapping between the names of entities stored on disk and their physical location. Separate rings for accounts, containers, and objects exist. A ring includes the concepts of using zones, devices, partitions, and replicas. Hence it allows dealing with failures, and isolation of zones representing a drive, a server, a cabinet, a switch, or even a datasideways. Weights can be used to balance the distribution of partitions on drives across the cluster allowing to support heterogeneous storage resources. According to the documentation, ``the Object Server is a very simple blob storage server that can store, retrieve and delete objects stored on local devices.''  Objects are stored as binary files with metadata stored in the file's extended attributes. This requires that the underlying filesystem choice for object servers support which is often not the case for standard Linux installations. To list objects, a Container Server can be utilized. Listing of containers is handled by the Account Server.
  
 %At this time the documentation of OpenStack indicates that the software is not yet ready for production services. The project has achieved a significant amount of publication and support. However the documentation of the project has at this time just started and is improved by its partners.
 
@@ -248,7 +248,7 @@ OpenNebula \cite{www/opennebula, llorentecloud} is an open-source toolkit which 
 
 The architecture of OpenNebula has been designed to be flexible and modular to allow its integration with different storage and network infrastructure configurations, and hypervisor technologies. Here, the core is a centralized component that manage the virtual machine's (VM) full life cycle, including setting up networks dynamically for groups of VMs and managing their storage requirements, such as VM disk image deployment or on-the-fly software environment creation. Another important component is the capacity manager, which governs the functionality provided by the core for scheduling. The default capacity scheduler is a requirement/rank matchmaker. However, it is also possible to develop more complex scheduling policies, through a lease model and advance reservations like Haizea \cite{haizea}. The last main components are the access drivers. They provide an abstraction of the underlying infrastructure to expose the basic functionality of the monitoring, storage and virtualization services available in the cluster. Therefore, OpenNebula is not tied to any specific environment and can provide a uniform management layer regardless of the virtualization platform.
 
-Additionally, OpenNebula offers management interfaces to integrate the core's functionality within other data center management tools, such as accounting or monitoring frameworks. To this end, OpenNebula implements the libvirt API \cite{www/libvirt}, an open interface for VM management, as well as a command line interface (CLI). A subset of this functionality is exposed to external users through a cloud interface.
+Additionally, OpenNebula offers management interfaces to integrate the core's functionality within other data sideways management tools, such as accounting or monitoring frameworks. To this end, OpenNebula implements the libvirt API \cite{www/libvirt}, an open interface for VM management, as well as a command line interface (CLI). A subset of this functionality is exposed to external users through a cloud interface.
 m
 Due to its architecture, OpenNebula is able to adapt to organizations with changing re­source needs, including the addition or failure of physical resources \cite{sotomayorvirtual}. Some essential features to support changing environments are the live migration and the snapshotting of VMs \cite{www/opennebula}. Furthermore, when the local resources are insufficient, OpenNebula can support a hybrid cloud model by using cloud drivers to inter­face with external clouds. This lets organizations supplement the local infrastructure with computing capacity from a public cloud to meet peak demands, or implement high availability strategies. OpenNebula includes an EC2 driver, which can submit requests to Amazon EC2 \cite{www/amazonec2} and Eucalyptus \cite{nurmi2008eos}, as well as an ElasticHosts driver \cite{www/elastichosts}.
 
@@ -257,12 +257,12 @@ Regarding the storage, an OpenNebula Image Repository allows users to easily spe
 
 \subsubsection{Others}
 
-Other cloud specific projects exist such as In-VIGO \cite{DBLP:journals/fgcs/AdabalaCCFFKMTZZZZ05}, Cluster-on-Demand \cite{chase2003dvc}, and VMWare's own proprietary vCloud Air \cite{www-vmware-vcloud}.  Each effort provides their own interpretation of private cloud services within a data center, often with the ability to interplay with pubic cloud offerings such as Amazon's EC2. Docker \cite{merkel2014docker} also looks to provide IaaS capabilities with specialized and easily configurable containers, based on LXC and libcontainer solutions describe in the previous section. While it is still to be determined how Docker and containers will change the private IaaS landscape, they do provide similar functionality for Linux users without some of the complexities of traditional virtualized IaaS.  
+Other cloud specific projects exist such as In-VIGO \cite{DBLP:journals/fgcs/AdabalaCCFFKMTZZZZ05}, Cluster-on-Demand \cite{chase2003dvc}, and VMWare's own proprietary vCloud Air \cite{www-vmware-vcloud}.  Each effort provides their own interpretation of private cloud services within a data sideways, often with the ability to interplay with pubic cloud offerings such as Amazon's EC2. Docker \cite{merkel2014docker} also looks to provide IaaS capabilities with specialized and easily configurable containers, based on LXC and libcontainer solutions describe in the previous section. While it is still to be determined how Docker and containers will change the private IaaS landscape, they do provide similar functionality for Linux users without some of the complexities of traditional virtualized IaaS.  
 
 
 
  
-%Using a Cloud deployment overlaid on a Grid computing system has been explored by the Nimbus project \cite{keahey2005vwg} with the Globus Toolkit \cite{foster1997-ijsa}. All of these clouds leverage the power of virtualization to create an enhanced data center.  The virtualization technique of choice for these Open platforms has typically been the Xen hypervisor, however more recently VMWare and the Kernel-based Virtual Machine (KVM) have become commonplace.   
+%Using a Cloud deployment overlaid on a Grid computing system has been explored by the Nimbus project \cite{keahey2005vwg} with the Globus Toolkit \cite{foster1997-ijsa}. All of these clouds leverage the power of virtualization to create an enhanced data sideways.  The virtualization technique of choice for these Open platforms has typically been the Xen hypervisor, however more recently VMWare and the Kernel-based Virtual Machine (KVM) have become commonplace.   
 
 
 
@@ -281,13 +281,13 @@ Other cloud specific projects exist such as In-VIGO \cite{DBLP:journals/fgcs/Ada
 
 While virtualization and cloud IaaS provide many key advancements, this technology alone is not sufficient.  Rather, a collective scheduling and management for virtual machines is required to piece together a working virtual cluster.  
 
-Let us consider a typical usage for a Cloud data center that is used in part to provide computational power for the Large Hadron Collider at CERN \cite{CERN2003}, a global collaboration from more than 2000 scientists of 182 institutes in 38 nations.  Such a system would have a small number of experiments to run. Each experiment would require a very large number of jobs to complete the computation needed for the analysis.  Examples of such experiments are the ATLAS \cite{luo2005gsp} and CMS \cite{cms} projects, which (combined) require Petaflops of computing power on a daily basis.  Each job of an experiment is unique, but the application runs are often the same.  Therefore, virtual machines are deployed to execute incoming jobs. There is a file server which provides virtual machine templates. All typical jobs are preconfigured in virtual machine templates. When a job arrives at the head node of the  cluster, a correspondent virtual machine is dynamically started on a certain compute node within the cluster to execute the job.  While the LHC project and CERN's cloud effort is a formidable one, it only covers pleasingly parallel HTC workloads, and often times HPC and big data workloads can equally complex in differing ways.
+Let us consider a typical usage for a Cloud data sideways that is used in part to provide computational power for the Large Hadron Collider at CERN \cite{CERN2003}, a global collaboration from more than 2000 scientists of 182 institutes in 38 nations.  Such a system would have a small number of experiments to run. Each experiment would require a very large number of jobs to complete the computation needed for the analysis.  Examples of such experiments are the ATLAS \cite{luo2005gsp} and CMS \cite{cms} projects, which (combined) require Petaflops of computing power on a daily basis.  Each job of an experiment is unique, but the application runs are often the same.  Therefore, virtual machines are deployed to execute incoming jobs. There is a file server which provides virtual machine templates. All typical jobs are preconfigured in virtual machine templates. When a job arrives at the head node of the  cluster, a correspondent virtual machine is dynamically started on a certain compute node within the cluster to execute the job.  While the LHC project and CERN's cloud effort is a formidable one, it only covers pleasingly parallel HTC workloads, and often times HPC and big data workloads can equally complex in differing ways.
 
 
 \FIGURE{!htb}
-  {images/distributed_and_cloud_computing_fig318.JPG}
+  {images/virtual-cluster-diagram.pdf}
   {1.0}
-  {Image borrowed from Cloud book - serves as temporary placeholder only}
+  {Virtual Clusters on Cloud Infrastructure}
   {F:virtualcluster}
 
 %\TODO{write all about virtual clusters. This includes much from the Cloud Computing book that looks at virtual clusters back in 2009 and such, as well as the latest efforts with SDSC's comet cloud and various other new age efforts. Also probably good to tlak a lot aobut dynamic provisioning here? }
@@ -340,32 +340,31 @@ CLAIM: consider hardware size/constraints. Physical infrastructure around petasc
 \subsection{The FutureGrid Project}
 
 
-FutureGrid is a national-scale Grid and Cloud test-bed facility that includes a number of computational resources across many distributed locations.   
+FutureGrid was a NSF-funded national-scale Grid and Cloud test-bed facility that included a number of computational resources across many distributed locations.  This FutureGrid test-bed allowed users can evaluate differing systems for applicability with their given research task or application. These areas include computer science research topics ranging from authentication, authorization, scheduling, virtualization, middleware design, interface design and cybersecurity, to the optimization of grid-enabled and cloud-enabled computational schemes for  Astronomy, Chemistry, Biology, Engineering, High Energy Physics, or Atmospheric Science. This project started at an opportune time, when cloud infrastructure was still in its expeirmental stages and its applicability to mid-tier scientific efforts were unknown. 
 
-
-The FutureGrid network is unique and can lend itself to a multitude of experiments specifically for evaluating middleware technologies and experiment management services.  This network can be dedicated to conduct experiments in isolation, using a network impairment device for introducing a variety of predetermined network conditions. Figure \ref{F:fg-map} depicts the geographically distributed resources that are outlined in Table \ref{T:fg-hardware} in more detail. All network links within FutureGrid are dedicated 10GbE links with the exception of a shared 10GbE link to TACC over the TeraGrid \cite{berman2001tkg, catlett2002philosophy} network, enabling high-speed data management and transfer between each partner site within FutureGrid.
+The FutureGrid  features a unique WAN network sctructure that lent itself to a multitude of experiments specifically for evaluating middleware technologies and experiment management services.  This network can be dedicated to conduct experiments in isolation, using a network impairment device for introducing a variety of predetermined network conditions. Figure \ref{F:fg-map} depicts the geographically distributed resources that are outlined in Table \ref{T:fg-hardware} in more detail. All network links within FutureGrid are dedicated 10GbE links with the exception of a shared 10GbE link to TACC over the TeraGrid \cite{berman2001tkg, catlett2002philosophy} network, enabling high-speed data management and transfer between each partner site within FutureGrid.
    
 \FIGURE{thb}
   {images/FG-map.pdf}
   {1.0}
-  {FutureGrid Participants and Resources}
+  {FutureGrid Participants, Network, and Resources}
   {F:fg-map}
 
 Although the total number of systems within FutureGrid is comparatively conservative, they provide some heterogeneity to the architecture and are connected by the high-bandwidth network links. One important feature to note is that most systems can be dynamically provisioned, e.g. these systems can be reconfigured when needed by special software that is part of FutureGrid with proper access control by users and administrators.  Therefore its believed that this hardware infrastructure can fully accommodate the needs of an experiment management system.
 
 \begin{table*}
 \caption{FutureGrid hardware}\label{T:fg-hardware}
-\begin{center}
+%\begin{sideways}
 \begin{tabular}{lrrrrrll}
 \hline
 System type & 
-\begin{sideways}Name \end{sideways}&
-\begin{sideways}\# CPUs\end{sideways} & 
-\begin{sideways}\# Cores \end{sideways} & 
-\begin{sideways}TFLOPS	\end{sideways} & 
-\begin{sideways}RAM (GB) \end{sideways} & 
-\begin{sideways}Storage (TB) \end{sideways} & 
-\begin{sideways} Site \end{sideways} \\
+Name&
+CPUs& 
+Cores& 
+TFLOPS& 
+RAM(GB)& 
+Disk(TB)& 
+ Site \\
 \hline
 IBM iDataPlex	& India		& 256	& 1024	& 11	& 3072	& $^{\dagger}$335		& IU \\
 \hline
@@ -386,14 +385,25 @@ SuperMicro	& Delta		& 32	& 192	& $^{\ddagger}$20	& 3072	& 128		& IU \\
 IBM iDataPlex	& Foxtrot 	& 64	& 256	& 2	& 768	& 5 		& UF \\
 \hline
 \hline
-Total	        & FutureGrid	& 1112	& 4960	& 70	& 23056	& 1394           & \\		
+Total	        & 	& 1112	& 4960	& 70	& 23056	& 1394           & \\		
 \hline
 \end{tabular}
 
 $^{\dagger}$Indicates shared file system. $^{\ddagger}$Best current estimate
-\end{center}
+%\end{sideways}
 \end{table*}
 
+As of Fall 2014, the FutureGrid project has ended. The computing resources and facilities at Indiana University have continued on as FutureSystems, continuing to provide a cloud, big data, and HPC testbed to approved researchers. Recently with new projects as part of the digital Science Center, the FutureSystems effort has added two new machines, \emph{Romeo} and \emph{Juliet}, presenting Haswell-based clusters to be used for big data research.  
+
+\begin{comment}
+\begin{sideways}Name \end{sideways}&
+\begin{sideways}\# CPUs\end{sideways} & 
+\begin{sideways}\# Cores \end{sideways} & 
+\begin{sideways}TFLOPS	\end{sideways} & 
+\begin{sideways}RAM (GB) \end{sideways} & 
+\begin{sideways}Storage (TB) \end{sideways} & 
+\begin{sideways} Site \end{sideways} \\
+\end{comment}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
