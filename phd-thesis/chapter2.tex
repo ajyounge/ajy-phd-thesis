@@ -6,11 +6,77 @@
 \label{chap:related}
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
 
-In order to accurately depict the research presented in this article, the topics within Cloud computing are reviewed
+In order to accurately depict the research presented in this article, the topics within Virtualization,  Cloud computing, and High Performance Computing are reviewed in detail. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Virtualization}
+\label{sec:virtualization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:1}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data center.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS. It should be noted that virtualization is not specific to Cloud computing. IBM originally pioneered the concept in the 1960's with the M44/44X systems.  It has only recently been reintroduced for general use on x86 platforms. 
+
+
+ \FIGURE{htb}
+  {images/Slide2.pdf}
+  {0.8}
+  {Virtual Machine Abstraction}
+  {F:vmm}
+ 
+
+However, virtualization is in the most general form, just another form of abstraction. As such, there are in fact many levels to virtualization that exist \cite{hwang2013distributed}. 
+
+
+\begin{itemize}
+
+\item \textbf{ISA - }
+Virtualization can start from the instruction set architecture (ISA) level, where by an entire processor instruction set is emulated and provided.  This may be useful for running sotfware or services developed for one instruction set (say MIPS) but is needed to run on Intel x86 hardware. ISA level virtualization is usually emulated through an interpreter which translates source instructions to target instructions, however this can often be extremely inefficient.  Dynamic binary translation can help aid in efficiency by translating bocks of source instructions to target instructions, however this still can be limiting.   
+
+\item \textbf{Hardware - }
+One of the most important technologies in cloud computing is hardware level virtualization\cite{Barham2003, ESX}. Hardware virtualization, in its most pure form, refers to the process of creating virtual abstraction to hardware platforms, operating systems, or software resources. This enables the creation of 1 or more virtual machines (VMs) that are run concurrently on the same operating environment, be it hardware or some higher software. Here, a virtual hardware environment is generating for a VM, including providing virtual processors, memory, and I/O devices, allowing for a multiplexing of VMs to exist, as depicted in Figure \ref{F:vmm}.  This layer also manages the physical hardware on behalf of a host OS as well as for guests. While the most common type of hardware virtualization is with the Xen Virtual Machine Monitor \cite{Barham2003}, this method has further separated into type 1 and type 2 hypervisors, as detailed further in Section \ref{s:hypervisors}.  
+
+\item \textbf{Operating System - }
+Moving up the latter of implementation with virtualization, we find OS level virtualization, where multiplexing happens at the level of the OS, rather than the hardware. Usually, this refers to isolating a filesystem and associated process and runtime effects in a single "chroot" or "container" environment at the user level, with kernel level operations being handled by a single OS kernel. This containerization allows for multiple user environments to exist concurrently without the complexity of hardware or ISA level virtualization.  Containers are also describe in the next section in more detail.
+
+\item \textbf{Library (API) - }
+Continuing, we move up to library or API level virtualzation. Here, some API is separated and a provided to a user or programming environment, and the communication between this API and the back-end library with the computation is virtualized. This can give the effect that resources are local, when really they are remote and abstract. This is how GPUs are "virtualized" with tools such as rCUDA \cite{duato2010rcuda, duato2011enabling} and vCUDA \cite{shi2012vcuda}. This method's performance often can be very dependent on the underlying communications mechanisms, as well as complete virtualization of the whole API (which may be difficult).  API virtualization also exists for entire OS libraries to translate between differing OS, without actual containerization.   
+
+\item \textbf{Process}
+Virtualization can also take the form at the process or user level, which can then be used to deliver a specialzied or high level language that is the same across several different OSs. This is how the Java Virtual Machine (JVM) and Microsoft's .NET platform work. This type of application predominantly falls outside of the scope of this dissertation. 
+
+
+\end{itemize}
+
+
+
+%%%%%%%%%---------------------------------------------------------
+\subsection{Hypervisors and Containers}
+\label{s:hypervisors}
+%%%%%%%%%---------------------------------------------------------
+
+While there are many types of virtualization, this dissertation predominately focuses on hardware and OS level virtualization only. With hardware virtualization, a Virtual Machine Monitor, or hypervisor, is used. 
+
+\TODO{Write definition of a hypervisor}
+
+ \FIGURE{htb}
+  {images/hypervisortypes.jpg}
+  {1.0}
+  {Hypervisors and Containers}
+  {F:hypervisors}
+
+Hardware virtualization can actually be dissected in more detail to two different types of hypervisors, and they can be directly compared to containers as seen in Figure \ref{F:hypervisors}. With a Type 1 virtuallization system, the hypervisor or VMM sits directly on the bare-metal hardware, below the OS. These native hypervisors provide direct control of the underlying hardware, and are controlled and operated usually through the use of a privileged VM.  One example of a type 1 hypervisor is the Xen Virtual Machine Monitor \cite{Barham2003}, which uses its VMM as well as a privileged Linux OS, called Dom0, to create and manage other user VMs, or running DomU instances. The VMM in this place provides the necessary hardware abstraction of CPU, memory, and some I/O aspects, leaving the control aspects of the other DomUs to Dom0.  With a type 1 hypervisor, all virtualization functions are kept separate from control and OS functionaity, effectively making a cleaner design. 
+
+Type 2 hypervisors utilize a different, and sometimes more convoluted design. With a type 2 hypervisor, there is a "host" OS that, like with native OSs, sits directly atop hardware. This OS is just like any normal native OS. However, the OS itself can abstract its own hardware, and provide and manage a VM, effectively as an OS process.  In this case, the hypervisor providing the abstraction is effectively hosted within, atop, or as a module part of a given OS.  There are many different type 2 hypervisors, the most common of which is the Linux Kernel Virtual Machine (KVM) \cite{kivity2007kvm}. KVM is often used in conjunction with QEMU, a ISA level hypervisor to provide some basic ISA level virtualization and emulation capabilities. KVM is simply provided as a Linux kernel module within a given host, and guest VMs are run as a single process on the host OS. 
+ 
+Both types of hypervisors are very distinct from OS level virtualization, also known as containers. With containers, there is a single OS, however instead of direct hardware abstraction,a single kernel is used to simultaniously run multiple user-space instances in a jailed-root environment. These environments may look and feel like a separate machine, but in fact are not. Often times the kernel itself provides resource management tools to help control resource utilization and allocations. Linux containers \cite{lxc}
+
+
+ While there are many forms of virtualization, the focus here is primarily on hardware and OS level virtualization, instead of higher level and API based virtualization techniques.  
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Cloud Computing}
-\label{sec:clouds}
+\label{sec:cloudcomputing}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Cloud computing is one of the most explosively expanding technologies in the computing industry today. However it is important to understand where it came from, in order to figure out where it will be heading in the future.  While there is no clear cut evolutionary path to Clouds, many believe the concepts originate from two specific areas: Grid Computing and Web 2.0.
@@ -41,7 +107,7 @@ Cloud computing \cite{Armbrust2010} is one of the most explosively expanding tec
 
 
 
-\AJY{todo moving around, so clean up}
+%\AJY{todo moving around, so clean up}
 Many of the features noted above define what Cloud computing can be from a user perspective.  However, Cloud computing in its physical form has many different meanings and forms.  Since Clouds are defined by the services they provide and not by applications, an integrated as-a-service paradigm has been defined to illustrate the various levels within a typical Cloud, as in Figure \ref{F:layers}.
 
 \FIGURE{htb}
@@ -66,36 +132,17 @@ Many of the features noted above define what Cloud computing can be from a user 
 When all of these layers are combined, a dynamic software stack is created to focus on large scale deployment of services to users.
 
 
-\subsection{Virtualization}
 
-Virtualization, in its most pure form, refers to the process of creating virtual abstraction to hardware platforms, operating systems, or software resources. Virtualization enables the creation of 1 or more virtual machines (VMs) that are run concurrently on the same operating environment, be it hardware or some higher software. As virtualization is, in general, just another form of abstraction, there are in fact many levels to virtualization that exist. 
-
-Virtualization can start from the instruction set architecture (ISA) level, where by an entire processor instruction set is emulated and provided.  This may be useful for running sotware or services developed for one instruction set (say MIPS) but is needed to run on Intel x86 hardware. ISA level virtualization is usually emulated through an interpreter which translates source instructions to target instructions, however this can often be extremely inefficient.  Dynamic binary translation can help aid in efficiency by translating bocks of source instructions to target instructions, however this still can be limiting.   
-
-The next, and potentially most relevant level of virtualization is hardware abstraction. Here,  the virtualization generates a virtual hardware environment for a VM, including providing virtual processors, memory, and I/O devices, allowing for a multiplexing of VMs to exist. 
-
-\AJY{TODO: Bring in virtualization comparison chart from old text}
+%%%%%%---------------------------------------------------------------
+\subsection{Infrastructure-as-a-Service}
+%%%%%%---------------------------------------------------------------
 
 
-There are a number of underlying technologies, services, and infrastructure-level configurations that make Cloud computing possible.  One of the most important technologies is the use of virtualization \cite{Barham2003, ESX}. Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:1}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data center.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS.
+Today there are a number of Clouds that offer IaaS. The Amazon Elastic Compute Cloud (EC2) \cite{www-amazon-ec2}, is probably the most popular of which and is used extensively in the IT industry. Eucalyptus \cite{nurmi2008eos} is becoming popular in both the scientific and industry communities.  It provides the same interface as EC2 and allows users to build an EC2-like cloud using their own internal resources.  Other scientific Cloud specific projects exist such as OpenNebula\cite{Fontan2008}, In-VIGO \cite{DBLP:journals/fgcs/AdabalaCCFFKMTZZZZ05}, and Cluster-on-Demand \cite{chase2003dvc}.  They provide their own interpretation of private Cloud services within a data center.  Using a Cloud deployment overlaid on a Grid computing system has been explored by the Nimbus project \cite{keahey2005vwg} with the Globus Toolkit \cite{foster1997-ijsa}. All of these clouds leverage the power of virtualization to create an enhanced data center.  The virtualization technique of choice for these Open platforms has typically been the Xen hypervisor, however more recently VMWare and the Kernel-based Virtual Machine (KVM) have become commonplace.   
 
- \FIGURE{htb}
-  {images/Slide2.pdf}
-  {0.8}
-  {Virtual Machine Abstraction}
-  {F:1}
-
-Virtualization is not specific to Cloud computing. IBM originally pioneered the concept in the 1960's with the M44/44X systems.  It has only recently been reintroduced for general use on x86 platforms.  Today there are a number of Clouds that offer IaaS. The Amazon Elastic Compute Cloud (EC2) \cite{www-amazon-ec2}, is probably the most popular of which and is used extensively in the IT industry. Eucalyptus \cite{nurmi2008eos} is becoming popular in both the scientific and industry communities.  It provides the same interface as EC2 and allows users to build an EC2-like cloud using their own internal resources.  Other scientific Cloud specific projects exist such as OpenNebula\cite{Fontan2008}, In-VIGO \cite{DBLP:journals/fgcs/AdabalaCCFFKMTZZZZ05}, and Cluster-on-Demand \cite{chase2003dvc}.  They provide their own interpretation of private Cloud services within a data center.  Using a Cloud deployment overlaid on a Grid computing system has been explored by the Nimbus project \cite{keahey2005vwg} with the Globus Toolkit \cite{foster1997-ijsa}. All of these clouds leverage the power of virtualization to create an enhanced data center.  The virtualization technique of choice for these Open platforms has typically been the Xen hypervisor, however more recently VMWare and the Kernel-based Virtual Machine (KVM) have become commonplace.   
-
-
-\subsection{Hypervisors and Containers}
-
-TODO: write up a description about the various hypervisor types, and containers too. 
-
-
- While there are many forms of virtualization, the focus here is primarily on hardware and OS level virtualization, instead of higher level and API based virtualization techniques.  
-
+%%%%%%---------------------------------------------------------------
 \subsection{Workload Scheduling}
+%%%%%%---------------------------------------------------------------
 
 While virtualization provides many key advancements, this technology alone is not sufficient.  Rather, a collective scheduling and management for virtual machines is required to piece together a working Cloud.  Let us consider a typical usage for a Cloud data center that is used in part to provide computational power for the Large Hadron Collider at CERN \cite{CERN2003}, a global collaboration from more than 2000 scientists of 182 institutes in 38 nations.  Such a system would have a small number of experiments to run. Each experiment would require a very large number of jobs to complete the computation needed for the analysis.  Examples of such experiments are the ATLAS \cite{luo2005gsp} and CMS \cite{cms} projects, which (combined) require Petaflops of computing power on a daily basis.  Each job of an experiment is unique, but the application runs are often the same.  
 
