@@ -121,8 +121,8 @@ Many of the features noted above define what Cloud computing can be from a user 
 
 \item{\em Platform-as-a-Service (PaaS)} - A framework for providing a unique computing platform or software stack for applications and services to be developed on.  The goal of PaaS is to alleviate many of the burdens of developing complex, scalable software by proving a programming paradigm and tools that make service development and integration a tractable task for many.  Examples include Microsoft Azure and Google App Engine.
 
-\item{\em Infrastructure-as-a-Service (IaaS)} - A framework for providing entire computing resources through a service.  This typically represents virtualized Operating Systems, thereby masking the underlying complexity details of the physical infrastructure.  This allows users to rent or buy computing resources on demand for their own use without needing to operate or manage physical infrastructure.  Examples include Amazon EC2, Eucalyptus, and Nimbus.
-
+\item{\em Infrastructure-as-a-Service (IaaS)} - A framework for providing entire computing resources through a service.  This typically represents virtualized Operating Systems, thereby masking the underlying complexity details of the physical infrastructure.  This allows users to rent or buy computing resources on demand for their own use without needing to operate or manage physical infrastructure.  Examples include Amazon EC2, and OpenStack, and is the major cloud focal point for this dissertation.
+  
 \item{\em Physical Hardware} - The underlying set of physical machines and IT equipment that host the various levels of service.  These are typically managed at a large scale using virtualization technologies which provide the QoS users expect.  This is the basis for all computing infrastructure.
 \end{itemize}
 
@@ -292,26 +292,41 @@ Let us consider a typical usage for a Cloud data sideways that is used in part t
 
 %\TODO{write all about virtual clusters. This includes much from the Cloud Computing book that looks at virtual clusters back in 2009 and such, as well as the latest efforts with SDSC's comet cloud and various other new age efforts. Also probably good to tlak a lot aobut dynamic provisioning here? }
 
-Cluster computing has defined one of the core tools in distributed systems for use in parallel computation \cite{amdahl1967validity}. Cluster computing revolves around the desire to get more computing power and better reliability by utilizing many computers together across a network for 1 or many computational tasks. Clusters have manifested themselves in many different ways, ranging from Beowulf clusters \cite{becker1995beowulf} which run using commodity PCs to some of the TOP500 \cite{www-top500} supercomputing systems today.  Virtual clusters represents the growing need of users to effectively organize computational resources in an environment specific to their tasks at hand, instead of sharing a common architecture across many users. With the advent of virtualization \cite{barham2003xen}, virtual clusters are deployed across a set of VMs in order to gain relative isolation and flexibility between disjoint virtual clusters. Virtual clusters, or a set of multiple cluster computing deployments on a single, larger physical cluster infrastructure, often have the following properties and attributes \cite{hwang2013distributed}:
+Cluster computing has become one of the core tools in distributed systems for use in parallel computation \cite{amdahl1967validity}. Cluster computing revolves around the desire to get more computing power and better reliability by utilizing many computers together across a network to achieve larger computational tasks. Clusters have manifested themselves in many different ways, ranging from Beowulf clusters \cite{becker1995beowulf} which run using commodity PCs to some of the TOP500 \cite{www-top500} supercomputing systems today.  Virtual clusters represents the growing need of users to effectively organize computational resources in an environment specific to their tasks at hand, instead of sharing a common architecture across many users. With the advent of virtualization \cite{barham2003xen}, virtual clusters are deployed across a set of VMs in order to gain relative isolation and flexibility between disjoint virtual clusters. Virtual clusters, or a set of multiple cluster computing deployments on a single, larger physical cluster infrastructure, often have the following properties and attributes \cite{hwang2013distributed}:
 
 %\cite{wu2014synchronization}
 
 \begin{itemize}
 \item Resources allocation based on a VM unit
-\item Clusters built of many VMs together - important mapping
+\item Clusters built of many VMs together, or by provisioning physical nodes
 \item Leverage local infrastructure management tools to provide a middleware solution for virtual clusters
 	\begin{itemize}
-	\item Could be a cloud IaaS such as OpenStack
-	\item Or could use a queueing system such as Moab
+	\item Implementations could be a cloud IaaS such as OpenStack
+	\item Some instances use a queueing system such as PBS
 	\end{itemize}
 \item User experience based on virtual cluster management, not single VM management
-\item Consolidates multiple functionality on a smaller resource platform using multiple VMs
-\item Provide fault tolerance through VM migration and management
-\item Dynamic scaling through the addition or deletion of VMs from the virtual cluster
+\item Consolidates functionality on a smaller resource platform using multiple VMs 
+\item Can provide fault tolerance through VM migration and management
+\item Can utilize dynamic scaling through the addition or deletion of VMs from the virtual cluster
 \item Connection to back-end storage solution to provide virtual persistent storage
 \end{itemize}
 
-\TODO{Give more info on original virtual cluster designs and implementations. Give information on cloudmesh, and HEAT, and cubernetes}
+
+Given the properties, Virtual clusters can take on many forms. This could lead to the simple provisioning of multiple disjoint OSs on a single physical resource. Virtual clusters generally have the ability to provide and manage their own user environment and tuned internal middleware.  Virtual clusters may enable the separation of multiple tasks into separate VMs, which still in fact run on the same or similar underlying physical resources, effectively providing task isolation.  Virtual clusters can be deployed to be persistance, stored, shared, or re-provisioned on demand.  The size of a virtual cluster could potentially expand and contrast relative to the necessary resource requirements, taking advantage of elasticity found with virtualization. Furthermore, VM migration may enable fault tolerance in the event of physical machine errors if properly managed.  
+
+
+
+
+\TODO{Give more info on original virtual cluster designs and implementations.} 
+
+
+\TODO{Give information on cloudmesh,  SDSC virtual clusters, HEAT, and cubernetes}
+
+Virtual Clusters, require orchestration services to be able to organize, deploy, manage, and re-play the desired user environment, and there have been a number of efforts to bring this orchestration to utility. One efforts within FutureGrid is with the experiment management design \cite{las2010gce}, which attempts to define how resources are connected to and monitored, as well as how VMs are stored in a repository and provisioned across multiple heterogeneous resources. This effort moved forward with  Cloudmesh \cite{von2014cloudmesh}, which provides a simple client interface to access multiple cloud resources with a command-line shell interface. 
+
+Another virtual cluster orchestration effort is with th
+
+
 
 
 %%%%%%---------------------------------------------------------------
@@ -393,7 +408,7 @@ $^{\dagger}$Indicates shared file system. $^{\ddagger}$Best current estimate
 %\end{sideways}
 \end{table*}
 
-As of Fall 2014, the FutureGrid project has ended. The computing resources and facilities at Indiana University have continued on as FutureSystems, continuing to provide a cloud, big data, and HPC testbed to approved researchers. Recently with new projects as part of the digital Science Center, the FutureSystems effort has added two new machines, \emph{Romeo} and \emph{Juliet}, presenting Haswell-based clusters to be used for big data research.  
+As of Fall 2014, the FutureGrid project has ended. The computing resources and facilities at Indiana University have continued on as FutureSystems, continuing to provide a cloud, big data, and HPC testbed to approved researchers. Recently with new projects as part of the digital Science Center, the FutureSystems effort has added two new machines, \emph{Romeo} and \emph{Juliet}, presenting clusters with Intel Haswell CPU architectures to be used for big data research.  
 
 \begin{comment}
 \begin{sideways}Name \end{sideways}&
