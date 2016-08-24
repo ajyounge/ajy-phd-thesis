@@ -136,7 +136,7 @@ When all of these layers are combined, a dynamic software stack is created to fo
 
 
 
-Today there are a number of Clouds that offer solutions for Infrastructure-as-a-Service (IaaS). At a high level, IaaS can be split into 3 tiers, based on their availability.  
+Today there are a number of Clouds that offer solutions for Infrastructure-as-a-Service (IaaS).  There have been multiple comparison efforts between various IaaS service \cite{von2012comparison, aboveTheClouds, rimal2009taxonomy, sotomayorvirtual } which provide insight to the similarities and differences between the long array of cloud infrasturcture deployment solutions.  However at a high level, IaaS can be split into 3 tiers, based on their availability.  
 
 \begin{itemize}
 \item \textbf{Public} - Public IaaS is where the services and virtualizaton of hardware resources are provided over the internet. Usually this is in a sidewaysalized data sideways (or sidewayss) whereby many users concurrently access these resources from across the globe, often at a pre-negotiated price point and service level agreement (SLA) \cite{baset2012cloud}.  Public clouds are the best utilization of economies of scale, by selling hosting services en-masse and thereby offering competitive costs. The Amazon Elastic Compute Cloud (EC2) is a primary example of a public cloud.    
@@ -423,9 +423,24 @@ As of Fall 2014, the FutureGrid project has ended. The computing resources and f
 \label{sec:hpc}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\TODO{Give a brief but well cited definition of high performance computing}
 
-\subsection{History of Supercomputing}
+\subsection{Brief History of Supercomputing}
 
+Supercomputing itself can date back to some of the forefront of computing itself, especially if we consider the ENIAC \cite{}, the first turing complete general purpose digital computer, also as the first supercomputer.  ENIAC was first deployed to calculate artilary firing tables, but was later used during the Second World War for helping the Manhattan project's thermonuclear calculations and later dedicated to the University of Pennsylvania after the war. 
+
+The first properly termed supercomputer was the Control Data Corporation's  6600 mainframe \cite{}, first delivered to CERN in 1965. The CDC 6600 was notiably faster than the IBM counterparts, and the first deployments were able to perform on the order of 1 MFLOP. Interestingly, the CPU design that came from Semour Cray's  CDC 6600 took advantage of a simplified yet fast CPU design with silicon-based transisters, which founded the basis of the RISC processor architecture. 
+
+
+Cray's efforts eventually lead him to start his own company, and in 1975 released the Cray 1 system \cite{}. The Cray 1 took the powerful aspects of vector processing and memory pipelineing from the STAR architecture (developed later by CDC) and introduced scalar performance through splitting vectors and instruction chaining. This resulted in an overall performance of around 250 MFLOPS at peak, but realistically closer to 1300 MFLOPS for general applications.  The Cray 1 system also helped push forward the integrated circuit design, which was finally performant to be used, and also required an entirely new freon based coolant system.
+
+The Cray 1 system gave way to the Cray X-MP and Y-MP in the mid 1980s. These machines were shared-memory vector processors, with two processors in the X-MP and up to 8 processors for the later Y-MP systems. These first shared-memory systems were aided by increased memory speeds. The X-MP machine was capable of 200MFLOPS sustained and ~400 MFLOPS peak perfomrance, whereas the Y-MP variants were capable of over 2 GFLOPS. 
+
+Also concurrently during the 1980s the advent of distributed memory architectures for supercomputing were starting to emerge. Specifically work on Caltech's Cosmic Cube, also known as a Hypercube, by Seitz and Fox \cite{seitz1985cosmic, fox1987matrix}, started the movement of concurrent or parallel computing.  The Cosmic Cube leveraged new VLSI techniques and assembled Intel 8086/87 processors together with a novel hypercube interconnect which required no switching, creating one of the first truly parallel computers. SIMD programming and computation was done through a novel message passing architecture, instead of shared variables.  This design was first commercialized with Intel's iPSC, and later contributing directly to designs in the Intel Paragon, ASCI Red, and Cray T3D/E systems.  
+
+
+- beowulf clusters, cluster computing
+- current supercomputers
 
 
 \subsection{Clusters and MMPs}
