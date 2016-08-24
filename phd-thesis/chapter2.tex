@@ -312,20 +312,17 @@ Cluster computing has become one of the core tools in distributed systems for us
 \end{itemize}
 
 
-Given the properties, Virtual clusters can take on many forms. This could lead to the simple provisioning of multiple disjoint OSs on a single physical resource. Virtual clusters generally have the ability to provide and manage their own user environment and tuned internal middleware.  Virtual clusters may enable the separation of multiple tasks into separate VMs, which still in fact run on the same or similar underlying physical resources, effectively providing task isolation.  Virtual clusters can be deployed to be persistance, stored, shared, or re-provisioned on demand.  The size of a virtual cluster could potentially expand and contrast relative to the necessary resource requirements, taking advantage of elasticity found with virtualization. Furthermore, VM migration may enable fault tolerance in the event of physical machine errors if properly managed.  
+Given the properties, Virtual clusters can take on many forms, however a very simplified set of virtual clusters across cloud infrastructure are provided as a representation in Figure \ref{F:virtualcluster}. This could lead to the simple provisioning of multiple disjoint OSs on a single physical resource. Virtual clusters generally have the ability to provide and manage their own user environment and tuned internal middleware.  Virtual clusters may enable the separation of multiple tasks into separate VMs, which still in fact run on the same or similar underlying physical resources, effectively providing task isolation.  Virtual clusters can be deployed to be persistence, stored, shared, or re-provisioned on demand.  The size of a virtual cluster could potentially expand and contrast relative to the necessary resource requirements, taking advantage of elasticity found with virtualization. Furthermore, VM migration may enable fault tolerance in the event of physical machine errors if properly managed. 
 
+With virtual clusters, the capability to quickly deploy custom environments becomes critical. As such, efforts have been put forth to quickly configure and create VM images on-demand. This includes custom efforts with configuration engines such as CfEngine, Chef, Ansible, and others. Within FutureGrid, an image management system was defined to provide preconfigured VM images for cloud infrastructure using the BCFG2 engine \cite{Diaz2011cca}.
 
-
-
-\TODO{Give more info on original virtual cluster designs and implementations.} 
-
-
-\TODO{Give information on cloudmesh,  SDSC virtual clusters, HEAT, and cubernetes}
+Initially, virtual clusters were proposed for the use of Grid communities \cite{Foster2006}. Specifically, Foster et al look to provide commodity clusters to various Virtual Organizations \cite{foster2001}, whereby grid services can instantiate and deploy VMs. This design and implementation was further refined through the use of metadata and contextualization using appliances \cite{keahey2008contextualization}. Some of these ideas have even come to take shape in larger scale supercomputing deployments, such as with SDSC commet's virtual cluster availability \cite{Moore2014}.
 
 Virtual Clusters, require orchestration services to be able to organize, deploy, manage, and re-play the desired user environment, and there have been a number of efforts to bring this orchestration to utility. One efforts within FutureGrid is with the experiment management design \cite{las2010gce}, which attempts to define how resources are connected to and monitored, as well as how VMs are stored in a repository and provisioned across multiple heterogeneous resources. This effort moved forward with  Cloudmesh \cite{von2014cloudmesh}, which provides a simple client interface to access multiple cloud resources with a command-line shell interface. 
 
-Another virtual cluster orchestration effort is with th
+Another virtual cluster orchestration effort has developed within the OpenStack private IaaS solution itself, named OpenStack Heat \cite{www-openstack-heat}. Heat provides a method by which you can deploy "stacks", which could essentially be virtual clusters,  using OpenStack infrastructure. Specifically, Heat provides a human readable and machine-accessible template for specifying environments and requirements, as well as a RESTful API. In submitting a Heat orchestration template to the API, heat will interpret and build the designed custom environment within a given OpenStack cloud deployment. Kubernetes \cite{bernstein2014containers}, a related effort, is a infrastructure orchistration framework for managing containerized applications within Docker.  
 
+\TODO{Provide example OpenStack Heat template in Appendix?}
 
 
 
