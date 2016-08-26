@@ -438,17 +438,25 @@ The Cray 1 system gave way to the Cray X-MP and Y-MP in the mid 1980s. These mac
 
 Also concurrently during the 1980s the advent of distributed memory architectures for supercomputing were starting to emerge. Specifically work on Caltech's Cosmic Cube, also known as a Hypercube, by Seitz and Fox \cite{seitz1985cosmic, fox1987matrix}, started the movement of concurrent or parallel computing.  The Cosmic Cube leveraged new VLSI techniques and assembled Intel 8086/87 processors together with a novel hypercube interconnect which required no switching, creating one of the first truly parallel computers. SIMD programming and computation was done through a novel message passing architecture, instead of shared variables.  This design was first commercialized with Intel's iPSC, and later contributing directly to designs in the Intel Paragon, ASCI Red, and Cray T3D/E systems.  
 
-While concurrent and parallel processor supercomputers continued into the 90s with aforementioned hypercube designs and the IBM Thinking Machines \cite{cm1}, a new commodity-based strategy emerged with Becker and Sterling's Beowulf clusters \cite{sterling2001beowulf}. Effectively, a Beowulf cluster is simply a cluster of commodity x86 machines linked together with a simplified LAN network. Beowulf clusters often (but not always) run Linux OS and leverage Etherent solutions, and are programmed using a message passing construct such as MPI \cite{mpi}. This allows for the building of massively parallel systems with relatively low cost and investment. Many specialized clusters today still utilize commodity x86 hardware and Linux OSs similar to the original Beowulf systems.   
+While concurrent and parallel processor supercomputers continued into the 90s with aforementioned hypercube designs and the IBM Thinking Machines \cite{cm1}, a new commodity-based strategy emerged with Becker and Sterling's Beowulf clusters \cite{sterling2001beowulf}. Effectively, a Beowulf cluster is simply a cluster of commodity x86 machines linked together with a simplified LAN network. Beowulf clusters often (but not always) run Linux OS and leverage Ethernet solutions, and are programmed using a message passing construct such as MPI \cite{mpi}. This allows for the building of massively parallel systems with relatively low cost and investment. Many specialized clusters today still utilize commodity x86 hardware and Linux OSs similar to the original Beowulf systems.   
 
+Concurrency and parallel computation on supercomputing has only flourished since. This has been even more pronounced  as the CPU power wall was hit in 2006 \cite{power-wall}, driving the need for concurrency not only at an increased rate for supercomputing, but also even for commodity systems.   While commodity single-CPU, multi-core systems often look towards exploiting shared memory parallelism, distributed memory architectures have become a way of life for high performance computing. 
 
+\subsection{Distributed Memory Computation}
 
+Abstractly,  distributed memory architectures consist of multiple instances of a processor, memory, and an interconnect which allows each instance to perform independent computations and communicate over the interconnect. These interconnects could be built using point-to-point, or through more complex and advanced switching hardware, building a larger topology.  While a simple example could involve several commodity PCs connected through Ethernet switch, this model scales to the latest supercomputing resources of today with millions of cores \cite{seqoia}.  
 
-\subsection{Clusters and MMPs}
+Programming such distributed memory systems is a nontrivial task that the greater HPC community has been wrangling for years. In the early days, this took the form of either the Message Passing Interface (MPI) \cite{mpi} or PVM \cite{pvm}, however MPI has been far more successful and dominates the market for distributed memory parallel computation. MPI is a standardized message passing system, which defines the semantics and syntax for writing parallel programs in C, C++, or Fortran. MPI has even been implemented in other languages such as Java \cite{mpj}.  As MPI is a standardization, there are may implementations that exist, including OpenMPI \cite{gabriel2004open}, MPICH \cite{gropp1999using}, and MVAPICH \cite{koop2008mvapich}, to name a few. Many MPI-enabled applications have been shown to be, with proper and careful design, the most efficient way to run a parallel application across a large subset of tightly coupled distributed resources, and can often represent the status-quo for HPC applications today. 
 
- - Discuss similarities and differences, top500
- - Bring about MPI, and how distributed memory archs are here
- - Ittroduce accelerators as recent advancement, GPUs.
+More recently, the MPI programming model has been modified or joined with other models. This change or deviation largely revolves around the hardware that has changed within HPC resources themselves to meet the need for more computational power. This includes hybrid MPI + OpenMP models which become useful as multi-core and many-core technologies becomes increasingly available \cite{rabenseifner2009hybrid},or a MPI+CUDA model which interleaves message passing with GPU utilization \cite{jacobsen2010mpi}.  As some of the latest supercomputing resources have been deployed specifically with Nvidia GPUs for GPGPU programming such as the ORNL's Titan system \cite{bland2012titan}, the need for distributed memory computation with GPU computing has increased.  
+
+%Breifly mention that it is these type of computations we woud like to support in virtualization?
 
 \subsection{Exascale}
 
+
+- Power concerns, problem of cores
+- Possibility for PGAS models
+- HP-X 
+-  
 
