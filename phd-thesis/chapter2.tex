@@ -41,7 +41,7 @@ Moving up the latter of implementation with virtualization, we find OS level vir
 \item \textbf{Library (API) - }
 Continuing, we move up to library or API level virtualzation. Here, some API is separated and a provided to a user or programming environment, and the communication between this API and the back-end library with the computation is virtualized. This can give the effect that resources are local, when really they are remote and abstract. This is how GPUs are "virtualized" with tools such as rCUDA \cite{duato2010rcuda, duato2011enabling} and vCUDA \cite{shi2012vcuda}. This method's performance often can be very dependent on the underlying communications mechanisms, as well as complete virtualization of the whole API (which may be difficult).  API virtualization also exists for entire OS libraries to translate between differing OS, without actual containerization.   
 
-\item \textbf{Process}
+\item \textbf{Process - }
 Virtualization can also take the form at the process or user level, which can then be used to deliver a specialized or high level language that is the same across several different OSs. This is how the Java Virtual Machine (JVM) and Microsoft's .NET platform work. This type of application predominantly falls outside of the scope of this dissertation. 
 
 
@@ -54,9 +54,9 @@ Virtualization can also take the form at the process or user level, which can th
 \label{s:hypervisors}
 %%%%%%%%%---------------------------------------------------------
 
-While there are many types of virtualization, this dissertation predominately focuses on hardware and OS level virtualization. With hardware virtualization, a Virtual Machine Monitor, or hypervisor, is used. 
+While there are many types of virtualization, this dissertation predominately focuses on hardware and OS level virtualization. With hardware virtualization, a Virtual Machine Monitor, or hypervisor, is used. Abstractly, a hypervisor is a piece of software that creates virtual machines or \emph{guests}, usually that model the underlying physical machine \emph{host} system.  
 
-\TODO{Write definition of a hypervisor}
+%\TODO{Write definition of a hypervisor}
 
  \FIGURE{htb}
   {images/hypervisortypes.jpg}
@@ -64,7 +64,7 @@ While there are many types of virtualization, this dissertation predominately fo
   {Hypervisors and Containers}
   {F:hypervisors}
 
-Hardware virtualization can actually be dissected in more detail to two different types of hypervisors, and they can be directly compared to containers as seen in Figure \ref{F:hypervisors}. With a Type 1 virtuallization system, the hypervisor or VMM sits directly on the bare-metal hardware, below the OS. These native hypervisors provide direct control of the underlying hardware, and are controlled and operated usually through the use of a privileged VM.  One example of a type 1 hypervisor is the Xen Virtual Machine Monitor \cite{Barham2003}, which uses its VMM as well as a privileged Linux OS, called Dom0, to create and manage other user VMs, or running DomU instances. The VMM in this place provides the necessary hardware abstraction of CPU, memory, and some I/O aspects, leaving the control aspects of the other DomUs to Dom0.  With a type 1 hypervisor, all virtualization functions are kept separate from control and OS functionaity, effectively making a cleaner design.  This design could lead to end application performance implications, as illustrated with the Palacios VMM \cite{lange2010palacios}. 
+Hardware virtualization can actually be dissected in more detail to two different types of hypervisors, and they can be directly compared to containers as seen in Figure \ref{F:hypervisors}. With a Type 1 virtualization system, the hypervisor or VMM sits directly on the bare-metal hardware, below the OS. These native hypervisors provide direct control of the underlying hardware, and are controlled and operated usually through the use of a privileged VM.  One example of a type 1 hypervisor is the Xen Virtual Machine Monitor \cite{Barham2003}, which uses its VMM as well as a privileged Linux OS, called Dom0, to create and manage other user VMs, or running DomU instances. The VMM in this place provides the necessary hardware abstraction of CPU, memory, and some I/O aspects, leaving the control aspects of the other DomUs to Dom0.  With a type 1 hypervisor, all virtualization functions are kept separate from control and OS functionaity, effectively making a cleaner design.  This design could lead to end application performance implications, as illustrated with the Palacios VMM \cite{lange2010palacios}. 
 
 Type 2 hypervisors utilize a different, and sometimes more convoluted design. With a type 2 hypervisor, there is a "host" OS that, like with native OSs, sits directly atop hardware. This OS is just like any normal native OS. However, the OS itself can abstract its own hardware, and provide and manage a VM, effectively as an OS process.  In this case, the hypervisor providing the abstraction is effectively hosted within, atop, or as a module part of a given OS.  There are many different type 2 hypervisors, the most common of which is the Linux Kernel Virtual Machine (KVM) \cite{kivity2007kvm}. KVM is often used in conjunction with QEMU, a ISA level hypervisor to provide some basic ISA level virtualization and emulation capabilities. KVM is simply provided as a Linux kernel module within a given host, and guest VMs are run as a single process on the host OS. 
  
@@ -199,13 +199,13 @@ In 2014, Eucalyptus was acquired by Hewlett-Packard, which now maintains the HPE
 
 \subsubsection{OpenStack}
 
-OpenStack, another private cloud infrastructure service, was introduced by Rackspace and NASA in July 2010. The project is trying to build an open source community spanning technologists, developers, researchers, and industry to share resources and technologies with the goal to create a massively scalable and secure cloud infrastructure. In tradition with other open source projects the entire software is open sources and limited to just open source API's such as Amazon.
+OpenStack \cite{www/openstack, sefraoui2012openstack}, another private cloud infrastructure service, was introduced by Rackspace and NASA in July 2010. The project is trying to build an open source community spanning technologists, developers, researchers, and industry to share resources and technologies with the goal to create a massively scalable and secure cloud infrastructure. In tradition with other open source projects the entire software is open sources and limited to just open source API's such as Amazon.
 
-\TODO{Need citations for OpenStack}
+%\TODO{Need citations for OpenStack}
  
 Historically, OpenStack focuses on the development of two aspects of cloud computing to address compute and storage aspects with their OpenStack Compute and OpenStack Storage solutions. According to the documentation ``OpenStack Compute is the internal fabric of the cloud creating and managing large groups of virtual private servers'' and ``OpenStack Object Storage is software for creating redundant, scalable object storage using clusters of commodity servers to store Terabytes or even petabytes of data.''    However, OpenStack as a platform has evolved much more than its original efforts, and has created a wide array of new sub-projects. 
 
-As part of the computing support efforts OpenStack \cite{www/openstack} utilizes a cloud fabric controller known under the name Nova. The architecture for Nova is built on the concepts of  shared-nothing and  messaging-based information exchange. Hence most communication in Nova are facilitated by message queues. To prevent blocking components while waiting for a response from others, deferred objects are introduced.  Nova supports multiple scheduling paradigms, and includes plugins for a wide array of hypervisors, including Xen, KVM, and VMWare.  The flexibility found within Nova is useful for supporting a wide array of cloud IaaS computational efforts. Recently, OpenStack has even looked to implement containers and bare-metal provisioning to keep on pace with the latest technologies.  
+As part of the computing support efforts OpenStack  utilizes a cloud fabric controller known under the name Nova. The architecture for Nova is built on the concepts of  shared-nothing and  messaging-based information exchange. Hence most communication in Nova are facilitated by message queues. To prevent blocking components while waiting for a response from others, deferred objects are introduced.  Nova supports multiple scheduling paradigms, and includes plugins for a wide array of hypervisors, including Xen, KVM, and VMWare.  The flexibility found within Nova is useful for supporting a wide array of cloud IaaS computational efforts. Recently, OpenStack has even looked to implement containers and bare-metal provisioning to keep on pace with the latest technologies.  
 
 The OpenStack Swift storage solution is build around a number of interacting components and concepts including a Proxy Server, a Ring, Object Server, a Container Server, an Account Server, Replication, Updaters, and Auditors. This distributed architecture attempts to have no centralized components, to enable scalability and resiliency for data.  Swift represents the long-term, object-based storage, similar to Amazon S3, and attempts to maintain rough API compatibility with S3. As Swift looks to use simple data replication as a main form of resiliency and fast read/write is rarely a priority, Swift is often built using commodity disk drives instead of most costly flash solutions.  
 
@@ -424,7 +424,6 @@ As of Fall 2014, the FutureGrid project has ended. The computing resources and f
 \label{sec:hpc}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\TODO{Give a brief but well cited definition of high performance computing}
 
 \subsection{Brief History of Supercomputing}
 
