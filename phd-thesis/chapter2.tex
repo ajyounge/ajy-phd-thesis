@@ -68,7 +68,7 @@ Hardware virtualization can actually be dissected in more detail to two differen
 
 Type 2 hypervisors utilize a different, and sometimes more convoluted design. With a type 2 hypervisor, there is a "host" OS that, like with native OSs, sits directly atop hardware. This OS is just like any normal native OS. However, the OS itself can abstract its own hardware, and provide and manage a VM, effectively as an OS process.  In this case, the hypervisor providing the abstraction is effectively hosted within, atop, or as a module part of a given OS.  There are many different type 2 hypervisors, the most common of which is the Linux Kernel Virtual Machine (KVM) \cite{kivity2007kvm}. KVM is often used in conjunction with QEMU, a ISA level hypervisor to provide some basic ISA level virtualization and emulation capabilities. KVM is simply provided as a Linux kernel module within a given host, and guest VMs are run as a single process on the host OS. 
  
-Both types of hypervisors are very distinct from OS level virtualization, also known as containers. With containers, there is a single OS, however instead of direct hardware abstraction,a single kernel is used to simultaneously run multiple user-space instances in a jailed-root environment. These environments may look and feel like a separate machine, but in fact are not. Often times the kernel itself provides resource management tools to help control resource utilization and allocations. Linux containers (LXC) \cite{lxc} provide a great example of this, with their use of namespaces for filesystem control and cgroups for resource management. With the recent advent of Docker, which looks to control versioning and easy deployment of traceable containers, this aspect of OS level virtualization has grown in popularity, however security and usability concerns still exist.   
+Both types of hypervisors are very distinct from OS level virtualization, also known as containers. With containers, there is a single OS, however instead of direct hardware abstraction,a single kernel is used to simultaneously run multiple user-space instances in a jailed-root environment. These environments may look and feel like a separate machine, but in fact are not. Often times the kernel itself provides resource management tools to help control resource utilization and allocations. Linux containers (LXC) provide a great example of this, with their use of namespaces for filesystem control and cgroups for resource management. With the recent advent of Docker, which looks to control versioning and easy deployment of traceable containers, this aspect of OS level virtualization has grown in popularity, however security and usability concerns still exist.   
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +84,7 @@ The other major component, Web 2.0, is also a relatively new concept in the hist
 
 Web 2.0 provides multiple levels of application services to users across the Internet.  In essence, the web becomes an application suite for users.  Data is outsourced to wherever it is wanted, and the users have total control over what they interact with, and spread accordingly.  This requires extensive, dynamic and scalable hosting resources for these applications. This demand provides the user-base for much of the commercial Cloud computing industry today.  Web 2.0 software requires abstracted resources to be allocated and relinquished on the fly, depending on the Web's traffic and service usage at each site.  Furthermore, Web 2.0 brought Web Services standards \cite{wsci} and the Service Oriented Architecture (SOA) \cite{krafzig2004} which outline the interaction between users and cyberinfrastructure.  In summary, Web 2.0 defined the interaction standards and user base, and Grid computing defined the underlying infrastructure capabilities.  
 
-Cloud computing \cite{Armbrust2010} is one of the most explosively expanding technologies in the computing industry today. A Cloud computing implementation typically enables users to migrate their data and computation to a remote location with some varying impact on system performance \cite{Wang2010}.  This provides a number of benefits which could not otherwise be achieved:  
+Cloud computing \cite{Armbrust2010} is one of the most explosively expanding technologies in the computing industry today. A Cloud computing implementation typically enables users to migrate their data and computation to a remote location with some varying impact on system performance \cite{wang2010ngc}.  This provides a number of benefits which could not otherwise be achieved:  
 
 
 \begin{itemize}
@@ -152,7 +152,7 @@ Today there are a number of Clouds that offer solutions for Infrastructure-as-a-
 \subsubsection{Amazon EC2}
 
 
- The Amazon Elastic Compute Cloud (EC2) \cite{www-amazon-ec2}, is probably the most popular of cloud infrastructure to date, and is used extensively in the IT industry. EC2 is the central component of Amazon Web Services platform \cite{www-aws}. EC2 allows users to effectively rent virtual machines (called instances), hosted within Amazon's data sidewayss, at a certain price point. Through their advanced UI or a RESTful API, users can start, stop, pause, migrate, and destroy instances exactly as needed, and to match the required computational tasks at hand.   
+ The Amazon Elastic Compute Cloud (EC2) \cite{EC2}, is probably the most popular of cloud infrastructure to date, and is used extensively in the IT industry. EC2 is the central component of Amazon Web Services platform. EC2 allows users to effectively rent virtual machines (called instances), hosted within Amazon's data sidewayss, at a certain price point. Through their advanced UI or a RESTful API, users can start, stop, pause, migrate, and destroy instances exactly as needed, and to match the required computational tasks at hand.   
 
 Amazon EC2 predominantly relies on the Xen hypervisor to provide VMs on demand to users, with an equivalent compute unit equal to a 1.7Ghz Intel Xeon processor.  However, recent advancements, instance types, and upgrades to EC2 have increased this compute unit's power. Instance reservations have 3 types: On-demand, Reserved, and Spot. With On-demand instances, users pay by the hour for however long the desired instance is running. Users can instead rent reserved instances, where they pay a one-time (discounted) cost based on a pre-determined allocation time. There is also Spot pricing, where VMs are provisioned only when a given spot price is met, which is determined simply based on supply and demand within the EC2 system itself. 
 
@@ -250,14 +250,14 @@ The architecture of OpenNebula has been designed to be flexible and modular to a
 
 Additionally, OpenNebula offers management interfaces to integrate the core's functionality within other data sideways management tools, such as accounting or monitoring frameworks. To this end, OpenNebula implements the libvirt API \cite{www/libvirt}, an open interface for VM management, as well as a command line interface (CLI). A subset of this functionality is exposed to external users through a cloud interface.
 m
-Due to its architecture, OpenNebula is able to adapt to organizations with changing re­source needs, including the addition or failure of physical resources \cite{sotomayorvirtual}. Some essential features to support changing environments are the live migration and the snapshotting of VMs \cite{www/opennebula}. Furthermore, when the local resources are insufficient, OpenNebula can support a hybrid cloud model by using cloud drivers to inter­face with external clouds. This lets organizations supplement the local infrastructure with computing capacity from a public cloud to meet peak demands, or implement high availability strategies. OpenNebula includes an EC2 driver, which can submit requests to Amazon EC2 \cite{www/amazonec2} and Eucalyptus \cite{nurmi2008eos}, as well as an ElasticHosts driver \cite{www/elastichosts}.
+Due to its architecture, OpenNebula is able to adapt to organizations with changing re­source needs, including the addition or failure of physical resources \cite{sotomayorvirtual}. Some essential features to support changing environments are the live migration and the snapshotting of VMs \cite{www/opennebula}. Furthermore, when the local resources are insufficient, OpenNebula can support a hybrid cloud model by using cloud drivers to inter­face with external clouds. This lets organizations supplement the local infrastructure with computing capacity from a public cloud to meet peak demands, or implement high availability strategies. OpenNebula includes an EC2 driver, which can submit requests to Amazon EC2 and Eucalyptus \cite{nurmi2008eos}, as well as an ElasticHosts driver \cite{www/elastichosts}.
 
 Regarding the storage, an OpenNebula Image Repository allows users to easily specify disk images from a catalog without worrying about low-level disk configuration attributes or block device mapping. Also, image access control is applied to the images registered in the repository, hence simplifying multi-user environments and image sharing. Nevertheless, users can also set up their own images. 
 
 
 \subsubsection{Others}
 
-Other cloud specific projects exist such as In-VIGO \cite{DBLP:journals/fgcs/AdabalaCCFFKMTZZZZ05}, Cluster-on-Demand \cite{chase2003dvc}, and VMWare's own proprietary vCloud Air \cite{www-vmware-vcloud}.  Each effort provides their own interpretation of private cloud services within a data sideways, often with the ability to interplay with pubic cloud offerings such as Amazon's EC2. Docker \cite{merkel2014docker} also looks to provide IaaS capabilities with specialized and easily configurable containers, based on LXC and libcontainer solutions describe in the previous section. While it is still to be determined how Docker and containers will change the private IaaS landscape, they do provide similar functionality for Linux users without some of the complexities of traditional virtualized IaaS.  
+Other cloud specific projects exist such as In-VIGO \cite{adabala2005virtualized}, Cluster-on-Demand \cite{chase2003dvc}, and VMWare's own proprietary vCloud Air \cite{www-vmware-vcloud}.  Each effort provides their own interpretation of private cloud services within a data sideways, often with the ability to interplay with pubic cloud offerings such as Amazon's EC2. Docker \cite{merkel2014docker} also looks to provide IaaS capabilities with specialized and easily configurable containers, based on LXC and libcontainer solutions describe in the previous section. While it is still to be determined how Docker and containers will change the private IaaS landscape, they do provide similar functionality for Linux users without some of the complexities of traditional virtualized IaaS.  
 
 
 
@@ -292,7 +292,8 @@ Let us consider a typical usage for a Cloud data sideways that is used in part t
 
 %\TODO{write all about virtual clusters. This includes much from the Cloud Computing book that looks at virtual clusters back in 2009 and such, as well as the latest efforts with SDSC's comet cloud and various other new age efforts. Also probably good to tlak a lot aobut dynamic provisioning here? }
 
-Cluster computing has become one of the core tools in distributed systems for use in parallel computation \cite{amdahl1967validity}. Cluster computing revolves around the desire to get more computing power and better reliability by utilizing many computers together across a network to achieve larger computational tasks. Clusters have manifested themselves in many different ways, ranging from Beowulf clusters \cite{becker1995beowulf} which run using commodity PCs to some of the TOP500 \cite{www-top500} supercomputing systems today.  Virtual clusters represents the growing need of users to effectively organize computational resources in an environment specific to their tasks at hand, instead of sharing a common architecture across many users. With the advent of virtualization \cite{barham2003xen}, virtual clusters are deployed across a set of VMs in order to gain relative isolation and flexibility between disjoint virtual clusters. Virtual clusters, or a set of multiple cluster computing deployments on a single, larger physical cluster infrastructure, often have the following properties and attributes \cite{hwang2013distributed}:
+Cluster computing has become one of the core tools in distributed systems for use in parallel computation.% \cite{amdahl1967validity} 
+Cluster computing revolves around the desire to get more computing power and better reliability by utilizing many computers together across a network to achieve larger computational tasks. Clusters have manifested themselves in many different ways, ranging from Beowulf clusters \cite{sterling2001beowulf} which run using commodity PCs to some of the TOP500 \cite{www-top500} supercomputing systems today.  Virtual clusters represents the growing need of users to effectively organize computational resources in an environment specific to their tasks at hand, instead of sharing a common architecture across many users. With the advent of modern virtualization, virtual clusters are deployed across a set of VMs in order to gain relative isolation and flexibility between disjoint virtual clusters. Virtual clusters, or a set of multiple cluster computing deployments on a single, larger physical cluster infrastructure, often have the following properties and attributes \cite{hwang2013distributed}:
 
 %\cite{wu2014synchronization}
 
@@ -332,7 +333,7 @@ Another virtual cluster orchestration effort has developed within the OpenStack 
 
 \TODO{Much of this is added in the introduction and throughout the dissertation. Maybe this should be removed or moved?}
 
-One of the major caveats to the usage of virtual clusters has been the performance implications. As with any systems level abstraction, virtualization technologies introduce overhead into a system and at times, can significantly degrade performance. This is especially concerning to parallel processing tasks and traditional HPC workloads, as increased performance and computational capacity are the reasons for using such systems in the first place. Workloads that depend on significant amounts of communication such as MPI based distributed memory applications and I/O heavy workloads have especially suffered from the overhead of virtualization. Traditional hypervisor overhead has has been better understood in the past as a large hurdle. The DOE Magellan project final report \cite{MegallanFinal} specifically outlined places where cloud infrastructure could, and could not fit the DOE's scientific computing requirements. The report specifically outlines places where how virtualized infrastructure is not able to meet the needs of most HPC workloads, stating in the executive recommendations, "Virtualized cloud environments are limited by networking and I/O options available in the virtual machine." This is followed up with specific experiments regarding interconnect limitations in virtualization \cite{Ramakrishnan2012}, which rightfully show issues with existing cloud interconnect options.  However the field of virtualization has changed since the Magellan report, with many efforts undertaken to address the performance issues. 
+One of the major caveats to the usage of virtual clusters has been the performance implications. As with any systems level abstraction, virtualization technologies introduce overhead into a system and at times, can significantly degrade performance. This is especially concerning to parallel processing tasks and traditional HPC workloads, as increased performance and computational capacity are the reasons for using such systems in the first place. Workloads that depend on significant amounts of communication such as MPI based distributed memory applications and I/O heavy workloads have especially suffered from the overhead of virtualization. Traditional hypervisor overhead has has been better understood in the past as a large hurdle. The DOE Magellan project final report \cite{MagellanFinal} specifically outlined places where cloud infrastructure could, and could not fit the DOE's scientific computing requirements. The report specifically outlines places where how virtualized infrastructure is not able to meet the needs of most HPC workloads, stating in the executive recommendations, "Virtualized cloud environments are limited by networking and I/O options available in the virtual machine." This is followed up with specific experiments regarding interconnect limitations in virtualization \cite{Ramakrishnan2012}, which rightfully show issues with existing cloud interconnect options.  However the field of virtualization has changed since the Magellan report, with many efforts undertaken to address the performance issues. 
 
 TODO: State how Futuregrid and other efforts have found virtualization performance improving. Also, added support for InfiniBand is a game-changer for this work. Suddenly HPC is good in VMs.
 
@@ -440,23 +441,82 @@ Also concurrently during the 1980s the advent of distributed memory architecture
 
 While concurrent and parallel processor supercomputers continued into the 90s with aforementioned hypercube designs and the IBM Thinking Machines \cite{cm1}, a new commodity-based strategy emerged with Becker and Sterling's Beowulf clusters \cite{sterling2001beowulf}. Effectively, a Beowulf cluster is simply a cluster of commodity x86 machines linked together with a simplified LAN network. Beowulf clusters often (but not always) run Linux OS and leverage Ethernet solutions, and are programmed using a message passing construct such as MPI \cite{mpi}. This allows for the building of massively parallel systems with relatively low cost and investment. Many specialized clusters today still utilize commodity x86 hardware and Linux OSs similar to the original Beowulf systems.   
 
-Concurrency and parallel computation on supercomputing has only flourished since. This has been even more pronounced  as the CPU power wall was hit in 2006 \cite{power-wall}, driving the need for concurrency not only at an increased rate for supercomputing, but also even for commodity systems.   While commodity single-CPU, multi-core systems often look towards exploiting shared memory parallelism, distributed memory architectures have become a way of life for high performance computing. 
+Concurrency and parallel computation on supercomputing resources has only flourished since. This has been even more pronounced as CPU clock frequencies stabilized and multi-core architectures took hold, driving the need for concurrency not only at an increased rate for supercomputing, but also even for commodity systems.   While commodity single-CPU, multi-core systems often look towards exploiting shared memory parallelism, distributed memory architectures have become a way of life for high performance computing. 
 
 \subsection{Distributed Memory Computation}
 
-Abstractly,  distributed memory architectures consist of multiple instances of a processor, memory, and an interconnect which allows each instance to perform independent computations and communicate over the interconnect. These interconnects could be built using point-to-point, or through more complex and advanced switching hardware, building a larger topology.  While a simple example could involve several commodity PCs connected through Ethernet switch, this model scales to the latest supercomputing resources of today with millions of cores \cite{seqoia}.  
+Abstractly,  distributed memory architectures consist of multiple instances of a processor, memory, and an interconnect which allows each instance to perform independent computations and communicate over the interconnect. These interconnects could be built using point-to-point, or through more complex and advanced switching hardware, building a larger topology.  While a simple example could involve several commodity PCs connected through Ethernet switch, this model scales to the latest supercomputing resources of today with millions of cores \cite{zhang2014optimizing}.  
 
-Programming such distributed memory systems is a nontrivial task that the greater HPC community has been wrangling for years. In the early days, this took the form of either the Message Passing Interface (MPI) \cite{mpi} or PVM \cite{pvm}, however MPI has been far more successful and dominates the market for distributed memory parallel computation. MPI is a standardized message passing system, which defines the semantics and syntax for writing parallel programs in C, C++, or Fortran. MPI has even been implemented in other languages such as Java \cite{mpj}.  As MPI is a standardization, there are may implementations that exist, including OpenMPI \cite{gabriel2004open}, MPICH \cite{gropp1999using}, and MVAPICH \cite{koop2008mvapich}, to name a few. Many MPI-enabled applications have been shown to be, with proper and careful design, the most efficient way to run a parallel application across a large subset of tightly coupled distributed resources, and can often represent the status-quo for HPC applications today. 
+Programming such distributed memory systems is a nontrivial task that the greater HPC community has been wrangling for years. In the early days, this took the form of either the Message Passing Interface (MPI) \cite{mpi} or PVM \cite{geist1994pvm}, however MPI has been far more successful and dominates the market for distributed memory parallel computation. MPI is a standardized message passing system, which defines the semantics and syntax for writing parallel programs in C, C++, or Fortran. MPI has even been implemented in other languages such as Java \cite{carpenter2000mpj}.  As MPI is a standardization, there are may implementations that exist, including OpenMPI \cite{gabriel2004open}, MPICH \cite{gropp1999using}, and MVAPICH \cite{koop2008mvapich}, to name a few. Many MPI-enabled applications have been shown to be, with proper and careful design, the most efficient way to run a parallel application across a large subset of tightly coupled distributed resources, and can often represent the status-quo for HPC applications today. 
 
 More recently, the MPI programming model has been modified or joined with other models. This change or deviation largely revolves around the hardware that has changed within HPC resources themselves to meet the need for more computational power. This includes hybrid MPI + OpenMP models which become useful as multi-core and many-core technologies becomes increasingly available \cite{rabenseifner2009hybrid},or a MPI+CUDA model which interleaves message passing with GPU utilization \cite{jacobsen2010mpi}.  As some of the latest supercomputing resources have been deployed specifically with Nvidia GPUs for GPGPU programming such as the ORNL's Titan system \cite{bland2012titan}, the need for distributed memory computation with GPU computing has increased.  
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{images/top500-interconnect.png}
+  \caption{Interconnect Family}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{images/top500-coprocessor.png}
+  \caption{Accelerator/Coprocessor Family}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Top 500 Development over time from 2002 to 2016 \cite{www-top500}}
+\label{F:top500}
+\end{figure}
+
+\begin{comment}
+\FIGURE{thb}
+  {images/top500-interconnect.png}
+  {1.0}
+  {Interconnect Family \cite{www-top500}}
+  {F:top500-interconnect}
+
+\FIGURE{thb}
+  {images/top500-coprocessor.png}
+  {1.0}
+  {Accelerator/Coprocessor Family \cite{www-top500}}
+  {F:top500-coproc}
+\end{comment}
+
+To get an idea of some of the hardware advances over the past few years, it is useful to examine the Top 500 \cite{www-top500}, a comprehensive list of the top 500 supercomputers known and their key characteristics.  Looking at the past decade in HPC, we can see some trends emerge within hardware. Specifically looking at Interconnect and Coprocessor architectures in Figure \ref{F:top500}, we see a notable jump in the number of deployed system that are using both InfiniBand and GPUs in the past decade. Specifically, InfiniBand usage has increased to roughly 40\% of the total number of deployed systems and remained somewhat stable as an interconnect family. Concurrently, the use of accelerators has increased form only 1 in 500 systems a decade ago, to almost a 20\% of the top 500 systems that are using coprocessors. Within that factor, the majority of such accelerator-equipped systems have been using GPUs, with a concurrent increase in the Intel Xeon Phi coprocessor as well.  While these do not represent all of supercomputing nor exclusively the most high end of systems, they do represent advanced hardware that has been increasingly common in the last decade, yet relatively underutilized in comparison within cloud infrastructure. As such, much of the effort in this dissertation focuses on, but is not limited to,  these two technology families.    
+
+
 
 %Breifly mention that it is these type of computations we woud like to support in virtualization?
 
 \subsection{Exascale}
 
+As the forefront of supercomputing moves beyond the latest petaflop machines in the past few years \cite{bland2012titan}, the HPC community is setting their sights on the next significant milestone: Exascale. Exascale computing refers broadly to performing roughly one exaFLOPS, or $10^{18}$ floating point operations per second. However, exascale itself is far more than just a theoretical FLOPS goal, but instead a set of new computing advancements and challenges that requires reaching computational power at such magnitude.  While FLOPs are often used as the ubiquitous yard stick for superocmputing with the LINPACK benchmark \cite{dongarra2003linpack,}, other efforts have taken hold to classify systems under a different set of parameters \cite{murphy2010graph500, dongarra2013hpcg}, with the loose understanding that these may incorporate a richer application set destined for exascale systems.  This could include for instance integer calculations at a similar scale to satisfy defence and intelligence perspectives, or graph processing at a 
 
-- Power concerns, problem of cores
-- Possibility for PGAS models
-- HP-X 
--  
+With exascale, there are a number of barriers that exist with current technologies that must be overcome to reach exascale.  The exascale Computing Study \cite{bergman2008exascale} specifically lists 4 major focal areas:
+
+\begin{enumerate}
+\item Energy and Power Challenge
+\begin{itemize}
+\item Describes the physical difficulties in providing the amount of power needed to drive a sufficiently large exascale system. The US DOE estimates the maximum power envelope for a deployed first exascale system to be within 20-40MW. Extrapolating current technology power utilization shows an order of magnitude more energy utilization than the specificity power envelop. As such, new architectures and conversation techniques will need to be investigated. 
+\end{itemize}
+\item Memory and Storage Challenge 
+\begin{itemize}
+\item This challenge illustrates the problem that has grown in relation to the memory wall, defined by the exponential difference between processor and memory performance, as well as the storage capacity limits to support calculations at the level of performance necessary. This challenge incorporates not only main memory limitations, but also tertiary storage issues as well. 
+\end{itemize}
+\item Concurrency and Storage Challenge
+\begin{itemize}
+\item This challenge is born from the recent limit in CPU clock rates as a way to gain performance. Instead, performance must be gained through parallelism. The depth of this challenge is especially profound when we consider parallelism on the order of millions, if not billions of threads.  
+\end{itemize}
+\item Resiliency Challenge
+\begin{itemize}
+\item The resiliency challenge defines the necessity of computation to recover and continue in the event of a fault or fluctuation. As parallelism  and the number of individualized components substantially increases in a path towards exascale, the mean time to failure of any given component also increases.  
+\end{itemize}
+\end{enumerate}
+
+
+While current exascale efforts are as wide as they are varying, not only with concepts, architectures, and runtime systems, but also with deployment plans and expectations between future deployments. Of particular interest in current exascale research is in Operating System and runtime (OS/R) developments to support new extreme-scale applications in an efficient manner. Two examples of novel OS pproaches are the Hobbes project \cite{brightwell2013hobbes} and the ARGO Exascale Operating System \cite{perarnau2015argo}. These OS efforts, along with novel programming models for exascale such as ParalleX \cite{sterling2014} look to fundamentally change the relationship between HPC hardware architectures and the libraries and  applications to be leveraged on such future exascale deployments.   
+
+ It is possible that virtualization itself may have an impact in OS and runtime services in exascale\cite{brightwell2013hobbes}. While some of the work herein may be tangentially of utility to such efforts, the immediate goal of this dissertation is not to investigate the applicability of virtualization for exascale systems, but rather to enable the diversification of HPC towards cloud infrastructure.
+
 
