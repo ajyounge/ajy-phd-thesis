@@ -6,16 +6,22 @@
 \label{chap:conc}
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
 
-\TODO{Give a quick 2 page recap on the work discussed. find a way to rephrase much of the introduction.}
-
 With the advent of virtualization and the availability of virtual machines through cloud infrastructure, a paradigm shift in distributed systems has occured. Many services and applications once deployed on workstations, private servers, personal computers, and even some supercomputers have migrated to a cloud infrastructure. The reasons for this change are vast, however these reasons are not enough to support all computational challanges within such a virtualized infrastructure.
 
 The use of tightly coupled, distributed memory applications common in High Performance Computing communities, has seen a number of problems and complications when deployed in virtualized infrasturcture.  While the reasons for this can be vast, many challanges  stem from the performance impact and overhead associated with virtualization, along with a lack of hardware necessary to support such concurrent environments. This dissertation looks to evaluate virtualization for supporting mid-tier scientific HPC applications and provide potential solutions to these issues.  
 
-Specifically, this   
+From the beginning, this dissertation proposes the advent of high performance virtual clusters to support a wide array of scientific computation, including mid-tier HPC applications, as well as a framework for building such an environment. This framework aims at identifying virtualization overhead and finding solutions and best practices with performant hypervisors, providing support for advanced accelerators and interconnects to enable new class of applications, and evaluating potential methods using benchmarks and real-world applications. 
+
+Chapter \ref{chap:related} studied the related research necessary for defining not only the context for virtualization and cloud computing, but also virtual clusters, and their history through supercomputing.  Chapter \ref{chap:cloud2011} looked to study the applicability of various hypervisors for supporting common HPC workloads through the use of benchmarks from a single-node aspect.  This found challenges and some solutions to these workloads, and identified missing gaps that exist. 
+
+Chapter \ref{chap:hpgc2014} started the investigation of the utility of GPUs to support mid-tier scientific applications using the Xen hypervisor. This chapter provided a proof-of-concept that with proper configuration and utilizing the latest in hardware support, GPU passthrough was possible and a viable model for supporting CUDA-enabled applications, a fast-growing application set. Chapter \ref{chap:cloud2014} provides an in-depth comparison of multiple hypervisors using the SHOC GPU benchmark suite, as well as GPU-enabled HPC applications. Here we discover our KVM implementation performs at near-native speeds and allows for effective GPU utilization. 
+
+Chapter \ref{chap:mdsimulations} takes the lessons learned with KVM in GPU passthrough and adds in SR-IOV InfiniBand support, a critical tool for supporting tighly coupled distributed memory applications, to build a small virtual cluster. This environment supports two class-leading Molecular Dynamics simulations, LAMMPs and HOOMD-blue, and shows how both applications can not only perform at near-native speeds, but also leverage the latest HPC technologies such as GPUDirect for efficient GPU-to-GPU communication. This framework is also enveloped in an OpenStack environment.     
+
+Chapter \ref{chap:future-work} is an introspective look at other advancements that can be made in virtualization to support high performance virtual clusters. Specifically, this chapter details the utility of virtual clusters backed with hugepages, added support for specialized live migration techniques leveraging high speed RDMA-capable interconnects, VM cloning for fast deployment of virtual clusters themselves, and scheduling considerations for integration of high performance virtual clusters in OpenStack.  
 
 
-\TODO{Answer answer the research question, did you accomplish this?}
+\TODO{Answer the research question, can we support HPC with virtual clusters? How could this help with big data convergence?}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
