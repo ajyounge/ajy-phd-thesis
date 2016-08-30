@@ -37,7 +37,7 @@ The results of running libSVM in a THP-enabled VM, a VM with no THP, and nativel
 \section{Live Migration Mechanisms}
 %%%%%%---------------------------------------------------------------
 
-TODO: Definition of Migration, live migration, differences. (assumed known here).
+%TODO: Definition of Migration, live migration, differences. (assumed known here).
 
 Migration of VMs represents one of the fundamental advantages to virtualization, and also one of the greatest challenges to efficiency.  With VM migration, the complete VM state is copied from a source to a unallocated destination host, where disk, memory, and network connections are kept intact. For disk continuity, a distributed and/or shared filesystem is utilized, most commonly but not exclusively NFS, where both the source and destination hosts have access to the VM disk.  Network continuity is preserved so long as the destination guest is within the same LAN and generates an unsolicited ARP reply to maintain the original IP after migration.  VM vCPU states and machine states are recorded from the source and quickly sent to the destination host when the VM is paused. For live migration, the source VM is paused only after all state and memory contents are copied to the destination. The last of the dirtied memory pages are copied over, and the newly formed destination VM is then un-paused.  This pause and tranfer time represents the entirety of a VM downtime during live migration, and is often at or under 100 milliseconds across commodity Ethernet networks (given a low memory utilization).  
 
@@ -66,7 +66,7 @@ The time it takes to migrate the memory contents from a source to destination VM
 
 The live migration algorithm proposed in \cite{huang2007high} uses the standard pre-copy mechanism that sends the entire memory contents across the network as RDMA operations, then iteratively copies dirtied pages before switching the running states.  As discussed in the previous section, a post-copy migration strategy may have benefits for quick VM migration in high performance virtual clusters, or even for VM cloning as described later in Section \ref{vmcloning}. Furthermore, efforts in Chapter \ref{chap:cloud2011} have found that the Xen hypervisor is not best suited for HPC workloads.  As such, there is a need to redefine the use of RDMA for VM migration using a hybrid post-copy mechanism in a high performance hypervisor.   
 
-\TODO{Update this item list with an algorithm definition}
+%\TODO{Update this item list with an algorithm definition}
 \begin{itemize}
 \item Transfer initial CPU state, registers
 \item Start the page table pages translation process: MFN to PFN and use copy-base approach
@@ -130,7 +130,7 @@ With post-copy migration, one could move the computation at hand close to a data
 This post-copy live migration technique for remote data computation avoids the cost of spawning a whole new job and/or process with associated running parameters, as well as the extremely high cost of a full VM live migration using the pre-copy method. However, one potential downside of post-copy live migration would be the non-deterministic runtime, as it would be unknown how much remote memory paging would be required. This could lead to more time spent with the destination VM in a paused state awaiting remote memory pages, rather than if the entire VM memory contents were transmitted completely. Careful analysis of memory usage, or a hybrid copy method based on predetermined memory sections could help overcome this issue, but require a more advanced migration architecture. 
 
 
-\TODO{Should I draw this out in a process diagram?}
+%\TODO{Should I draw this out in a process diagram?}
 
 
 %TODO: Discuss work in \cite{huang2007high} and how we build upon the idea
@@ -175,9 +175,46 @@ While a VM fork mechanism leveraging post-copy live migration in KVM will quickl
 \label{vcsched}
 %%%%%%---------------------------------------------------------------
 
-\TODO{Discuss the proximity scheduler in OpenStack, its first look. Discuss how traditional IaaS oversubscription does not fit for HPC. However, there's no reason we can't do both over-subscription for some workloads, but focus on performance for other workloads within the same infrastructure.}
+%\TODO{Discuss the proximity scheduler in OpenStack, its first look. Discuss how traditional IaaS oversubscription does not fit for HPC. However, there's no reason we can't do both over-subscription for some workloads, but focus on performance for other workloads within the same infrastructure.}
 
+Historically, cloud infrastructure has taken a simplistic approach when it comes to VM and workload scheduling. Often, a simple round-robbin or greedy \cite{Younge2011eagc} scheduling algorithm is appropriated. With round robin scheduling, a simple list of host machines are used and iterated over as VM requests are made. This essentially scatters the VMs without regard to their locality, and oversubscription becomes commonplace regardless of the number of requested VMs or their interconnection. A greedy algorithm can help keep spacial locality, but focuses specifically on over-subsciption as well to help consolidate VM allocations. While this oversubscription aspect is very good for public cloud providers such as Amazon EC2, it becomes counterproductive for high performance virtual clusters.
 
+With high performance virtual clusters, a number of VM instances are needed that can gain near-native performance. Furthermore, these VMs will be running tightly coupled applications, and as such need to be allocated in a way in which communication latency is minimized and bandwidth is maximized for all VMs. This will help insure the entire virtual clusters can perform optimally.  However, given off-the-shelf private cloud providers or, worse still, public cloud infrasturcture, these requirements are at best opaque to the user, and at worst extremely suboptimal.
+
+One way in which high performance virtual clusters can operate efficiently is by defining specific instance types, or \emph{flavors} within OpenStack, that define what resources a VM has allocated.  Given previous research on the NUMA effects of VMs \cite{openstack-numa}, these specialized flavors should be defined to fit within a NUMA socket.  Furthermore, CPU pinning should be used to specifically keep the VM within the NUMA socket itself.  Using libvirt, a commong API utilized in many cloud infrastructure deployments (including OpenStack), we can specify CPU pinning directly in the XML config.
+
+\begin{verbatim}
+<cputune>
+ <vcpupin vcpu="0" cpuset="0"/>
+ <vcpupin vcpu="1" cpuset="1"/>
+ <vcpupin vcpu="2" cpuset="4"/>
+ <vcpupin vcpu="3" cpuset="5"/>
+ <vcpupin vcpu="4" cpuset="6"/>
+ <emulatorpin cpuset="2"/>
+</cputune>
+\end{verbatim}
+
+\FIGURE{thb}
+  {images/extra_specs.png}
+  {1.0}
+  {Adding extra specs to a VM flavor in OpenStack}
+  {F:extraspecs}
+
+With OpenStack, this NUMA configuration can be executed through the KVM Nova plugin and a scheduling filter, which defines how to place VMs effectively. Furthemore, the instance flavor can also specificy the addition of \begin{verbatim}instance_type_extra_specs\end{verbatim} within Nova, whereby specialized hardware such as GPUs and InfiniBand interconnects (as described in Chapters 5 and 6) can be passed through to the VMs directly. Once defined, the same specialized high performance flavors in OpenStack simply have to add the labels (such as 'gpu' or 'infiniband') to the flavor to gain the requested hardware, as illustrated in Figure \ref{F:extraspecs} with OpenStack Horizon's UI interface.  The implementation put forth in the OpenStack Havana build has since been upgraded by Intel with Sr-IOV support and additonal scheduling filter additons, and is available in the latest OpenStack relases \cite{jiang2015}. 
+
+\begin{verbatim}
+pci_passthrough_devices=[{"label":"gpu","address":"0000:08:00.0"},
+			 {"label":"infiniband","address":"0000:21:00.0"}]
+instance_type_extra_specs={'pci_passthrough:labels':'["gpu"]'}
+instance_type_extra_specs={'pci_passthrough:labels':'["infiniband"]'}
+\end{verbatim}
+ 
+
+To provide a space for high performance virtual clusters, we need a scheduling mechanism within a cloud infrasturcture to support the effective and proper platement beyond controlling for NUMA characteristics. While there are many effective scheduling algorithms for workload placement within an environment, a Proximity Scheduler \cite{www-proximity-scheduler}, as defined in OpenStack, may work well. Specifically, one could either define or compute the underlying cloud infrastructure network topology. This could be as simple as a YAML file that defnes an underlying InfiniBand interconnect 2-1 Fat Tree topology, or a more complex solution that utilizes network performance metrics to measure bandwidth and latency between disjoint nodes to build a weighted proxmimity graph. As it is possible that such network parameters could change due to other usage or to reconfiguration, a method of periodically monitoring and updating this proximity network using measurement tools \cite{hanemann2005perfsonar} may also help keep an effective proximity metric between hosts. With a metric, one can then apply a proximity scheduler to handle high performance virtual cluster allocation requests effectively and in a way that will be far more optimal than a simple round robin scheduling mechanism. The OpenStack private cloud IaaS framework is proposed for this effort, however, further development is needed to bring such a scheudling mechanism to fruition.  
+
+The use of service level agreements (SLAs) within cloud infrastructure allocation is a well studied aspect \cite{serrano2013towards}.  It is also possible that certain SLAs could be incorporated into a private cloud infrasturcture such as OpenStack to simultaniously gaurantee performance for virtual clusters with the above defined methods, while concurrently offering "classical" VM workload scheduling for HTC, big data, or other cloud usage models. This would provide the same user experience yet support diverse workloads and performance expectations as defined by a given SLA  
+
+ 
 
 %%%%%%---------------------------------------------------------------
 \section{Chapter Summary}

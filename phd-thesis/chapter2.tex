@@ -14,7 +14,7 @@ In order to accurately depict the research presented in this article, the topics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:1}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data center.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS. It should be noted that virtualization is not specific to Cloud computing. IBM originally pioneered the concept in the 1960's with the M44/44X systems.  It has only recently been reintroduced for general use on x86 platforms. 
+Virtualization is a way to abstract the hardware and system resources from a operating system.  This is typically performed  within a Cloud environment across a large set of servers using a Hypervisor or Virtual Machine Monitor (VMM) which lies in between the hardware and the Operating System (OS). From here, one or more virtualized OSs can be started concurrently as seen in Figure \ref{F:vmm}, leading to one of the key advantages of Cloud computing.  This, along with the advent of multi-core processing capabilities, allows for a consolidation of resources within any data center.  It is the Cloud's job to exploit this capability to its maximum potential while still maintaining a given QoS. It should be noted that virtualization is not specific to Cloud computing. IBM originally pioneered the concept in the 1960's with the M44/44X systems.  It has only recently been reintroduced for general use on x86 platforms. 
 
 
  \FIGURE{htb}
@@ -39,7 +39,7 @@ One of the most important technologies in cloud computing is hardware level virt
 Moving up the latter of implementation with virtualization, we find OS level virtualization, where multiplexing happens at the level of the OS, rather than the hardware. Usually, this refers to isolating a filesystem and associated process and runtime effects in a single "chroot" or "container" environment at the user level, with kernel level operations being handled by a single OS kernel. This containerization allows for multiple user environments to exist concurrently without the complexity of hardware or ISA level virtualization.  Containers are also describe in the next section in more detail.
 
 \item \textbf{Library (API) - }
-Continuing, we move up to library or API level virtualzation. Here, some API is separated and a provided to a user or programming environment, and the communication between this API and the back-end library with the computation is virtualized. This can give the effect that resources are local, when really they are remote and abstract. This is how GPUs are "virtualized" with tools such as rCUDA \cite{duato2010rcuda, duato2011enabling} and vCUDA \cite{shi2012vcuda}. This method's performance often can be very dependent on the underlying communications mechanisms, as well as complete virtualization of the whole API (which may be difficult).  API virtualization also exists for entire OS libraries to translate between differing OS, without actual containerization.   
+Continuing, we move up to library or API level virtualzation. Here, some API is separated and a provided to a user or programming environment, and the communication between this API and the back-end library with the computation is virtualized. This can give the effect that resources are local, when really they are remote and abstract. This is how GPUs are "virtualized" with tools such as rCUDA \cite{duato2011enabling} and vCUDA \cite{shi2012vcuda}. This method's performance often can be very dependent on the underlying communications mechanisms, as well as complete virtualization of the whole API (which may be difficult).  API virtualization also exists for entire OS libraries to translate between differing OS, without actual containerization.   
 
 \item \textbf{Process - }
 Virtualization can also take the form at the process or user level, which can then be used to deliver a specialized or high level language that is the same across several different OSs. This is how the Java Virtual Machine (JVM) and Microsoft's .NET platform work. This type of application predominantly falls outside of the scope of this dissertation. 
@@ -97,7 +97,7 @@ Cloud computing \cite{Armbrust2010} is one of the most explosively expanding tec
 
 \item{\em Cost Effective} - Users finds only the hardware required for each project.  This reduces the risk for institutions potentially want build a scalable system, thus providing greater flexibility, since the user is only paying for needed infrastructure while maintaining the option to increase services as needed in the future.
 
-\item{\em Simplified Interface} - Whether using a specific application, a set of tools or Web services, Clouds provide access to a potentially vast amount of computing resources in an easy and user-centric way. We have investigated such an interface within Grid systems through the use of the Cyberaide project \cite{las09ccgrid, las08-javascript}.
+\item{\em Simplified Interface} - Whether using a specific application, a set of tools or Web services, Clouds provide access to a potentially vast amount of computing resources in an easy and user-centric way. We have investigated such an interface within Grid systems through the use of the Cyberaide project \cite{las09ccgrid, las08javascript}.
 
 \end{itemize}
 
@@ -332,7 +332,7 @@ Another virtual cluster orchestration effort has developed within the OpenStack 
 %\TODO{Provide example OpenStack Heat template in Appendix?}
 
 
-
+\begin{comment}
 %%%%%%---------------------------------------------------------------
 \subsubsection{Virtual Cluster Performance}
 %%%%%%---------------------------------------------------------------
@@ -354,7 +354,7 @@ CLAIM: State recent hardware availability is driving innovation in virtual clust
 CLAIM: Mention we want to support mid-tier scientific applications. Peta-scale HPC beyond scope. Back up importance with XSEDE report showing most (90\%) of jobs on national cyber infrastructure use less than 1024 cores. This is metric for mid-tier, and our target for deployment.  
 
 CLAIM: consider hardware size/constraints. Physical infrastructure around petascale? Beyond single rack environments for sure. Say that while SR-IOV IB works only scale to few nodes, results are good and trends lead up to hundreds of cores possible, if not thousands. This is scope of mid-tier scientific HPC. Cite our MD paper, SDSC XSEDE paper, and NASA paper to validate claim.
-
+\end{comment}
 
 \subsection{The FutureGrid Project}
 
@@ -496,7 +496,7 @@ To get an idea of some of the hardware advances over the past few years, it is u
 
 \subsection{Exascale}
 
-As the forefront of supercomputing moves beyond the latest petaflop machines in the past few years \cite{bland2012titan}, the HPC community is setting their sights on the next significant milestone: Exascale. Exascale computing refers broadly to performing roughly one exaFLOPS, or $10^{18}$ floating point operations per second. However, exascale itself is far more than just a theoretical FLOPS goal, but instead a set of new computing advancements and challenges that requires reaching computational power at such magnitude.  While FLOPs are often used as the ubiquitous yard stick for supercomputing with the LINPACK benchmark \cite{dongarra2003linpack,}, other efforts have taken hold to classify systems under a different set of parameters \cite{murphy2010graph500, dongarra2013hpcg}, with the loose understanding that these may incorporate a richer application set destined for exascale systems.  This could include for instance integer calculations at a similar scale to satisfy defence and intelligence perspectives, or graph processing at a 
+As the forefront of supercomputing moves beyond the latest petaflop machines in the past few years \cite{bland2012titan}, the HPC community is setting their sights on the next significant milestone: Exascale. Exascale computing refers broadly to performing roughly one exaFLOPS, or $10^{18}$ floating point operations per second. However, exascale itself is far more than just a theoretical FLOPS goal, but instead a set of new computing advancements and challenges that requires reaching computational power at such magnitude.  While FLOPs are often used as the ubiquitous yard stick for supercomputing with the LINPACK benchmark \cite{dongarra2003linpack}, other efforts have taken hold to classify systems under a different set of parameters \cite{murphy2010graph500, dongarra2013hpcg}, with the loose understanding that these may incorporate a richer application set destined for exascale systems.  This could include for instance integer calculations at a similar scale to satisfy defence and intelligence perspectives, or graph processing at a 
 
 With exascale, there are a number of barriers that exist with current technologies that must be overcome to reach exascale.  The exascale Computing Study \cite{bergman2008exascale} specifically lists 4 major focal areas:
 
