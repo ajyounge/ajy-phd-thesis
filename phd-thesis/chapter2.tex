@@ -185,9 +185,15 @@ Nimbus also provides an implementation of EC2's interface that allows you to use
 
 Eucalyptus is a product from Eucalyptus Systems  \cite{nurmi2008eos, eucapyltuswp, www/eucalyptus}, that developed out of a research project at the University of California, Santa Barbara. Eucalyptus was initially aimed at bringing the cloud computing paradigm of computing to academic super computers and clusters. Eucalyptus provides a Amazon Web Services (AWS) complaint EC2 based web service interface for interacting with the Cloud service. %Additionally Eucalyptus provides other support services as well, such as the Walrus storage solution (similar to S3) and a user interface for managing users and images. 
 
-\TODO{Bring in architecture diagram from Euclyptus}
+ \FIGURE{htb}
+  {images/eucalyptus_cloud_architecture.png}
+  {1.0}
+  {Eucalyptus Architecture}
+  {F:euca}
+
+
  
-The architecture is based on a two level hierarchy of the Cloud controller and the Cluster controller. The Cluster Controller usually manages the nodes within a single cluster and multiple such Cluster Controllers can be used to connect to a single Cloud Controller. The Cloud Controller is responsible for the resource management, scheduling and accounting aspects of the Cloud.
+The architecture depicted in Figure \ref{F:euca} is based on a two level hierarchy of the Cloud controller and the Cluster controller \cite{www-euca}. The Cluster Controller usually manages the nodes within a single cluster and multiple such Cluster Controllers can be used to connect to a single Cloud Controller. The Cloud Controller is responsible for the resource management, scheduling and accounting aspects of the Cloud.
  
 Being one of the first private cloud computing solutions, Eucalyptus has a focused user interface.  Much of Eucalyptus's design is based on the functionality of Amazon's EC2 cloud solution, and the user interface is a prime example of that model.  While EC2 is a proprietary public cloud, it uses an open interface through the use of well designed Web Services which are open to all. Eucalyptus, looking to provide complete compatibility with EC2 to market the private cloud market, uses the same interface for all communication to the Cloud Controller.  With Eucalyptus's interface being AWS complaint, it provides the same form of authentication that AWS supports, namely the shared key and PKI  models.% The shared keys are used with the Eucalyptus Query Interface. 
 
@@ -209,15 +215,15 @@ As part of the computing support efforts OpenStack  utilizes a cloud fabric cont
 
 The OpenStack Swift storage solution is build around a number of interacting components and concepts including a Proxy Server, a Ring, Object Server, a Container Server, an Account Server, Replication, Updaters, and Auditors. This distributed architecture attempts to have no centralized components, to enable scalability and resiliency for data.  Swift represents the long-term, object-based storage, similar to Amazon S3, and attempts to maintain rough API compatibility with S3. As Swift looks to use simple data replication as a main form of resiliency and fast read/write is rarely a priority, Swift is often built using commodity disk drives instead of most costly flash solutions.  
 
-With OpenStack Nova's increased, so too has the auxiliary OpenStack projects increased to support Nova.  While there are many other recent OpenStack projects, these listed OpenStack efforts, along with Nova and Swift, represent the common core of a current OpenStack deployment. 
- 
+With OpenStack Nova's increased prevalence, the number of auxiliary OpenStack projects has also increased to support Nova.  While there are many other recent OpenStack projects, these listed OpenStack efforts, along with Nova and Swift, represent the common core of a current OpenStack deployment. 
+  i
 
 \begin{itemize}
-\item Cinder for persistent block-level storage mechanisms to support VM instances and elastic block storage
-\item Neutron provides advanced networking and SDN solutions, IP addressing, and VLAN configuration
-\item Glance delivers comprehensive image management, including image discovery, registration, and delivery mechanisms 
-\item Keystone identity and authentication service for all OpenStack services
-\item Horizon, a dashboard web-based UI framework, complimentary to the RESTful client API.   
+\item \textbf{Cinder} for persistent block-level storage mechanisms to support VM instances and elastic block storage
+\item \textbf{Neutron} provides advanced networking and SDN solutions, IP addressing, and VLAN configuration
+\item \textbf{Glance} delivers comprehensive image management, including image discovery, registration, and delivery mechanisms 
+\item \textbf{Keystone} identity and authentication service for all OpenStack services
+\item \textbf{Horizon}, a dashboard web-based UI framework, complimentary to the RESTful client API.   
 \end{itemize}
 
 Currently, OpenStack exists as one of the largest ongoing private IaaS efforts, with over 500 companies contributing to the effort, and thousands of deployments. While releases have pushed forth approximately every 6 months, the latest current release at the time of writing is \emph{Mitaka}, which now includes full support for GPUs and SR-IOV interconnects. It is expected that OpenStack's prevalence in the cloud computing community will only increase in the next few years.   
@@ -271,7 +277,7 @@ Other cloud specific projects exist such as In-VIGO \cite{adabala2005virtualized
 
 %%%%%%---------------------------------------------------------------
 %\subsection{Workload Scheduling}
-%%%%%%---------------------------------------------------------------
+%%%%%%--------------------------------------------------------------- i
 
 %While this is an abstract solution, it is important to keep in mind that these virtual machines create an overhead when compared to running on ``bare metal."  Current research estimates this the overhead for CPU bound operations at 1 to 15\% depending on the hypervisor, however more detailed studies are needed to better understand this overhead.   While the hypervisor introduces overhead, so does the actual VM image being used.  Therefore, it is clear that slimming down the images could yield an increase in overall system efficiency.  This provides the motivation for the minimal Virtual Machine image design discussed in Section \ref{sec:minvm}.
 
