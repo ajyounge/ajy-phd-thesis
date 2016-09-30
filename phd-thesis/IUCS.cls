@@ -15,7 +15,7 @@
 % Indiana University Computer Science department.  Originally 
 % taken form the BYU Physics department, and named BYUPhys.cls.  
 % The IUCS class is for producing theses and dissertations 
-% in the RIT department of computer science.  You can supply 
+% in the department of computer science.  You can supply 
 % the following optional arguments in the square brackets to 
 % specify the thesis type:
 %
@@ -218,8 +218,8 @@
     \titlepage 
     \copyrightpage 
     \phdapprovalpage 
-    \acceptancepage 
     \abstractpage 
+    \acceptancepage 
     \acknowledgmentspage 
     \fixmargins
     \renewcommand{\clearemptydoublepage}{\cle@remptydoublep@ge}
@@ -292,7 +292,7 @@
 
 % ---------------------------- main code ----------------------------
 
-% Set the margins to RIT/BYU specifications for the single sided preliminary
+% Set the margins to IU specifications for the single sided preliminary
 % pages.  At the end of the \makepreliminarypages command we fix the margins
 % to be appropriate alternating values for double sided printing (if selected).
 % If the \makepreliminarypages macro is not run, this never gets fixed. 
@@ -489,25 +489,34 @@
     \begin{center}
     \providecommand\pdfbookmark[3][]{} \pdfbookmark[0]{Acceptance Page}{bm:Accept}    
     \vspace*{0.375in}
-    INDIANA UNIVERSITY\\[3\baselineskip]
+    ABSTRACT APPROVAL\\[3\baselineskip]
     \end{center}%
     \noindent%
-    As chair of the candidate's graduate committee, I have read the
-    \@docname\ of \@Author \ in its final form and have found
-    that (1) its format, citations, and bibliographical style are
-    consistent and acceptable and fulfill university and department
-    style requirements; (2) its illustrative materials including
-    figures, tables, and charts are in place; and (3) the final
-    manuscript is satisfactory to the graduate committee
-    and is ready for submission to the university library.\\[2\baselineskip]
-    \datebox\hfill\signaturebox{\@Advisor\\Chair, Graduate Committee}
-    \vskip 0pt plus 2fill
-    \noindent Accepted for the Department\par\hfill%
-    \signaturebox{\@DepRep, \@DepRepTitle\\Computer Science Program}
-	{} \vfill \noindent Accepted for the College\par\hfill
-    \signaturebox{\@Dean, \@DeanTitle \\
-    School of Informatics and Computing  
-	}
+    As committee members of the candidate's graduate committe, I 
+    have read the \@docname\ abstract of \@Author \ and found it
+    in a form satisfactory to the graduate committee.\\[\baselineskip] 
+    \begin{flushright}
+    \datebox   \signaturebox{\@Advisor, Chair}\\
+    \datebox   \signaturebox{\@MemberA}\\
+    \datebox   \signaturebox{\@MemberB}\\
+    \datebox   \signaturebox{\@MemberC}\\
+%    As chair of the candidate's graduate committee, I have read the
+%    \@docname\ of \@Author \ in its final form and have found
+%    that (1) its format, citations, and bibliographical style are
+%    consistent and acceptable and fulfill university and department
+%    style requirements; (2) its illustrative materials including
+%    figures, tables, and charts are in place; and (3) the final
+%    manuscript is satisfactory to the graduate committee
+%    and is ready for submission to the university library.\\[2\baselineskip]
+%    \datebox\hfill\signaturebox{\@Advisor\\Chair, Graduate Committee}
+%    \vskip 0pt plus 2fill
+%    \noindent Accepted for the Department\par\hfill%
+%    \signaturebox{\@DepRep, \@DepRepTitle\\Computer Science Program}
+%	{} \vfill \noindent Accepted for the College\par\hfill
+%    \signaturebox{\@Dean, \@DeanTitle \\
+%    School of Informatics and Computing  
+%	}
+    \end{flushright}
     \clearemptydoublepage
   }
 
