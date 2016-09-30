@@ -8,9 +8,11 @@
 \label{chap:mdsimulations}
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
 
-\begin{comment}
-\begin{abstract}
-
+%\begin{comment}
+%\begin{abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Cloud infrastructure-as-a-Service paradigms have recently shown their utility for a vast array of computational problems, ranging from advanced web service architectures to high throughput computing.  However, many scientific computing applications have been slow to adapt to virtualized cloud frameworks. This is due to performance impacts of virtualization technologies, coupled with the lack of advanced hardware support necessary for running many high performance scientific a:tabnpplications at scale. 
 
 By using KVM virtual machines that leverage both Nvidia GPUs and InfiniBand, we show that molecular dynamics simulations with LAMMPS and HOOMD run at near-native speeds. This experiment also illustrates how virtualized environments can support the latest parallel computing paradigms, including both MPI+CUDA and new GPUDirect RDMA functionality. Specific findings show initial promise in scaling of such applications to larger production deployments targeting large scale computational workloads.  
@@ -27,8 +29,8 @@ By using KVM virtual machines that leverage both Nvidia GPUs and InfiniBand, we 
 %* MD simulations \\
 %* Good results \\
 
-\end{abstract}
-\end{comment}
+%\end{abstract}
+%\end{comment}
 
 \section{Introduction}
 
@@ -56,7 +58,7 @@ With the advances in hypervisor performance coupled with the newfound availabili
 
 Efforts to improve power efficiency and performance in data centers has led to more heterogeneous architectures. That move toward heterogeneity has, in turn, led to support for heterogeneity in the cloud. For example, Amazon EC2 supports GPU accelerators in EC2~\cite{www-amazon-gpu}, and OpenStack supports heterogeneity using flavors~\cite{www-openstack-flavors}. These advancements in cloud-level support for heterogeneity combined with better support for high-performance virtualization makes the use of cloud for HPC much more feasible for a wider range of applications and platforms.
 
-In this paper we discribe background a related work. Then, we describe a heterogeneous cloud platform, based on OpenStack. This
+In this paper we describe background a related work. Then, we describe a heterogeneous cloud platform, based on OpenStack. This
 effort has been under development at USC/ISI since 2011~\cite{crago2011heterogeneous}.
 We describe our work towards integrating GPU and InfiniBand support into
 OpenStack, and we describe the heterogeneous scheduling additions that are
