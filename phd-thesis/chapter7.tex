@@ -59,17 +59,17 @@ In Chapters 5 and 6, KVM's PCI passthrough is detailed for use with Nvidia GPUs,
 
 While PCI passthrough works well for providing dedicated accelerator resources such as GPUs, a sharing model of PCI passthrough does not hold. This is because PCI passthrough is a simple 1-to-1 relationship between a guest and PCI device. While it is possible to have a 1-to-many relationship (e.g. a single VM with multiple GPUs connected), there is no way to share a single device across multiple guests or the guest and the host. While this is not an issue and in fact a desirable effect with GPUS (GPUs are not designed for multi-application sharing and such a solution would largely lead to significant inefficiencies), high speed networking adapters attached on PCI-Express buses do have a necessity to be shared in virtualized environments.
 
-	With this requirement for sharing PCI networking adapters, a few options exist, as illustrated in Figure \ref{sriov}. The first option is to use a software multiplexing option that sorts inbound and outbound traffic and forwards them to queues set up for each VM as necessary.  One example of this is Virtual Machine Device Queues (VMDq) and while this solution does have some workable Ethernet solutions and can allows VMs to share a PCI based NIC, there are performance limitations. These limiations are due to the amount of hypervisor involvement necessary in sorting the queues, as well as the fact that all data needs to  
-
- Single Root I/O Virtualization (SR-IOV) has been developed. 
-
-
-
 \FIGURE{thb}
   {images/sriov.png}
   {1.0}
   {SR-IOV Networking comparison}
   {F:sriov}
+
+
+With this requirement for sharing PCI networking adapters, a few options exist and are illustrated in Figure \ref{F:sriov}. The first option is to use software multiplexing that sorts inbound and outbound traffic and forwards packets to queues set up for each VM as necessary.  One example of this is Virtual Machine Device Queues (VMDq) \cite{vmdq}hile this solution does have some workable Ethernet solutions and can allows VMs to share a PCI based NIC, there are performance limitations, due to the large amount of hypervisor involvement necessary in sorting the queues, as well as the fact that all data needs to be buffered between the hypervisor and guest memory. The next and simplist option is simply to add more PCI adapters to a given server. While multiple PCI passthrough does work, there is a fundamental limitation to this method as the number of cores and NUMA sockets expanding along with higher bandwidth NICs requiring more PCI slots. %Normal Ethernet based VM networking includes briding or tapping existing networks within the host and using driver emulation in the guest. HJowever, this method does not apply to other networks and has known perfomrance limitations. <F12>this 
+
+With these limitations in mind, Single Root I/O Virtualization (SR-IOV) has been developed. 
+
 
  
 \TODO{Provide background infromation on SR-IOV, and how it works}
