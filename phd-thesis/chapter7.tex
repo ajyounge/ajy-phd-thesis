@@ -66,16 +66,25 @@ While PCI passthrough works well for providing dedicated accelerator resources s
   {F:sriov}
 
 
-With this requirement for sharing PCI networking adapters, a few options exist and are illustrated in Figure \ref{F:sriov}. The first option is to use software multiplexing that sorts inbound and outbound traffic and forwards packets to queues set up for each VM as necessary.  One example of this is Virtual Machine Device Queues (VMDq) \cite{vmdq}hile this solution does have some workable Ethernet solutions and can allows VMs to share a PCI based NIC, there are performance limitations, due to the large amount of hypervisor involvement necessary in sorting the queues, as well as the fact that all data needs to be buffered between the hypervisor and guest memory. The next and simplist option is simply to add more PCI adapters to a given server. While multiple PCI passthrough does work, there is a fundamental limitation to this method as the number of cores and NUMA sockets expanding along with higher bandwidth NICs requiring more PCI slots. %Normal Ethernet based VM networking includes briding or tapping existing networks within the host and using driver emulation in the guest. HJowever, this method does not apply to other networks and has known perfomrance limitations. <F12>this 
+With this requirement for sharing PCI networking adapters, a few options exist and are illustrated in Figure \ref{F:sriov}. The first option is to use software multiplexing that sorts inbound and outbound traffic and forwards packets to queues set up for each VM as necessary.  One example of this is Virtual Machine Device Queues (VMDq) \cite{vmdq}. While this solution of software queues does have some workable Ethernet solutions and can allows VMs to share a PCI based NIC, there are performance limitations, due to the large amount of hypervisor involvement necessary in sorting the queues, as well as the fact that all data needs to be buffered between the hypervisor and guest memory. The next and simplest option is simply to add more PCI adapters to a given server. While multiple PCI passthrough does work, there is a fundamental limitation to this method as the number of cores and NUMA sockets expanding along with higher bandwidth NICs requiring more PCI slots. %Normal Ethernet based VM networking includes briding or tapping existing networks within the host and using driver emulation in the guest. HJowever, this method does not apply to other networks and has known perfomrance limitations. <F12>this 
 
-With these limitations in mind, Single Root I/O Virtualization (SR-IOV) has been developed. 
+With these limitations in mind, Single Root I/O Virtualization (SR-IOV) has been developed. This standardization effectively enables multiplexing of a PCI based communications adapter (typically Ethernet but also InfiniBand adapters) directly within the hardware.  With SR-IOV, multiple Virtual Functions (VFs) are created and configured in hardware.  Each VF has a dedicated resource pool with specific Tx and Rx queues, along with other lightweight PCI resources such as registers, BARs, and hardware descriptors.  These adapters also still maintain a Physical Function (PF), which is a fully-implemented PCI device that acts not only as a standard controller card, but also as a control mechanism for the VFs (given firmware adjustments). These mechanisms are illustrated in Figure \ref{F:sriovpci} provided by Intel \cite{intel}. 
+ 
+\FIGURE{thb}
+  {images/sriov-pci.png}
+  {1.0}
+  {SR-IOV Networking comparison}
+  {F:sriovpci}
 
+To use SR-IOV within a virtualized setting, a VF is given to a guest VM on boot. This happens using the PCI passthrough mechanisms, except the specific VF PCI identifier is used, instead of the actual adapter card. Within the guest, the VM loads specific driver (usually supplied by the hardware vendor) that is able to probe and detect the VF functionality. This driver fills in the descriptors and sets up memory allocations for DMA directly within the guest OS, effectively creating dedicated data queues within the VM.  
+
+When a datum (could be a packet or a message, depending on the adapter type) arrives at the physical card, it is sent through a hardware switch which places the data into the pool specific to the target VF. The data is then immediately DMAed to the guest based on the preallocated memory buffers. This is possible through the use of VT-d mechanisms which enable the translation between device addresses and the guest virtual addresses, bypassing the need for hypervisor memory translation. This entire process happens without any CPU interaction, other than occasional interrupts to send a notification of completed data work queues.   This essentially enabled direct hardware DMA to a guest without any hypervisor involvement.
+ 
+Using modern 10GbE and InfiniBand adapters, SR-IOV can easily configurable to have up to 64 VFs, enabling a great deal of scalability within a given host.  Without any hypervisor interaction or context switching, bandwidth and latency can start to approach near-native levels, which was previously not possible with other methods. Looking at InfiniBand, research has found that Mellanox adapters with SR-IOV in KVM can achieve near-native bandwidth, while incurring only a slight 15-30\% overhead on small (1bype) messages \cite{Musleh2014cloud, jose2013}. This latency overhead is due to the extra hardware switching that has to happen between the VFs in the adapter itself, as well as the IOMMU involvement.   
 
  
-\TODO{Provide background infromation on SR-IOV, and how it works}
 
-\TODO{Illustrate how IB SR-IOV in KVM works}
-
+\TODO{Clean up citations}
  
 
 %%%%%%---------------------------------------------------------------
