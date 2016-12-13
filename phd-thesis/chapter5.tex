@@ -294,7 +294,7 @@ whereas KVM's Linux kernel represents the actual running kernel hosting the KVM
 hypervisor.  Linux Containers share a single kernel between the host
 and guests. 
 
-It is worth noting that these experiments were originally set up, configured and tested with the VMWare ESXi hypervisor as well. However, we've found that fundamental limitations with the reliability and accuracy of the VMWare virtual Time Stamp Counter (TSC) \cite{vmwaretiming} can lead to significant deviations in performance reporting. Not feeling comfortable with VMWare's ability to accurately report fair timing measurements, we decided to omit the VMWare results from this manuscript. 
+It is worth noting that these experiments were originally set up, configured and tested with the VMWare ESXi hypervisor as well. However, we've found that fundamental limitations with the reliability and accuracy of the VMWare virtual Time Stamp Counter (TSC) \cite{vmwaretiming} can lead to significant deviations in performance reporting. Not feeling comfortable with VMWare's ability to accurately report fair timing measurements, we decided to omit the VMWare results from this manuscript. For more information on time keeping in virtual machines, please refer to Section 7.3 for more details. 
 
 Similarly, hypervisor requirements prevented us from standardizing on a single host operating system.  For Xen
 and KVM, we relied on the Arch Linux 2013.10.01 distribution because it provides
