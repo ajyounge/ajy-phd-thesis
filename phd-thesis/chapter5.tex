@@ -19,9 +19,9 @@ multi-core processors; however, their use in the cloud has been limited.  Today,
 several common hypervisors support GPU-passthrough, but their performance has
 not been systematically characterized.  
 
-In this chapter we show that low overhead PCI passthrough is achievable across 4
+In this chapter we show that low overhead PCI passthrough is achievable across 3
 major hypervisors and two processor microarchitectures. We compare the performance of two generations of NVIDIA
-GPUs within the Xen,  and KVM hypervisors, and we also compare the
+GPUs within the Xen and KVM hypervisors, and we also compare the
 performance to that of Linux Containers (LXC). We show that GPU passthrough to
 KVM achieves 98--100\% of the base system's performance across two
 architectures, while Xen achieve 96\% of the base systems
@@ -56,7 +56,7 @@ performance and power efficiency over commodity multi-core CPUs.
 %or no access to accelerators.  
 
 
- Infrastructure-as-a-Service (IaaS) clouds have the potential to
+Infrastructure-as-a-Service (IaaS) clouds have the potential to
 democratize access to the latest, fastest, and most powerful computational
 accelerators.  This is true of both public and private clouds.  Yet today's
 clouds are typically homogeneous without access to even the most commonly used
@@ -95,10 +95,10 @@ Containers (LXC).  Through a series of microbenchmarks as well as scientific and
 Big Data applications, we make two contributions: 
 
 \begin{enumerate}
-\item We demonstrate that PCI passthrough at high performance is possible for
-GPUs across 4 major hypervisors.
-\item We describe the lessons learned through our performance analysis, as well as the relative advantages
-and disadvantages of each hypervisor for GPU support.
+	\item We demonstrate that PCI passthrough at high performance is possible for
+	GPUs across 3 major hypervisors.
+	\item We describe the lessons learned through our performance analysis, as well as the relative advantages
+	and disadvantages of each hypervisor for GPU support.
 \end{enumerate}
 
 %In this paper we characterize the performance of the NVIDIA Kepler K20 GPU
@@ -246,7 +246,7 @@ and compilers, GPU passthrough solutions are preferrable to API remoting.  Today
 
 \subsection{Host and Hypervisor Configuration}
 
-We used two hardware systems, named Bespin and Delta, to evaluate four
+We used two hardware systems, named Bespin and Delta, to evaluate 
 hypervisors.
 The Bespin system at USC/ISI represents Intel's Sandy Bridge microarchitecture with a Kepler class K20 GPU. The Delta system, provided by the FutureGrid project \cite{www-futuregrid}, represents the Westmere microarchitecture with a Fermi class C2075 GPU. 
 %  Bespin and Delta are representative of
@@ -268,7 +268,7 @@ ethernet network for management only.
 \centering
 \begin{tabular}{|l||l|l|}
 \hline
- & Bespin & Delta  \\ \hline
+& Bespin & Delta  \\ \hline
 CPU (cores)  & 2x E5-2670 (16)  & 2x X5660 (12) \\ \hline
 Clock Speed & 2.6 GHz & 2.6 GHz \\ \hline 
 RAM &  48 GB &  192 GB \\ \hline
@@ -292,7 +292,9 @@ virtualization solution imposes its own unique requirements on the base
 operating system.  Hence, Xen's Linux kernel refers to the Domain-0 kernel,
 whereas KVM's Linux kernel represents the actual running kernel hosting the KVM
 hypervisor.  Linux Containers share a single kernel between the host
-and guests.  
+and guests. 
+
+It is worth noting that these experiments were originally set up, configured and tested with the VMWare ESXi hypervisor as well. However, we've found that fundamental limitations with the reliability and accuracy of the VMWare virtual Time Stamp Counter (TSC) \cite{vmwaretiming} can lead to significant deviations in performance reporting. Not feeling comfortable with VMWare's ability to accurately report fair timing measurements, we decided to omit the VMWare results from this manuscript. 
 
 Similarly, hypervisor requirements prevented us from standardizing on a single host operating system.  For Xen
 and KVM, we relied on the Arch Linux 2013.10.01 distribution because it provides
@@ -418,7 +420,7 @@ Energy)  co-design effort for exascale applications~\cite{LULESH}.
 
 %LULESH 1.0
 %includes both Kepler and Fermi GPU models which we use in our benchmarking. 
- 
+
 
 \section{Performance Results}\label{RESULTS}
 
@@ -430,22 +432,22 @@ Energy)  co-design effort for exascale applications~\cite{LULESH}.
 level, while maximum overheads are expressed as a percentage.  }
 \label{K20MEANS}
 \centering
-    \begin{tabular}{|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|}
 %\rowcolor{gray!50}
-    \hline 
-    ~  & \multicolumn{6}{c|}{Bespin (K20)} \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
-    L0 & 0.999   & 1.57   & 0.997 & 3.34   & 1.00   & 1.77    \\ \hline 
-    L1 & 0.998   & 1.23   & 0.998 & 1.39   & 1.00   & 1.47    \\ \hline 
-    L2 & 0.998   & 0.48   & 0.995 & 0.846  & 0.999  & 1.90   \\ \hline
-    ~  & \multicolumn{6}{c|}{Bespin PCIe-only}  \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC}   \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
-    L0 & 0.997   & 0.317   & 0.999  & 0.143 & 0.995  & 0.981     \\ \hline 
-    L1 & 0.998   & 0.683   & 0.997  & 1.39  & 1.00   & 0.928     \\ \hline 
-    L2 & 0.998   & 0.478   & 0.996  & 0.846 & 1.00   & 0.247     \\ \hline
-    \end{tabular}
+\hline 
+~  & \multicolumn{6}{c|}{Bespin (K20)} \\ \hline
+~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} \\ \hline 
+~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+L0 & 0.999   & 1.57   & 0.997 & 3.34   & 1.00   & 1.77    \\ \hline 
+L1 & 0.998   & 1.23   & 0.998 & 1.39   & 1.00   & 1.47    \\ \hline 
+L2 & 0.998   & 0.48   & 0.995 & 0.846  & 0.999  & 1.90   \\ \hline
+~  & \multicolumn{6}{c|}{Bespin PCIe-only}  \\ \hline
+~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC}   \\ \hline 
+~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+L0 & 0.997   & 0.317   & 0.999  & 0.143 & 0.995  & 0.981     \\ \hline 
+L1 & 0.998   & 0.683   & 0.997  & 1.39  & 1.00   & 0.928     \\ \hline 
+L2 & 0.998   & 0.478   & 0.996  & 0.846 & 1.00   & 0.247     \\ \hline
+\end{tabular}
 \end{table*}
 
 \begin{table*}
@@ -455,22 +457,22 @@ level, while maximum overheads are expressed as a percentage.  }
 level, while maximum overheads are expressed as a percentage.  }
 \label{C2075MEANS}
 \centering
-    \begin{tabular}{|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|}
 %\rowcolor{gray!50}
-    \hline 
-    ~  &  \multicolumn{6}{c|}{Delta (C2075)} \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC}  \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
-    L0 & 1.01     & 0.031   & 0.969    & 12.7  & 1.00  & 0.073      \\ \hline 
-    L1 & 1.00     & 1.45    & 0.959    & 24.0  & 1.00  & 0.663      \\ \hline 
-    L2 & 1.00     & 0.101   & 0.982    & 4.60  & 1.00  & 0.016      \\ \hline
-    ~  &  \multicolumn{6}{c|}{Delta PCIe-only} \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
-    L0 & 1.04     & 0.029   & 0.889    & 12.7  & 1.00  & 0.01     \\ \hline 
-    L1 & 1.00     & 1.45    & 0.914    & 20.5  & 0.999 & 0.380    \\ \hline 
-    L2 & 1.00     & 0.075   & 0.918    & 4.60  & 1.00  & N/A     \\ \hline
-    \end{tabular}
+\hline 
+~  &  \multicolumn{6}{c|}{Delta (C2075)} \\ \hline
+~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC}  \\ \hline 
+~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+L0 & 1.01     & 0.031   & 0.969    & 12.7  & 1.00  & 0.073      \\ \hline 
+L1 & 1.00     & 1.45    & 0.959    & 24.0  & 1.00  & 0.663      \\ \hline 
+L2 & 1.00     & 0.101   & 0.982    & 4.60  & 1.00  & 0.016      \\ \hline
+~  &  \multicolumn{6}{c|}{Delta PCIe-only} \\ \hline
+~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} \\ \hline 
+~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+L0 & 1.04     & 0.029   & 0.889    & 12.7  & 1.00  & 0.01     \\ \hline 
+L1 & 1.00     & 1.45    & 0.914    & 20.5  & 0.999 & 0.380    \\ \hline 
+L2 & 1.00     & 0.075   & 0.918    & 4.60  & 1.00  & N/A     \\ \hline
+\end{tabular}
 \end{table*}
 
 
@@ -576,32 +578,32 @@ below.
 
 
 \FIGURE{!htb}
-  {images/5-1}
-  {1.0}
-  {SHOC Levels 0 and 1 relative performance on Bespin system.  Results show benchmarks over or
+{images/5-1}
+{1.0}
+{SHOC Levels 0 and 1 relative performance on Bespin system.  Results show benchmarks over or
 under-performing by 0.5\% or greater.  Higher is better.}
-  {F:SHOC_l1} 
+{F:SHOC_l1} 
 
 \FIGURE{!htb}
-  {images/5-2}
-  {1.0}
-  {SHOC Levels 1 and 2 relative performance on Bespin system.  Results show benchmarks over or
+{images/5-2}
+{1.0}
+{SHOC Levels 1 and 2 relative performance on Bespin system.  Results show benchmarks over or
 under-performing by 0.5\% or greater.  Higher is better.}
-  {F:SHOC_l1-2} 
+{F:SHOC_l1-2} 
 
 \FIGURE{!htb}
-  {images/5-3}
-  {1.0}
-  {SHOC Levels 0 and 1 relative performance on Delta system.  Benchmarks
+{images/5-3}
+{1.0}
+{SHOC Levels 0 and 1 relative performance on Delta system.  Benchmarks
 shown are the same as Bespin's.  Higher is better.}
-  {F:delta-SHOC_l1} 
+{F:delta-SHOC_l1} 
 
 \FIGURE{!htb}
-  {images/5-4}
-  {1.0}
-  {SHOC Levels 1 and 2 relative performance. Benchmarks shown are the same as
+{images/5-4}
+{1.0}
+{SHOC Levels 1 and 2 relative performance. Benchmarks shown are the same as
 Bespin's.   Higher is better.}
-  {F:delta-SHOC_l1-2} 
+{F:delta-SHOC_l1-2} 
 
 
 
@@ -837,17 +839,17 @@ advantages.  In general, its maximum overheads are comparable to or less than KV
 
 
 \FIGURE{!htb}
-  {images/5-5}
-  {1.0}
-  {GPU-LIBSVM relative performance on Bespin system.  Higher is better.}
-  {F:LIBSVM} 
+{images/5-5}
+{1.0}
+{GPU-LIBSVM relative performance on Bespin system.  Higher is better.}
+{F:LIBSVM} 
 
 \FIGURE{!htb}
-  {images/5-6}
-  {1.0}
-  {GPU-LIBSVM relative performance on Delta showing improved performance
+{images/5-6}
+{1.0}
+{GPU-LIBSVM relative performance on Delta showing improved performance
 within virtual environments.  Higher is better.}
-  {F:delta-LIBSVM} 
+{F:delta-LIBSVM} 
 
 
 
@@ -923,17 +925,17 @@ inability to enabled page sizes larger than 4k.
 \subsection{LAMMPS Performance}
 
 \FIGURE{!htb}
-  {images/5-7}
-  {1.0}
-  {LAMMPS Rhodopsin benchmark relative performance for Bespin system.  Higher is better.}
-  {F:RHODO} 
+{images/5-7}
+{1.0}
+{LAMMPS Rhodopsin benchmark relative performance for Bespin system.  Higher is better.}
+{F:RHODO} 
 
 
 \FIGURE{!htb}
-  {images/5-8}
-  {1.0}
-  {LAMMPS Rhodopsin benchmark relative performance for Delta system.  Higher is better.}
-  {F:delta-RHODO} 
+{images/5-8}
+{1.0}
+{LAMMPS Rhodopsin benchmark relative performance for Delta system.  Higher is better.}
+{F:delta-RHODO} 
 
 
 %\begin{figure}[ht!]
@@ -1005,10 +1007,10 @@ KVM and LXC.
 
 
 \FIGURE{!htb}
-  {images/5-9}
-  {1.0}
-  {LULESH relative performance on Bespin. Higher is better.}
-  {F:LULESH_bespin} 
+{images/5-9}
+{1.0}
+{LULESH relative performance on Bespin. Higher is better.}
+{F:LULESH_bespin} 
 
 %\begin{figure}[ht!]
 %\centering
@@ -1079,7 +1081,7 @@ in future revisions to the NVIDIA driver.
 
 
 \section{Directions for Future Work}\label{FUTURE}
-In this chapter we have characterized the performance of 4 common hypervisors
+In this chapter we have characterized the performance of common hypervisors
 across two generations of GPUs and two host microarchitectures, and across 3
 sets of benchmarks.  We showed the dramatic improvement in virtualization
 performance between the Fermi/Westmere and the Kepler/Sandy Bridge system, with
