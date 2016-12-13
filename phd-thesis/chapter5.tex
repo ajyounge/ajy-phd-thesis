@@ -2,7 +2,7 @@
 %% PhD Thesis/Project
 
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
-\chapter{GPU-Passthrough Performance: A Comparison of KVM, Xen, VMWare ESXi, and LXC for CUDA and OpenCL Applications}
+\chapter{GPU-Passthrough Performance: A Comparison of KVM, Xen, and LXC for CUDA and OpenCL Applications}
 \label{chap:cloud2014}
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%
 
@@ -21,11 +21,11 @@ not been systematically characterized.
 
 In this chapter we show that low overhead PCI passthrough is achievable across 4
 major hypervisors and two processor microarchitectures. We compare the performance of two generations of NVIDIA
-GPUs within the Xen, VMWare ESXi, and KVM hypervisors, and we also compare the
+GPUs within the Xen,  and KVM hypervisors, and we also compare the
 performance to that of Linux Containers (LXC). We show that GPU passthrough to
 KVM achieves 98--100\% of the base system's performance across two
-architectures, while Xen and VMWare achieve 96--99\% of the base systems
-performance, respectively.   In addition, we describe several
+architectures, while Xen achieve 96\% of the base systems
+performance.   In addition, we describe several
 valuable lessons learned through our analysis and share the
 advantages and disadvantages of each hypervisor/PCI passthrough solution. 
 
@@ -90,7 +90,7 @@ attempt to virtualize the GPU~\cite{Duato2010rc}
 %critical code.  
 
 In this chapter, we characterize the performance of both NVIDIA Fermi and Kepler GPUs
-operating in PCI passthrough mode in VMWare VSphere, Linux KVM, Xen, and Linux
+operating in PCI passthrough mode in Linux KVM, Xen, and Linux
 Containers (LXC).  Through a series of microbenchmarks as well as scientific and
 Big Data applications, we make two contributions: 
 
@@ -287,20 +287,18 @@ virtualization may be interesting in their own right, but they are not the
 subject of this set of experiments.
 
 We use Bespin and Delta to evaluate three hypervisors and one container-based
-approach to GPU passthrough. The hypervisors and container system, VMWare ESXi,
-Xen, KVM, and LXC, are summarized in Table~\ref{HYPERVISORS}.  Note that each
+approach to GPU passthrough. The hypervisors and container system, Xen, KVM, and LXC, are summarized in Table~\ref{HYPERVISORS}.  Note that each
 virtualization solution imposes its own unique requirements on the base
 operating system.  Hence, Xen's Linux kernel refers to the Domain-0 kernel,
 whereas KVM's Linux kernel represents the actual running kernel hosting the KVM
 hypervisor.  Linux Containers share a single kernel between the host
-and guests, and VMWare ESXi does not rely on a Linux kernel at all.  
+and guests.  
 
 Similarly, hypervisor requirements prevented us from standardizing on a single host operating system.  For Xen
 and KVM, we relied on the Arch Linux 2013.10.01 distribution because it provides
 easy access to the mainline Linux kernel.  For our LXC tests, we use CentOS
 6.4 because its shared kernel was identical to the base CentOS 6.4 kernel used
-in our testing.  VMWare has a
-proprietary software stack.  All of this makes comparison challenging, but as we describe in
+in our testing.   All of this makes comparison challenging, but as we describe in
 Section~\ref{GUESTS}, we are running a common virtual machine across all
 experiments.
 
@@ -333,7 +331,7 @@ experiments.
 Hypervisor & Linux Kernel & Linux Version \\ \hline 
 KVM & 3.12 & Arch 2013.10.01 \\ \hline 
 Xen 4.3.0-7 & 3.12 & Arch 2013.10.01 \\ \hline
-VMWare ESXi 5.5.0 & N/A & N/A \\ \hline
+%VMWare ESXi 5.5.0 & N/A & N/A \\ \hline
 LXC & 2.6.32-358.23.2 & CentOS 6.4 \\ \hline
 
 \end{tabular}
@@ -432,21 +430,21 @@ Energy)  co-design effort for exascale applications~\cite{LULESH}.
 level, while maximum overheads are expressed as a percentage.  }
 \label{K20MEANS}
 \centering
-    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|l|}
 %\rowcolor{gray!50}
     \hline 
-    ~  & \multicolumn{8}{c|}{Bespin (K20)} \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare} \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
-    L0 & 0.999   & 1.57   & 0.997 & 3.34   & 1.00   & 1.77  & 1.00  & 1.90     \\ \hline 
-    L1 & 0.998   & 1.23   & 0.998 & 1.39   & 1.00   & 1.47  & 1.00  & 0.975   \\ \hline 
-    L2 & 0.998   & 0.48   & 0.995 & 0.846  & 0.999  & 1.90  & 0.999 & 1.20   \\ \hline
-    ~  & \multicolumn{8}{c|}{Bespin PCIe-only}  \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare}  \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
-    L0 & 0.997   & 0.317   & 0.999  & 0.143 & 0.995  & 0.981  & 0.995 & 1.01      \\ \hline 
-    L1 & 0.998   & 0.683   & 0.997  & 1.39  & 1.00   & 0.928  & 1.01  & 0.975   \\ \hline 
-    L2 & 0.998   & 0.478   & 0.996  & 0.846 & 1.00   & 0.247  & 1.01  & 0.133    \\ \hline
+    ~  & \multicolumn{6}{c|}{Bespin (K20)} \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+    L0 & 0.999   & 1.57   & 0.997 & 3.34   & 1.00   & 1.77    \\ \hline 
+    L1 & 0.998   & 1.23   & 0.998 & 1.39   & 1.00   & 1.47    \\ \hline 
+    L2 & 0.998   & 0.48   & 0.995 & 0.846  & 0.999  & 1.90   \\ \hline
+    ~  & \multicolumn{6}{c|}{Bespin PCIe-only}  \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC}   \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+    L0 & 0.997   & 0.317   & 0.999  & 0.143 & 0.995  & 0.981     \\ \hline 
+    L1 & 0.998   & 0.683   & 0.997  & 1.39  & 1.00   & 0.928     \\ \hline 
+    L2 & 0.998   & 0.478   & 0.996  & 0.846 & 1.00   & 0.247     \\ \hline
     \end{tabular}
 \end{table*}
 
@@ -457,21 +455,21 @@ level, while maximum overheads are expressed as a percentage.  }
 level, while maximum overheads are expressed as a percentage.  }
 \label{C2075MEANS}
 \centering
-    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|l|}
 %\rowcolor{gray!50}
     \hline 
-    ~  &  \multicolumn{8}{c|}{Delta (C2075)} \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare}  \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
-    L0 & 1.01     & 0.031   & 0.969    & 12.7  & 1.00  & 0.073   & 1.00  & 4.95    \\ \hline 
-    L1 & 1.00     & 1.45    & 0.959    & 24.0  & 1.00  & 0.663   & 0.933 & 36.6    \\ \hline 
-    L2 & 1.00     & 0.101   & 0.982    & 4.60  & 1.00  & 0.016   & 0.962 & 7.01    \\ \hline
-    ~  &  \multicolumn{8}{c|}{Delta PCIe-only} \\ \hline
-    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} & \multicolumn{2}{c|}{VMWare} \\ \hline 
-    ~  & Mean   & Max & Mean & Max & Mean & Max & Mean & Max \\ \hline 
-    L0 & 1.04     & 0.029   & 0.889    & 12.7  & 1.00  & 0.01  & 0.995  & 4.37    \\ \hline 
-    L1 & 1.00     & 1.45    & 0.914    & 20.5  & 0.999 & 0.380 & 0.864  & 36.6    \\ \hline 
-    L2 & 1.00     & 0.075   & 0.918    & 4.60  & 1.00  & N/A   & 0.869  & 7.01    \\ \hline
+    ~  &  \multicolumn{6}{c|}{Delta (C2075)} \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC}  \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+    L0 & 1.01     & 0.031   & 0.969    & 12.7  & 1.00  & 0.073      \\ \hline 
+    L1 & 1.00     & 1.45    & 0.959    & 24.0  & 1.00  & 0.663      \\ \hline 
+    L2 & 1.00     & 0.101   & 0.982    & 4.60  & 1.00  & 0.016      \\ \hline
+    ~  &  \multicolumn{6}{c|}{Delta PCIe-only} \\ \hline
+    ~  & \multicolumn{2}{c|}{KVM} & \multicolumn{2}{c|}{Xen} & \multicolumn{2}{c|}{LXC} \\ \hline 
+    ~  & Mean   & Max & Mean & Max & Mean & Max  \\ \hline 
+    L0 & 1.04     & 0.029   & 0.889    & 12.7  & 1.00  & 0.01     \\ \hline 
+    L1 & 1.00     & 1.45    & 0.914    & 20.5  & 0.999 & 0.380    \\ \hline 
+    L2 & 1.00     & 0.075   & 0.918    & 4.60  & 1.00  & N/A     \\ \hline
     \end{tabular}
 \end{table*}
 
@@ -569,14 +567,11 @@ average, these systems are almost indistinguishable from their non-virtualized
 base systems.  So much so, that experimental noise occasionally boosts
 performance slightly above their base systems.  
 
-This is in sharp contrast to the Xen and VMWare hypervisors, which perform well
+This is in sharp contrast to the Xen , which performs well
 on the Bespin system, but poorly on the Delta system in some cases.  This is
-particularly evident when looking at the maximum overheads for Xen and VMWare
-across both systems.  In this case, we see that on the Bespin system, Xen's
+particularly evident when looking at the maximum overheads for Xen across both systems.  In this case, we see that on the Bespin system, Xen's
 maximum overhead of 3.34\% is dwarfed by Delta's maximum Xen overhead of 24.0\%.
-VMWare exhibits similar characteristics, resulting in a maximum overhead of
-1.9\% in the case of the Bespin system, and a surprising 36.6\% in the case of
-the Delta system.  We provide a more in-depth discussion of these overheads
+We provide a more in-depth discussion of these overheads
 below.
 
 
@@ -674,9 +669,7 @@ bspeed\_download is representative of the most likely source of virtualization o
 movement across the PCI-Express bus.  The PCIe lies at the boundary of
 the virtual machine and the physical GPU, and requires interrupt remapping,
 IOMMU interaction, etc. in order to enable GPU passthrough into the virtual
-machine.  Despite this, in Figure~\ref{F:SHOC_l1} we see a maximum of 1\% overhead
-for bspeed\_download in
-VMWare, and less than 0.5\% overhead for both KVM and Xen.
+machine.  Despite this, in Figure~\ref{F:SHOC_l1} we see a maximum of less than 0.5\% overhead for bspeed\_download for both KVM and Xen.
 
 The remainder of Figure~\ref{F:SHOC_l1} includes a series of SHOC's Level 1
 benchmarks, representing computational kernels.  This includes BFS, FFT, molecular dynamics,
@@ -685,17 +678,17 @@ overhead are the PCIe portion of SHOC's benchmarks. This is unsurprising, since
 the Level 0 benchmarks suggest PCIe bandwidth as the major source overhead.
 Still, results remain consistent with the bspeed\_download overhead observed in
 the Level 0 benchmarks, further suggesting that host/device data movement
-is the major source of overhead.
+is the major source of overhead.  In Figure~\ref{F:SHOC_l1-2} we present the remaining SHOC Level 1 results as well
+as the SHOC Level 2 results (S3D).  
 
-In Figure~\ref{F:SHOC_l1-2} we present the remaining SHOC Level 1 results as well
-as the SHOC Level 2 results (S3D).  In these results we begin to see an interesting trend,
-namely that VMWare consistently outperforms the base system in the Spmv and S3D
-microbenchmarks on the Bespin system.  We believe this to be a performance
-regression in CentOS 6.4, rather than a unique improvement due to the VMWare ESXi
-hypervisor.  When running the benchmarks on a non-virtualized Bespin system with
-Arch Linux, the VMWare ESXi performance gains were erased.  An interesting
-finding of this was that Spmv was unique in this way - no other benchmarks were
-affected by this performance issue.
+%In these results we begin to see an interesting trend,
+%namely that VMWare consistently outperforms the base system in the Spmv and S3D
+%microbenchmarks on the Bespin system.  We believe this to be a performance
+%regression in CentOS 6.4, rather than a unique improvement due to the VMWare ESXi
+%hypervisor.  When running the benchmarks on a non-virtualized Bespin system with
+%Arch Linux, the VMWare ESXi performance gains were erased.  An interesting
+%finding of this was that Spmv was unique in this way - no other benchmarks were
+%affected by this performance issue.
 
 %We discuss this is more detail in
 %Section~\ref{OVERHEADS}.
@@ -723,8 +716,8 @@ same benchmarks are responsible for most of the overhead on the Delta system.  T
 unsurprising, since PCIe was shown to be the source of the bulk of the overhead.
 A major difference in the case of the Delta system, however, is the amount of
 overhead.  While the Bespin system saw overheads of approximately 1\%, Delta's overhead
-routinely jumps above 35\%, especially in the case of the Spmv benchmark for
-VMWare.  
+routinely jumps higher with Xen.% above 35\%, especially in the case of the Spmv benchmark for
+%VMWare.  
 
 On further examination, we determined that Xen was unable to activate
 IOMMU large page tables on the Delta system.  KVM successfully allocated 4k, 2M,
@@ -732,9 +725,9 @@ and 1G page table sizes, while Xen was limited to size 4k page tables.  The
 Bespin system was able to take advantage of 4k, 2M, and 1G page sizes on both
 KVM and Xen.  It appears that this issue is correctable and does not represent a
 fundamental limitation to the Xen hypervisor on the Nehalem/Westmere
-microarchitecture.  While as a closed source product,  we have limited insight
-into VMWare ESXi, we speculate that VMWare may be experiencing a similar issue
-on the Delta system and not on our Bespin system.
+microarchitecture.  %While as a closed source product,  we have limited insight
+%into VMWare ESXi, we speculate that VMWare may be experiencing a similar issue
+%on the Delta system and not on our Bespin system.
 
 %In Section~\ref{OVERHEADS}, we provide further context for this high
 
@@ -744,7 +737,7 @@ on the Delta system and not on our Bespin system.
 
 In light of this, we broadly find that virtualization overhead across
 hypervisors and architectures is minimal.  Questions remain as to the source of the
-exceptionally high overhead in the case of Xen and VMWare on the Delta
+exceptionally high overhead in the case of Xen on the Delta
 system, but because KVM shows no evidence of this overhead, we believe the
 Westmere/Fermi architecture to be suitable for VGA passthrough in a cloud
 environment.  In the case of the Bespin system, it is clear that VGA passthrough can be
@@ -753,8 +746,8 @@ achieved across hypervisors with virtually no overhead.
 A surprising finding is that LXC showed little performance advantage over KVM,
 Xen, and VWMare.  While we expected near-native performance from LXC we did not expect the
 hardware-assisted hypervisors to achieve such high performance.  Still, LXC carries some
-advantages.  In general, its maximum overheads are comparable to or less than KVM, Xen, and
-VMWare, especially in the case of the Delta system.   
+advantages.  In general, its maximum overheads are comparable to or less than KVM or Xen, especially in the case of the Delta system.   
+
 
 %Broadly, we find that each hypervisor performs near-native even through the
 %Level 1 and Level 2 benchmarks.  This is especially true for the Bespin system.
@@ -889,8 +882,7 @@ occasionally boost the performance of a KVM guests beyond its
 host~\cite{Arcangeli:2010}.  After disabling hugepages on the KVM host for the
 Delta system, performance dropped to 80--87\% of the base system, suggesting that
 memory optimizations such as transparent hugepages can substantially improve the
-performance of virtualized guests under some circumstances.  LXC and VMWare
-perform close to the base system, while Xen achieves between 72--90\% of the
+performance of virtualized guests under some circumstances.  LXC performs close to the base system, while Xen achieves between 72--90\% of the
 base system's performance.  We speculate that this may be related to Xen's
 inability to enabled page sizes larger than 4k.
 
@@ -1009,7 +1001,7 @@ While, overall, we see very little overhead, there is a
 slight scaling effect that is most apparent in the case of the Xen hypervisor.
 As the mesh resolution ($N^3$) increases from $N=30$ to $N=150$, we see that the Xen
 overhead decreases until Xen performs on-par with
-KVM, LXC, and VMWare.  
+KVM and LXC.  
 
 
 \FIGURE{!htb}
@@ -1036,9 +1028,8 @@ KVM, LXC, and VMWare.
 Virtualizing performance-critical workloads has always proven controversial,
 whether the workload is CPU-only \cite{Younge2011cloud} or CPU with GPU.  From our Westmere results, we
 can see that this criticism is in part legitimate, at times resulting in a performance
-penalty of greater than 10\%, especially in the case of the VMWare ESXi and Xen
-hypervisors.  We believe much of this to be fixable, especially in the case of
-the Xen hypervisor.  
+penalty of greater than 10\%, especially in the case of the Xen
+hypervisor.  We believe much of this to be fixable with further software refinement.
 
 At the same time, however, we have shown that the Sandy Bridge
 processor generation has nearly erased those performance overheads, suggesting
@@ -1061,16 +1052,16 @@ Delta system.
 %across both the Delta (C2075) and Bespin (K20) systems, but the effect was much
 %greater in the case of the Delta system.  
 
-VMWare's performance proved inconsistent across architectures, performing well
-in the case of Bespin, and relatively poorly in the case of the Delta system.
-Because hypervisor configurations were identical across systems, we can only speculate that
-VMWare's performance is aided by the virtualization improvements offered by the
-Sandy Bridge microarchitecture.  
+%VMWare's performance proved inconsistent across architectures, performing well
+%in the case of Bespin, and relatively poorly in the case of the Delta system.
+%Because hypervisor configurations were identical across systems, we can only speculate that
+%VMWare's performance is aided by the virtualization improvements offered by the
+%Sandy Bridge microarchitecture.  
 
 The Xen hypervisor was consistently average across both architectures,
 performing neither poorly nor extraordinarily well in any individual benchmark.
-Xen and VMWare ESXi are the only two hypervisors from this study that officially support VGA
-passthrough.  As a result, PCI passthrough support in both Xen and VMWare is
+Xen is the only  hypervisor from this study that officially support VGA
+passthrough.  As a result, PCI passthrough support in both Xen  is
 more robust than KVM.  We expect that this advantage will not last long, as
 commercial solutions targeting PCI passthrough in KVM are becoming
 common, particularly with regard to SR-IOV and networking adapters.
