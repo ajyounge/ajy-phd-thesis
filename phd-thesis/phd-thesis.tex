@@ -46,15 +46,20 @@
 
 % The fancyhdr package allows you to easily customize the page header.
 % The settings below produce a nice, well separated header.
+%AJY: IU library hates headers, so comment out headers
 \usepackage{fancyhdr}
-  \fancyhead{}
-  \fancyhead[LO]{\slshape \rightmark}
-  \fancyhead[RO,LE]{\textbf{\thepage}}
-  \fancyhead[RE]{\slshape \leftmark}
-  \fancyfoot{}
-  \pagestyle{fancy}
-  \renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter \ \ #1}{}}
-  \renewcommand{\sectionmark}[1]{\markright{\thesection \ \ #1}}
+\fancyhf{}
+\cfoot{\thepage}
+
+
+%  \fancyhead{}
+%  \fancyhead[LO]{\slshape \rightmark}
+%  \fancyhead[RO,LE]{\textbf{\thepage}}
+%  \fancyhead[RE]{\slshape \leftmark}
+%  \fancyfoot{}
+%  \pagestyle{fancy}
+%  \renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter \ \ #1}{}}
+%  \renewcommand{\sectionmark}[1]{\markright{\thesection \ \ #1}}
 % The caption package allows us to change the formatting of figure captions.
 % The commands here change to the suggested caption format: single spaced and a bold tag
 \usepackage[margin=0.3in,labelfont=bf,labelsep=none]{caption} \DeclareCaptionFormat{suggested}{\singlespace#1#2 #3\par\doublespace} \captionsetup{format=suggested}
@@ -101,12 +106,23 @@
 \usepackage{subcaption}
 \RequirePackage{lineno}
 
+%This fixes the IU Library's requirement to keep all fonts at 12pt, including section names
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\normalsize\bfseries}
+  {\chaptertitlename\ \thechapter}{12pt}{\normalsize}
+\titleformat{\section}[hang]
+  {\normalfont\normalsize\bfseries}
+  {}{0em}{\thesection\hspace{0.6em}}
+\titleformat{\subsection}[hang]
+  {\normalfont\normalsize\bfseries}
+  {}{0em}{\thesubsection\hspace{0.6em}}
 
 % ------------------------- Fill in these fields for the preliminary pages ----------------------------
 %
 % For Senior and honors this is the year and month that you submit the thesis
 % For Masters and PhD, this is your graduation date
-\Year{2016} \Month{October} \Author{Andrew J. Younge}
+\Year{2017} \Month{February} \Author{Andrew J. Younge}
 
 % If you have a long title, split it between two lines. The \TitleBottom field defines the second line
 % A two line title should be an "inverted pyramid" with the top line longer than the bottom.
@@ -185,6 +201,10 @@ Last but not least, I want to thank my parents Mary and Wayne Younge, my sisters
 
 \fussy
 
+%Hage page numbers lower center, but no headers
+\pagestyle{plain}
+
+
 \begin{document}
 
 % Start page counting in roman numerals
@@ -210,9 +230,10 @@ Last but not least, I want to thank my parents Mary and Wayne Younge, my sisters
 % Start regular page counting at page 1
 \mainmatter
 
+
 % Personal Comments to make while working on the manuscript
 \newcommand{\AJY}[1]{{\color{red}\em AJY: #1}}
-\newcommand{\TODO}[1]{{\color{black}\em  TODO: #1}}
+\newcommand{\TODO}[1]{{\color{yellow}\em  TODO: #1}}
 
 % \newcommand{\AJY}[1]{}
 
@@ -220,7 +241,7 @@ Last but not least, I want to thank my parents Mary and Wayne Younge, my sisters
 
 \newfloat{algorithm}{htbp}{loa} \floatname{algorithm}{Algorithm}
 
-%Enable line numbers for editing
+%Enable line numbers for editing purposes
 %\linenumbers
 
 
@@ -233,7 +254,7 @@ Last but not least, I want to thank my parents Mary and Wayne Younge, my sisters
 \include{chapter7}
 \include{conclusion}
 
-%\appendix
+\appendix
 
 %\bibliographystyle{csRIT}
 
@@ -252,10 +273,14 @@ bib/cloud2014,%
 bib/lammps,%
 bib/futuregrid}
 
-\include{appendix}
+%\include{appendix}
 
-\phantomsection \addcontentsline{toc}{chapter}{Index} 
+%AJY Add a lone for the CV as per Library requirements
+
+\phantomsection \addcontentsline{toc}{chapter}{Cirriculum Vitae} 
 \renewcommand{\baselinestretch}{1} \small \normalsize \printindex
+
+
 
 \end{document} 
 

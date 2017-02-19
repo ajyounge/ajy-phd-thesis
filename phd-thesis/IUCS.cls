@@ -1,5 +1,6 @@
 % Revision: 06-13-2013
 % Revision History
+%   02-19-2017 : AJY: Made numerous modifications to conform with IU Library style.
 %   06-13-2013 : AJY: Removed RIT information and Added in Indiana University. GO HOOSIERS
 %   12-21-2009 : AJY: Removed BYU Phsyics Dept links and added in RIT CS information
 %   07-10-2008 : Corrected Alignment of signature boxes on Masters/PhD Approval page
@@ -216,11 +217,11 @@
   \renewcommand{\makepreliminarypages}{ 
     \preliminarymargins
     \titlepage 
-    \copyrightpage 
     \phdapprovalpage 
-    \abstractpage 
-    \acceptancepage 
+    \copyrightpage 
     \acknowledgmentspage 
+    \abstractpage 
+    %\acceptancepage 
     \fixmargins
     \renewcommand{\clearemptydoublepage}{\cle@remptydoublep@ge}
   }
@@ -346,7 +347,7 @@
     \@TitleTop\\[\baselineskip]
     \@TitleBottom\\
     \vfill
-    by\\[\baselineskip]
+    %by\\[\baselineskip]
     \@Author
     \vfill
     Submitted to the faculty of\\[\baselineskip]
@@ -355,7 +356,7 @@
     \vskip0.667in
     \@degree \\
     \vfill
-    Department of Computer Science\\[\baselineskip]
+    in the School of Informatics and Computing\\[\baselineskip]
     Indiana University\\[\baselineskip]
     \@Month~\@Year \\[\baselineskip]
     \end{center}
@@ -392,7 +393,7 @@
 
 % ======================== Copyright page ===============================
 \newcommand{\copyrightpage}{
-    \thispagestyle{empty}
+    %\thispagestyle{empty}
     \providecommand\pdfbookmark[3][]{} \pdfbookmark[0]{Copyright}{bm:Copyright}    
     \vspace*{\fill}
     \begin{center}
@@ -417,27 +418,28 @@
     \parbox[t]{3.6in}{
         \ \\[2\baselineskip]
         \rule{3.6in}{0.4pt}\\
-        #1
+        \vfill#1
     }
 }
 
 \newcommand{\phdapprovalpage}{
-    \thispagestyle{empty}
+    %\thispagestyle{empty}
     \begin{center}
     \providecommand\pdfbookmark[3][]{} \pdfbookmark[0]{Graduate Committee Approval}{bm:ComAp}    
     \vspace*{0.375in}
-    INDIANA UNIVERSITY\\[3\baselineskip]
-    GRADUATE COMMITTEE APPROVAL\\[5\baselineskip]
-    of a \@docname~submitted by\\[\baselineskip]
-    \@Author\\[2\baselineskip]
+   Accepted by the Graduate Faculty, Indiana University, in partial fulfillment of the requirements for the degree of Doctor of Philosophy.
+    \\[\baselineskip]
     \end{center}
     \noindent
-    This dissertation has been read by each member of the following graduate committee 
-    and by majority vote has been found to be satisfactory.\\[\baselineskip]
-    \datebox\hfill\signaturebox{\@Advisor, Chair}\\
-    \datebox\hfill\signaturebox{\@MemberA}\\
-    \datebox\hfill\signaturebox{\@MemberB}\\
-    \datebox\hfill\signaturebox{\@MemberC}
+    Doctoral Committee\\[\baselineskip]
+    \begin{flushright}
+    \hfill\signaturebox{\hfill\@Advisor, Chair}\\
+    \hfill\signaturebox{\hfill\@MemberA}\\
+    \hfill\signaturebox{\hfill\@MemberB}\\
+    \hfill\signaturebox{\hfill\@MemberC}
+    \end{flushright} 
+    \vspace*{0.875in}
+    October 10th, 2016
     \vfill
     \clearemptydoublepage
   }
@@ -485,7 +487,7 @@
 
 % ======================= Acceptance Page ============================
 \newcommand{\acceptancepage}{
-    \thispagestyle{empty}%
+    %\thispagestyle{empty}%
     \begin{center}
     \providecommand\pdfbookmark[3][]{} \pdfbookmark[0]{Acceptance Page}{bm:Accept}    
     \vspace*{0.375in}
@@ -523,29 +525,32 @@
 % ========================= Abstract ===================================
 
 \newcommand{\abstractpage}{
-    \thispagestyle{empty}
-    \begin{abstractenv}
+    %\thispagestyle{empty}
+    %\begin{abstractenv}  %commented out because IU actually wants abstract page numbers
     \begin{center}
     \providecommand\pdfbookmark[3][]{} \pdfbookmark[0]{Abstract}{bm:Abstract}    
     \vspace*{0.375in}
-    ABSTRACT\\[3\baselineskip]
+    \@Author\\[3\baselineskip]
     \@TitleTop\\[\baselineskip]
     \@TitleBottom\\[3\baselineskip]
-    \@Author\\[\baselineskip]
-    Department of Computer Science\\[\baselineskip]
-    \@degree\\[3\baselineskip]
     \end{center}   
     \renewcommand{\baselinestretch}{1.66}\small\normalsize
     \@Abstract
-    
-    \end{abstractenv}
+    \begin{flushright}
+    \hfill\signaturebox{\hfill\@Advisor, Chair}\\
+    \hfill\signaturebox{\hfill\@MemberA}\\
+    \hfill\signaturebox{\hfill\@MemberB}\\
+    \hfill\signaturebox{\hfill\@MemberC}
+    \end{flushright} 
+    %\end{abstractenv}
     \clearemptydoublepage
   }
 
 % ========================= Acknowledgments ==============================
 \newcommand{\acknowledgmentspage}{
+    %\pagestyle{empty}
     \renewcommand{\baselinestretch}{1}\small\normalsize
-    \thispagestyle{empty}
+    %\thispagestyle{empty}
     \begin{center}
     \providecommand\pdfbookmark[3][]{} \pdfbookmark[0]{Acknowledgments}{bm:Acknowledge}    
     \vspace*{0.375in}
