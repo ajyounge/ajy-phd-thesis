@@ -105,9 +105,18 @@
 \usepackage{rotating}
 \usepackage{subcaption}
 \RequirePackage{lineno}
+\usepackage{tocloft}
+
+%Fixes font sizes of TOC and LOF 
+\renewcommand{\contentsname}{\normalfont\normalsize\bfseries Table of Contents}
+\renewcommand{\listfigurename}{\normalfont\normalsize\bfseries List of Figures}
+
 
 %This fixes the IU Library's requirement to keep all fonts at 12pt, including section names
 \usepackage{titlesec}
+\titleformat{\part}[display]
+  {\normalfont\normalsize\bfseries}
+  {\parttitlename\ \thepart}{12pt}{\normalsize}
 \titleformat{\chapter}[display]
   {\normalfont\normalsize\bfseries}
   {\chaptertitlename\ \thechapter}{12pt}{\normalsize}
@@ -275,9 +284,10 @@ bib/futuregrid}
 
 %\include{appendix}
 
-%AJY Add a lone for the CV as per Library requirements
+%Add a line for the CV (appended separately) that doesn't include page numbers
+\cftaddtitleline{toc}{chapter}{Cirriculum Vitae}{}
 
-\phantomsection \addcontentsline{toc}{chapter}{Cirriculum Vitae} 
+%\phantomsection \addcontentsline{toc}{chapter}{Cirriculum Vitae} 
 \renewcommand{\baselinestretch}{1} \small \normalsize \printindex
 
 
